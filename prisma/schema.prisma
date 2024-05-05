@@ -31,6 +31,7 @@ model Category {
 model Post {
   id        String    @id @default(cuid())
   createdAt DateTime  @default(now())
+  updateAt DateTime   @updatedAt
   slug      String    @unique
   title     String
   description      String
