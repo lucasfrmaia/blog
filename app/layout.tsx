@@ -1,4 +1,4 @@
-import "/globals.css";
+import "./globals.css";
 import { Inter as FontSans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <html lang="en">
          <body
             className={cn(
-               "bg-background font-sans antialiased",
+               "bg-background font-sans antialiased px-[10%]",
                fontSans.variable
             )}
          >
