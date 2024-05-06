@@ -1,11 +1,11 @@
-interface User {
+interface IUser {
    id: string;
    name?: string | null;
    email: string;
    image?: string | null;
 }
 
-interface Category {
+interface ICategory {
    id: string;
    slug: string;
    title: string;
@@ -13,7 +13,7 @@ interface Category {
    color: string;
 }
 
-interface Post {
+interface IPost {
    id: string;
    createdAt: Date;
    updateAt: Date;
@@ -24,9 +24,10 @@ interface Post {
    views: number;
    catSlug: string;
    userEmail: string;
+   categories: ICategory[];
 }
 
-interface Comment {
+interface IComment {
    id: string;
    createdAt: Date;
    description: string;

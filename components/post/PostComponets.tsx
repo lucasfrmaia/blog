@@ -1,9 +1,5 @@
 import React from "react";
 
-interface Category {
-   name: string;
-}
-
 export function PostContainer({
    children,
    className,
@@ -73,14 +69,14 @@ export function PostCategories({
    categories,
    className,
 }: {
-   categories: Category[];
+   categories: ICategory[];
    className?: string;
 }) {
    return (
       <ul className="post-categories">
          {categories.map((category, index) => (
             <li key={index} className="post-category">
-               {category.name}
+               {category.title}
             </li>
          ))}
       </ul>

@@ -5,7 +5,7 @@ import {
    PostDescription,
    PostImage,
    PostTitle,
-} from "../post/Post";
+} from "../post/PostComponets";
 
 type IPropPresetation = {
    children?: React.ReactNode;
