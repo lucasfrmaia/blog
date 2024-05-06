@@ -1,4 +1,7 @@
+import { ICategory } from "@/app/(entities)/interfaces";
+import { cn } from "@/lib/utils";
 import React from "react";
+import { Button } from "../ui/button";
 
 export function PostContainer({
    children,
@@ -7,7 +10,21 @@ export function PostContainer({
    children: React.ReactNode;
    className?: string;
 }) {
-   return <div className="post-container">{children}</div>;
+   return (
+      <div className={cn("flex space-x-2 items-center", className)}>
+         {children}
+      </div>
+   );
+}
+
+export function PostHeader({
+   children,
+   className,
+}: {
+   children: React.ReactNode;
+   className?: string;
+}) {
+   return <div className={cn("flex items-center", className)}>{children}</div>;
 }
 
 export function PostImage({
@@ -19,7 +36,7 @@ export function PostImage({
    alt: string;
    className?: string;
 }) {
-   return <img className="post-image" src={src} alt={alt} />;
+   return <img className={cn("flex-1", className)} src={src} alt={alt} />;
 }
 
 export function PostTitle({
@@ -29,7 +46,7 @@ export function PostTitle({
    children: React.ReactNode;
    className?: string;
 }) {
-   return <h2 className="post-title">{children}</h2>;
+   return <h2 className={cn("font-bold text-3xl", className)}>{children}</h2>;
 }
 
 export function PostDescription({
@@ -39,19 +56,20 @@ export function PostDescription({
    children: React.ReactNode;
    className?: string;
 }) {
-   return <p className="post-description">{children}</p>;
+   return <p className={cn("text-muted-foreground", className)}>{children}</p>;
 }
 
-export function ReadMoreButton({
+export function PostReadMoreButton({
    onClick,
+   className,
 }: {
    onClick: () => void;
    className?: string;
 }) {
    return (
-      <button className="read-more-button" onClick={onClick}>
+      <Button className={cn("w-24", className)} onClick={onClick}>
          Read More
-      </button>
+      </Button>
    );
 }
 
@@ -62,21 +80,54 @@ export function PostContent({
    children: React.ReactNode;
    className?: string;
 }) {
-   return <div className="post-container">{children}</div>;
+   return (
+      <div className={cn("flex flex-1 flex-col gap-y-2", className)}>
+         {children}
+      </div>
+   );
 }
 
 export function PostCategories({
    categories,
    className,
+   classNameLi,
 }: {
    categories: ICategory[];
    className?: string;
+   classNameLi?: string;
 }) {
    return (
-      <ul className="post-categories">
+      <ul className={cn("inline-block", className)}>
          {categories.map((category, index) => (
-            <li key={index} className="post-category">
-               {category.title}
+            <li key={index} className={cn("inline-block", classNameLi)}>
+               <span>{category.title}</span>
+            </li>
+         ))}
+      </ul>
+   );
+}
+
+export function PostCategoriesBadge({
+   categories,
+   className,
+   classNameLi,
+}: {
+   categories: ICategory[];
+   className?: string;
+   classNameLi?: string;
+}) {
+   return (
+      <ul className={cn("", className)}>
+         {categories.map((category, index) => (
+            <li
+               style={{ backgroundColor: category.color }}
+               key={`PostCatrgoriesBadge-${category.slug}`}
+               className={cn(
+                  "inline-block px-2 text-center h-6 text-secondary rounded-3xl",
+                  classNameLi
+               )}
+            >
+               <span>{category.title}</span>
             </li>
          ))}
       </ul>

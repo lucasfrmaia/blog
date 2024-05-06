@@ -10,7 +10,7 @@ type IPropNaveBar = {
 
 export default function NaveBar({ children, className }: IPropNaveBar) {
    return (
-      <header className="flex justify-between items-center h-24 w-full">
+      <header className="flex px-space-page justify-between items-center h-24 w-full">
          <div className="flex items-center space-x-2  flex-1">
             <BsGithub className="h-8 w-8" />
             <BsTwitter className="h-8 w-8" />

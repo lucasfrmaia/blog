@@ -1,4 +1,4 @@
-import Categories from "@/components/category/Categories";
+import PopularCategories from "@/components/category/PopularCategories";
 import Footer from "@/components/footer/Footer";
 import NaveBar from "@/components/header/NaveBar";
 import PostSection from "@/components/post/PostSection";
@@ -10,7 +10,7 @@ export default function Home() {
       <>
          <NaveBar />
          <Presetation />
-         <Categories />
+         <PopularCategories />
          <PostSection />
          <Footer />
       </>

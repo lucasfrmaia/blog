@@ -1,11 +1,11 @@
-interface IUser {
+export interface IUser {
    id: string;
    name?: string | null;
    email: string;
    image?: string | null;
 }
 
-interface ICategory {
+export interface ICategory {
    id: string;
    slug: string;
    title: string;
@@ -13,7 +13,7 @@ interface ICategory {
    color: string;
 }
 
-interface IPost {
+export interface IPost {
    id: string;
    createdAt: Date;
    updateAt: Date;
@@ -27,7 +27,7 @@ interface IPost {
    categories: ICategory[];
 }
 
-interface IComment {
+export interface IComment {
    id: string;
    createdAt: Date;
    description: string;

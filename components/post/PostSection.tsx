@@ -1,6 +1,8 @@
 import React from "react";
 import RecentPost from "./RecentPost";
 import PopularPost from "./PopularPost";
+import BaseSection from "../ui/utils/BaseSection";
+import AsidePost from "./AsidePost";
 
 type IPropPostSection = {
    children?: React.ReactNode;
@@ -9,9 +11,9 @@ type IPropPostSection = {
 
 export default function PostSection({ children, className }: IPropPostSection) {
    return (
-      <section className="flex gap-x-2">
+      <BaseSection className="flex gap-x-2">
          <RecentPost className="flex-[2]" />
-         <PopularPost className="flex-1" />
-      </section>
+         <AsidePost className="flex-1" />
+      </BaseSection>
    );
 }
