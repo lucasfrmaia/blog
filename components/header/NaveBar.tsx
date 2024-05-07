@@ -1,7 +1,8 @@
 import React from "react";
 import { Switch } from "../ui/switch";
 import { GiThrustBend } from "react-icons/gi";
-import { BsGithub, BsTwitter } from "react-icons/bs";
+import { BsGithub, BsSearch, BsTwitter } from "react-icons/bs";
+import { Button } from "../ui/button";
 
 type IPropNaveBar = {
    children?: React.ReactNode;
@@ -10,32 +11,34 @@ type IPropNaveBar = {
 
 export default function NaveBar({ children, className }: IPropNaveBar) {
    return (
-      <header className="flex px-space-page justify-between items-center h-24 w-full">
-         <div className="flex items-center space-x-2  flex-1">
-            <BsGithub className="h-8 w-8" />
-            <BsTwitter className="h-8 w-8" />
-         </div>
+      <>
+         <div className="h-24 mb-4"></div>
+         <header className="fixed top-0 left-0 z-50 flex px-space-page justify-between items-center h-24 w-full bg-card">
+            <div className="flex-1">
+               <h1 className="text-2xl font-semibold">Maia Blog</h1>
+            </div>
 
-         <div className="flex-1">
-            <h1 className="text-2xl font-semibold">Maia Blog</h1>
-         </div>
+            <div className="flex justify-around items-center flex-1 gap-x-2 ">
+               <Switch />
 
-         <div className="flex justify-around items-center flex-1 gap-x-2 ">
-            <Switch />
+               <ul className="flex flex-1 items-center justify-around gap-x-2">
+                  <li className="cursor-pointer hover:text-secondary-foreground">
+                     HomePage
+                  </li>
+                  <li className="cursor-pointer hover:text-secondary-foreground">
+                     Contact
+                  </li>
+                  <li className="cursor-pointer hover:text-secondary-foreground">
+                     About
+                  </li>
+                  <li className="cursor-pointer hover:text-secondary-foreground"></li>
+               </ul>
+            </div>
 
-            <ul className="flex flex-1 items-center justify-around gap-x-2">
-               <li className="cursor-pointer hover:text-secondary-foreground">
-                  HomePage
-               </li>
-               <li className="cursor-pointer hover:text-secondary-foreground">
-                  Contact
-               </li>
-               <li className="cursor-pointer hover:text-secondary-foreground">
-                  About
-               </li>
-               <li className="cursor-pointer hover:text-secondary-foreground"></li>
-            </ul>
-         </div>
-      </header>
+            <div className="flex items-center justify-around">
+               <Button variant="ghost">Fazer Login</Button>
+            </div>
+         </header>
+      </>
    );
 }
