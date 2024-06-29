@@ -8,7 +8,7 @@ import {
    PostImage,
    PostReadMoreButton,
    PostTitle,
-} from "../post/PostComponets";
+} from "../post-component/PostComponent";
 import BaseSection from "../ui/utils/BaseSection";
 import { Button } from "../ui/button";
 

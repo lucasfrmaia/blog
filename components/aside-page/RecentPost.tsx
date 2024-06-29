@@ -10,40 +10,24 @@ import {
    PostCategories,
    PostReadMoreButton,
    PostHeader,
-} from "./PostComponets";
+} from "../post-component/PostComponent";
 import { IPost } from "@/app/(entities)/interfaces";
 import TitleSection from "../ui/utils/TitleSection";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
+import { globalUtils } from "@/utils/classes";
 
 type IPropRecentPost = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default function RecentPost({ children, className }: IPropRecentPost) {
-   const posts: IPost[] = Array.from({ length: 5 })
-      .map((x) => ({
-         id: "1",
-         createdAt: new Date(),
-         updateAt: new Date(),
-         slug: "post-1",
-         title: "Post 1",
-         description: "Description of post 1",
-         img: "https://t3.ftcdn.net/jpg/05/27/49/44/360_F_527494416_7PWpMBqkWQarxhOgD1vIDzhDxizP1cQd.jpg",
-         views: 100,
-         catSlug: "technology",
-         userEmail: "user1@example.com",
-         categories: [
-            {
-               id: "2",
-               slug: "science",
-               title: "Ciência",
-               color: "#007bff",
-            },
-         ],
-      }))
-      .slice(0, 3);
+export default async function RecentPost({
+   children,
+   className,
+}: IPropRecentPost) {
+   const response = await fetch(globalUtils.apiRoutes.posts.recent);
+   const { posts } = (await response.json()) as { posts: IPost[] };
 
    return (
       <div className={cn("flex flex-col", className)}>

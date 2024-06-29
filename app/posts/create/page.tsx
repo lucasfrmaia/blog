@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import NaveBar from "@/components/header/NaveBar";
@@ -52,12 +54,12 @@ export default function Page({ children, className }: IPropPage) {
                   Criar Post
                </h1>
 
-               <div>
-                  <Label />
-                  <Input {...register("title")} />
-               </div>
-
-               <ReactQuill theme="snow" value={value} onChange={setValue} />
+               <ReactQuill
+                  className="border w-1/2 h-96"
+                  theme="snow"
+                  value={value}
+                  onChange={setValue}
+               />
 
                <Button>Criar Post</Button>
             </form>

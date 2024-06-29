@@ -1,8 +1,9 @@
 import { comment } from "postcss";
 
 class GlobalUtils {
-   public readonly apiRoutes: {};
+   public readonly apiRoutes;
    public readonly baseUrlApi;
+   public readonly routes;
 
    constructor() {
       (this.baseUrlApi = process.env.BASE_URL_API),
@@ -12,7 +13,17 @@ class GlobalUtils {
                all: `${this.baseUrlApi}/categories/all`,
                popular: `${this.baseUrlApi}/categories/popular`,
             },
+            posts: {
+               default: `${this.baseUrlApi}/posts`,
+               recent: `${this.baseUrlApi}/posts/recent`,
+               popular: `${this.baseUrlApi}/posts/popular`,
+            },
          });
+      this.routes = {
+         home: "/",
+         contact: "/contact",
+         about: "/about",
+      };
    }
 }
 

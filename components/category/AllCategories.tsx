@@ -1,22 +1,22 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import TitleSection from "../ui/utils/TitleSection";
+import { globalUtils } from "@/utils/classes";
+import { ICategory } from "@/app/(entities)/interfaces";
 
 type IPropAllCategories = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default function AllCategories({
+export default async function AllCategories({
    children,
    className,
 }: IPropAllCategories) {
-   const categories = Array.from({ length: 5 }).map(() => ({
-      id: "2",
-      slug: "science",
-      title: "Science",
-      color: "#007bff",
-   }));
+   const response = await fetch(globalUtils.apiRoutes.categories.all);
+   const { categories } = (await response.json()) as {
+      categories: ICategory[];
+   };
 
    return (
       <div className={cn("", className)}>

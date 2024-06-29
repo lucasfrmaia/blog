@@ -1,6 +1,5 @@
 import React from "react";
 import RecentPost from "./RecentPost";
-import PopularPost from "./PopularPost";
 import BaseSection from "../ui/utils/BaseSection";
 import AsidePost from "./AsidePost";
 

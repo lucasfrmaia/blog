@@ -26,7 +26,8 @@ import {
    PostTitle,
    PostDescription,
    PostReadMoreButton,
-} from "../post/PostComponets";
+} from "../post-component/PostComponent";
+import { globalUtils } from "@/utils/classes";
 
 type IPropContentPostPage = {
    children?: React.ReactNode;
@@ -59,30 +60,12 @@ const SortSelect = () => {
    );
 };
 
-export default function ContentPostPage({
+export default async function ContentPostPage({
    children,
    className,
 }: IPropContentPostPage) {
-   const posts: IPost[] = Array.from({ length: 5 }).map((x) => ({
-      id: "1",
-      createdAt: new Date(),
-      updateAt: new Date(),
-      slug: "post-1",
-      title: "Post 1",
-      description: "Description of post 1",
-      img: "https://t3.ftcdn.net/jpg/05/27/49/44/360_F_527494416_7PWpMBqkWQarxhOgD1vIDzhDxizP1cQd.jpg",
-      views: 100,
-      catSlug: "technology",
-      userEmail: "user1@example.com",
-      categories: [
-         {
-            id: "2",
-            slug: "science",
-            title: "Ciência",
-            color: "#007bff",
-         },
-      ],
-   }));
+   const response = await fetch(globalUtils.apiRoutes.posts.default);
+   const { posts } = (await response.json()) as { posts: IPost[] };
 
    return (
       <div className={cn("px-space-page mb-auto", className)}>
@@ -116,8 +99,9 @@ export default function ContentPostPage({
             {posts.map(
                ({ title, categories, description, img, id, createdAt }) => {
                   return (
-                     <PostContainer key={`SearchPost-${id}`}>
+                     <PostContainer className="mb-8" key={`SearchPost-${id}`}>
                         <PostImage
+                           className="w-32 h-32"
                            src={img || ""}
                            alt={`Post Image- ${title}`}
                         ></PostImage>
