@@ -26,8 +26,9 @@ export default async function RecentPost({
    children,
    className,
 }: IPropRecentPost) {
-   const response = await fetch(globalUtils.apiRoutes.posts.recent);
-   const { posts } = (await response.json()) as { posts: IPost[] };
+   //const response = await fetch(globalUtils.apiRoutes.posts.recent);
+   //const { posts } = (await response.json()) as { posts: IPost[] };
+   const posts = [] as IPost[];
 
    return (
       <div className={cn("flex flex-col", className)}>

@@ -20,9 +20,19 @@ class GlobalUtils {
             },
          });
       this.routes = {
-         home: "/",
-         contact: "/contact",
-         about: "/about",
+         home: {
+            link: "/",
+            label: "Início",
+         },
+
+         contact: {
+            link: "/",
+            label: "Contato",
+         },
+         about: {
+            link: "/",
+            label: "Sobre",
+         },
       };
    }
 }

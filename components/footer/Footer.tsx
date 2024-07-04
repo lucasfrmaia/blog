@@ -1,54 +1,95 @@
 import React from "react";
+import {
+   FooterContent,
+   FooterLink,
+   FooterText,
+   FooterTitle,
+   FooterUl,
+} from "./FooterComponent";
+import { globalUtils } from "@/utils/classes";
+import { ICategory } from "@/app/(entities)/interfaces";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
 
 type IPropFooter = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default function Footer({ children, className }: IPropFooter) {
-   return (
-      <footer className="px-space-page flex gap-x-8 py-4">
-         <div className="flex-[2]">
-            <div className="flex gap-x-2">
-               <img
-                  className="rounded-full w-7 h-7"
-                  src="https://t3.ftcdn.net/jpg/05/27/49/44/360_F_527494416_7PWpMBqkWQarxhOgD1vIDzhDxizP1cQd.jpg"
-                  alt=""
-               />
-               <span className="font-bold">Maia Blog</span>
-            </div>
+export default async function Footer({ children, className }: IPropFooter) {
+   const links = Object.values(globalUtils.routes);
+   const response = await fetch(globalUtils.apiRoutes.categories.all);
+   const { categories } = (await response.json()) as {
+      categories: ICategory[];
+   };
 
-            <p>
-               Neste exemplo, o contêiner flexível .container se ajustará
-               automaticamente à largura do texto dentro do elemento .text, sem
-               a necessidade de inline-block. O uso de flex-wrap: wrap; permite
-               que o texto quebre para a próxima linha, se necessário.
-            </p>
+   return (
+      <footer className="px-space-page p-4">
+         <div className="flex gap-x-8 py">
+            <FooterContent className="flex-[2]">
+               <FooterTitle>Sobre</FooterTitle>
+               <p>
+                  Neste exemplo, o contêiner flexível .container se ajustará
+                  automaticamente à largura do texto dentro do elemento .text,
+                  sem a necessidade de inline-block. O uso de flex-wrap: wrap;
+                  permite que o texto quebre para a próxima linha, se
+                  necessário.
+               </p>
+            </FooterContent>
+
+            <FooterContent className="flex-1">
+               <FooterTitle>Categorias</FooterTitle>
+               <FooterUl className="flex flex-col">
+                  {links.map(({ link, label }) => {
+                     return (
+                        <FooterLink href={link} key={`Footer-${label}`}>
+                           {label}
+                        </FooterLink>
+                     );
+                  })}
+               </FooterUl>
+            </FooterContent>
+
+            <FooterContent className="flex-1">
+               <FooterTitle>Categorias</FooterTitle>
+               <FooterUl>
+                  {categories.map((category) => {
+                     return (
+                        <FooterText key={`Footer-${category.id}`}>
+                           {category.title}
+                        </FooterText>
+                     );
+                  })}
+               </FooterUl>
+            </FooterContent>
+
+            <FooterContent className="flex-[2]">
+               <FooterTitle>Notificações de Post</FooterTitle>
+               <FooterText>
+                  Insira seu email para receber Notificações de novos posts
+               </FooterText>
+
+               <form className="mt-4">
+                  <Input
+                     type="email"
+                     className="w-full mb-2"
+                     placeholder="Digite seu email..."
+                  />
+                  <Button type="submit" className="w-full">
+                     Cadastrar Email
+                  </Button>
+               </form>
+            </FooterContent>
          </div>
-         <div className="flex-1">
-            <div>
-               <h3 className="font-bold mb-2">Links</h3>
-               <li>
-                  {" "}
-                  <a href="#">Link aqui</a>{" "}
-               </li>
-               <li>
-                  {" "}
-                  <a href="#">Link aqui</a>{" "}
-               </li>
-               <li>
-                  {" "}
-                  <a href="#">Link aqui</a>{" "}
-               </li>
-               <li>
-                  {" "}
-                  <a href="#">Link aqui</a>{" "}
-               </li>
-               <li>
-                  {" "}
-                  <a href="#">Link aqui</a>{" "}
-               </li>
-            </div>
+
+         <div className="flex items-center justify-between">
+            <FooterContent className="flex-1">Logo...</FooterContent>
+
+            <FooterContent className="flex items-center gap-x-4">
+               <FooterLink href="#">Termos de Uso</FooterLink>
+               <FooterLink href="#">Politícas de Privacidade</FooterLink>
+               <FooterLink href="#">Politícas de Cookies</FooterLink>
+            </FooterContent>
          </div>
       </footer>
    );
