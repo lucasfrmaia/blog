@@ -3,6 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
+import { ContextProvider } from "@/context/ContextProvider";
 
 const fontSans = FontSans({
    subsets: ["latin"],
@@ -18,7 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                fontSans.variable
             )}
          >
-            {children}
+            <ContextProvider>{children}</ContextProvider>
          </body>
       </html>
    );

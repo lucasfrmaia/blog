@@ -1,18 +1,51 @@
+"use client";
+
 import React from "react";
-import { Switch } from "../ui/switch";
-import { GiThrustBend } from "react-icons/gi";
-import { BsGithub, BsSearch, BsTwitter } from "react-icons/bs";
 import { Button } from "../ui/button";
 import { globalUtils } from "@/utils/classes";
 import SearchBar from "../ui/utils/SearchBar";
-import { FaUserAlt } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { useTheme } from "next-themes";
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type IPropNaveBar = {
    children?: React.ReactNode;
    className?: string;
 };
+
+export function ModeToggle() {
+   const { setTheme } = useTheme();
+
+   return (
+      <DropdownMenu>
+         <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+               <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+               <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+               <span className="sr-only">Toggle theme</span>
+            </Button>
+         </DropdownMenuTrigger>
+         <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+               Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+               Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+               System
+            </DropdownMenuItem>
+         </DropdownMenuContent>
+      </DropdownMenu>
+   );
+}
 
 export default function NaveBar({ children, className }: IPropNaveBar) {
    const links = Object.values(globalUtils.routes);
@@ -55,7 +88,7 @@ export default function NaveBar({ children, className }: IPropNaveBar) {
                   </PopoverTrigger>
 
                   <PopoverContent className="flex flex-col shadow-2xl rounded-lg">
-                     <div className="flex flex-col justify-center items-center w-full">
+                     <div className="flex flex-col justify-center items-center w-full mb-4">
                         <Avatar className="w-10 h-10">
                            <AvatarImage src="https://github.com/shadcn.png" />
                            <AvatarFallback>CN</AvatarFallback>
@@ -63,8 +96,9 @@ export default function NaveBar({ children, className }: IPropNaveBar) {
                         <span>Olá! Usuário!</span>
                      </div>
 
-                     <div>
-                        <p>Tema</p>
+                     <div className="flex items-center justify-between">
+                        <p className="text-lg font-semibold">Tema</p>
+                        <ModeToggle />
                      </div>
                   </PopoverContent>
                </Popover>
