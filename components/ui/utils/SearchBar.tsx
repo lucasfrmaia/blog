@@ -36,7 +36,7 @@ export default function SearchBar({ className, ...props }: IPropSearchBar) {
          />
 
          <button className="clear-none">
-            <IoIosSearch color="black" size={21} />
+            <IoIosSearch className="text-foreground" size={21} />
          </button>
       </div>
    );

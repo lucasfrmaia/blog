@@ -8,6 +8,8 @@ type IPropBaseSection = {
 
 export default function BaseSection({ children, className }: IPropBaseSection) {
    return (
-      <div className={cn("px-space-page mb-12", className)}>{children}</div>
+      <section className={cn("px-space-page mb-12", className)}>
+         {children}
+      </section>
    );
 }

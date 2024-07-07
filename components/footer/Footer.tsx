@@ -28,7 +28,7 @@ export default async function Footer({ children, className }: IPropFooter) {
          <div className="flex gap-x-8 py">
             <FooterContent className="flex-[2]">
                <FooterTitle>Sobre</FooterTitle>
-               <p>
+               <p className="text-muted-foreground">
                   Neste exemplo, o contêiner flexível .container se ajustará
                   automaticamente à largura do texto dentro do elemento .text,
                   sem a necessidade de inline-block. O uso de flex-wrap: wrap;

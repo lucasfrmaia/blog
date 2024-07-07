@@ -14,6 +14,7 @@ import {
    DropdownMenuItem,
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 type IPropNaveBar = {
    children?: React.ReactNode;
@@ -69,7 +70,7 @@ export default function NaveBar({ children, className }: IPropNaveBar) {
                            key={`Navebar-${label}`}
                            className="cursor-pointer hover:text-blue-500"
                         >
-                           <a href={link}>{label}</a>
+                           <Link href={link}>{label}</Link>
                         </li>
                      );
                   })}
@@ -89,7 +90,7 @@ export default function NaveBar({ children, className }: IPropNaveBar) {
 
                   <PopoverContent className="flex flex-col shadow-2xl rounded-lg">
                      <div className="flex flex-col justify-center items-center w-full mb-4">
-                        <Avatar className="w-10 h-10">
+                        <Avatar className="w-10 h-10 mb-2">
                            <AvatarImage src="https://github.com/shadcn.png" />
                            <AvatarFallback>CN</AvatarFallback>
                         </Avatar>

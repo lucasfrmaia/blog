@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
    PostContainer,
@@ -11,6 +9,8 @@ import {
 } from "../post-component/PostComponent";
 import BaseSection from "../ui/utils/BaseSection";
 import { Button } from "../ui/button";
+import Link from "next/link";
+import { globalUtils } from "@/utils/classes";
 
 type IPropPresetation = {
    children?: React.ReactNode;
@@ -41,26 +41,30 @@ export default function Presetation({ children, className }: IPropPresetation) {
 
    return (
       <BaseSection>
-         <div className="w-[80%]">
+         <div className="w-[80%] mb-4">
             <h1 className="text-[3rem] font-normal">
                <span className="font-semibold">Olá Devs! </span>
                Explore minhas histórias e artigos.
             </h1>
          </div>
 
-         <PostContainer>
+         <PostContainer className="flex gap-x-4 items-center">
             <PostImage
-               src={post.img}
+               post={post}
                alt={`Imagem do post ${post.title}`}
             ></PostImage>
 
             <PostContent>
-               <PostTitle>{post.title}</PostTitle>
-               <PostDescription>{post.description}</PostDescription>
+               <PostTitle post={post} />
+               <PostDescription post={post} />
 
                <div className="flex gap-x-2 items-center">
-                  <PostReadMoreButton onClick={() => {}} />
-                  <Button variant="link">Ver Todos</Button>
+                  <Link href={`/posts/${post.id}`}>
+                     <PostReadMoreButton />
+                  </Link>
+                  <Link href={"/posts"}>
+                     <Button variant="link">Ver Todos</Button>
+                  </Link>
                </div>
             </PostContent>
          </PostContainer>

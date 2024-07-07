@@ -31,13 +31,13 @@ export default async function PopularPost({
          <TitleSection>Posts Populares</TitleSection>
 
          <div>
-            {posts.map(({ title, categories, description, img, id }) => {
+            {posts.map((post) => {
                return (
-                  <PostContainer className="mb-4" key={`RecentPost-${id}`}>
+                  <PostContainer className="mb-4" key={`RecentPost-${post.id}`}>
                      <PostContent>
-                        <PostTitle>{title}</PostTitle>
-                        <PostCategoriesBadge categories={categories} />
-                        <PostDescription>{description}</PostDescription>
+                        <PostTitle post={post} />
+                        <PostCategoriesBadge post={post} />
+                        <PostDescription post={post} />
                      </PostContent>
                   </PostContainer>
                );

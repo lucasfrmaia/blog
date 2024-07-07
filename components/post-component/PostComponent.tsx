@@ -1,7 +1,8 @@
-import { ICategory } from "@/app/(entities)/interfaces";
+import { ICategory, IPost } from "@/app/(entities)/interfaces";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export function PostContainer({
    children,
@@ -28,42 +29,56 @@ export function PostHeader({
 }
 
 export function PostImage({
-   src,
+   post,
    alt,
    className,
 }: {
-   src: string;
+   post: IPost;
    alt: string;
    className?: string;
 }) {
-   return <img className={cn("flex-1", className)} src={src} alt={alt} />;
+   return (
+      <Link href={`/posts/${post.id}`}>
+         <img className={cn("", className)} src={post.img || ""} alt={alt} />
+      </Link>
+   );
 }
 
 export function PostTitle({
-   children,
+   post,
    className,
 }: {
-   children: React.ReactNode;
+   post: IPost;
    className?: string;
 }) {
-   return <h2 className={cn("font-bold text-3xl", className)}>{children}</h2>;
+   return (
+      <h2 className={cn("font-bold text-3xl", className)}>
+         <Link className="hover:underline" href={`/posts/${post.id}`}>
+            {post.title}
+         </Link>
+      </h2>
+   );
 }
 
 export function PostDescription({
-   children,
+   post,
    className,
 }: {
-   children: React.ReactNode;
+   post: IPost;
    className?: string;
 }) {
-   return <p className={cn("text-muted-foreground", className)}>{children}</p>;
+   return (
+      <p className={cn("text-muted-foreground", className)}>
+         {post.description}
+      </p>
+   );
 }
 
 export function PostReadMoreButton({
    onClick,
    className,
 }: {
-   onClick: () => void;
+   onClick?: () => void;
    className?: string;
 }) {
    return (
@@ -88,17 +103,17 @@ export function PostContent({
 }
 
 export function PostCategories({
-   categories,
+   post,
    className,
    classNameLi,
 }: {
-   categories: ICategory[];
+   post: IPost;
    className?: string;
    classNameLi?: string;
 }) {
    return (
       <ul className={cn("inline-block", className)}>
-         {categories.map((category, index) => (
+         {post.categories.map((category, index) => (
             <li key={index} className={cn("inline-block", classNameLi)}>
                <span>{category.title}</span>
             </li>
@@ -108,17 +123,17 @@ export function PostCategories({
 }
 
 export function PostCategoriesBadge({
-   categories,
+   post,
    className,
    classNameLi,
 }: {
-   categories: ICategory[];
+   post: IPost;
    className?: string;
    classNameLi?: string;
 }) {
    return (
       <ul className={cn("", className)}>
-         {categories.map((category, index) => (
+         {post.categories.map((category, index) => (
             <li
                style={{ backgroundColor: category.color }}
                key={`PostCatrgoriesBadge-${category.slug}`}

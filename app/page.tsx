@@ -1,3 +1,5 @@
+"use client";
+
 import Footer from "@/components/footer/Footer";
 import NaveBar from "@/components/header/NaveBar";
 import PostSection from "@/components/aside-page/PostSection";

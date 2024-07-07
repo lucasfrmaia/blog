@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import React from "react";
 
 interface FooterContentProps {
@@ -44,7 +45,9 @@ export const FooterUl: React.FC<FooterUlProps> = ({ className, children }) => {
 };
 
 export const FooterLi: React.FC<FooterLiProps> = ({ className, children }) => {
-   return <li className={cn(`text-gray-600`, className)}>{children}</li>;
+   return (
+      <li className={cn(`text-muted-foreground`, className)}>{children}</li>
+   );
 };
 
 export const FooterLink: React.FC<FooterLinkProps> = ({
@@ -53,9 +56,12 @@ export const FooterLink: React.FC<FooterLinkProps> = ({
    children,
 }) => {
    return (
-      <a href={href} className={cn(`text-blue-500 hover:underline`, className)}>
+      <Link
+         href={href}
+         className={cn(`text-blue-500 hover:underline`, className)}
+      >
          {children}
-      </a>
+      </Link>
    );
 };
 
@@ -63,7 +69,7 @@ export const FooterText: React.FC<FooterTextProps> = ({
    className,
    children,
 }) => {
-   return <p className={cn(`text-gray-600`, className)}>{children}</p>;
+   return <p className={cn(`text-muted-foreground`, className)}>{children}</p>;
 };
 
 export const FooterTitle: React.FC<FooterTitleProps> = ({

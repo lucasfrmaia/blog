@@ -16,6 +16,7 @@ import TitleSection from "../ui/utils/TitleSection";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { globalUtils } from "@/utils/classes";
+import Link from "next/link";
 
 type IPropRecentPost = {
    children?: React.ReactNode;
@@ -26,41 +27,43 @@ export default async function RecentPost({
    children,
    className,
 }: IPropRecentPost) {
-   //const response = await fetch(globalUtils.apiRoutes.posts.recent);
-   //const { posts } = (await response.json()) as { posts: IPost[] };
-   const posts = [] as IPost[];
+   const response = await fetch(globalUtils.apiRoutes.posts.recent);
+   const { posts } = (await response.json()) as { posts: IPost[] };
 
    return (
       <div className={cn("flex flex-col", className)}>
          <TitleSection>Posts Recentes</TitleSection>
-         <div>
-            {posts.map(
-               ({ title, categories, description, img, id, createdAt }) => {
-                  return (
-                     <PostContainer key={`RecentPost-${id}`}>
-                        <PostImage
-                           src={img || ""}
-                           alt={`Post Image- ${title}`}
-                        ></PostImage>
+         <div className="mb-4">
+            {posts.map((post) => {
+               return (
+                  <PostContainer
+                     className="gap-x-4"
+                     key={`RecentPost-${post.id}`}
+                  >
+                     <PostImage
+                        post={post}
+                        alt={`Post Image- ${post.title}`}
+                     ></PostImage>
 
-                        <PostContent>
-                           <PostHeader className="flex gap-x-2">
-                              {new Date(createdAt).toDateString()}
-                              <span>•</span>
-                              <PostCategories categories={categories} />
-                           </PostHeader>
+                     <PostContent className="flex-1">
+                        <PostHeader className="flex gap-x-2">
+                           {new Date(post.createdAt).toDateString()}
+                           <span>•</span>
+                           <PostCategories post={post} />
+                        </PostHeader>
 
-                           <PostTitle>{title}</PostTitle>
-                           <PostDescription>{description}</PostDescription>
-                           <PostReadMoreButton onClick={() => {}} />
-                        </PostContent>
-                     </PostContainer>
-                  );
-               }
-            )}
+                        <PostTitle post={post} />
+                        <PostDescription post={post} />
+                        <PostReadMoreButton onClick={() => {}} />
+                     </PostContent>
+                  </PostContainer>
+               );
+            })}
          </div>
 
-         <Button className="self-center">Ver Todos</Button>
+         <Button className="self-center">
+            <Link href={"/posts"}>Ver Todos</Link>
+         </Button>
       </div>
    );
 }
