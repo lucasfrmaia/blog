@@ -75,15 +75,16 @@ export function PostDescription({
 }
 
 export function PostReadMoreButton({
-   onClick,
    className,
+   post,
 }: {
    onClick?: () => void;
    className?: string;
+   post: IPost;
 }) {
    return (
-      <Button className={cn("w-24", className)} onClick={onClick}>
-         Read More
+      <Button className={cn("w-24", className)}>
+         <Link href={`/posts/${post.id}`}>Read More</Link>
       </Button>
    );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 
 type IPropSearchBar = {
@@ -10,7 +10,6 @@ type IPropSearchBar = {
 
 export default function SearchBar({ className, ...props }: IPropSearchBar) {
    const [isClicked, setIsClicked] = useState(false);
-
    const handleFocus = () => {
       setIsClicked(true);
    };

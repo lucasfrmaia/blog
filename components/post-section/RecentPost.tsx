@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
    PostContainer,
@@ -37,10 +35,11 @@ export default async function RecentPost({
             {posts.map((post) => {
                return (
                   <PostContainer
-                     className="gap-x-4"
+                     className="gap-x-4 mb-4"
                      key={`RecentPost-${post.id}`}
                   >
                      <PostImage
+                        className="hover:scale-105 ease-linear h-64"
                         post={post}
                         alt={`Post Image- ${post.title}`}
                      ></PostImage>
@@ -54,7 +53,7 @@ export default async function RecentPost({
 
                         <PostTitle post={post} />
                         <PostDescription post={post} />
-                        <PostReadMoreButton onClick={() => {}} />
+                        <PostReadMoreButton post={post} />
                      </PostContent>
                   </PostContainer>
                );

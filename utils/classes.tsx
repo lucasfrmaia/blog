@@ -22,7 +22,10 @@ class GlobalUtils {
             link: "/",
             label: "Início",
          },
-
+         posts: {
+            link: "/posts",
+            label: "Posts",
+         },
          contact: {
             link: "/",
             label: "Contato",

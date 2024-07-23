@@ -59,9 +59,7 @@ export default function Presetation({ children, className }: IPropPresetation) {
                <PostDescription post={post} />
 
                <div className="flex gap-x-2 items-center">
-                  <Link href={`/posts/${post.id}`}>
-                     <PostReadMoreButton />
-                  </Link>
+                  <PostReadMoreButton post={post} />
                   <Link href={"/posts"}>
                      <Button variant="link">Ver Todos</Button>
                   </Link>

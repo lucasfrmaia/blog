@@ -13,8 +13,11 @@ export default async function AllCategories({
    children,
    className,
 }: IPropAllCategories) {
-   const response = await fetch(globalUtils.apiRoutes.categories.all);
-   const { categories } = (await response.json()) as {
+   // const response = await fetch(globalUtils.apiRoutes.categories.all);
+   // const { categories } = (await response.json()) as {
+   //    categories: ICategory[];
+   // };
+   const { categories } = { categories: [] } as {
       categories: ICategory[];
    };
 

@@ -30,34 +30,21 @@ import {
 import { globalUtils } from "@/utils/classes";
 import NaveBar from "@/components/header/NaveBar";
 import Footer from "@/components/footer/Footer";
+import ToggleGroupItems, {
+   ToggleGroupContainer,
+   ToggleGroupTitle,
+} from "@/components/filters-post/ToggleGroup";
+import {
+   SelectContainer,
+   SelectTitle,
+   TSortOptions,
+} from "@/components/filters-post/Select";
+import PostFilters from "@/components/posts/PostFilters";
+import PostPagination from "@/components/posts/PostPagination";
 
 type IProppage = {
    children?: React.ReactNode;
    className?: string;
-};
-
-const SortSelect = () => {
-   return (
-      <div className="mb-4">
-         <h3 className="text-xl font-bold mb-2">Ordenação</h3>
-
-         <Select>
-            <SelectTrigger className="w-[180px]">
-               <SelectValue placeholder="Select a fruit" />
-            </SelectTrigger>
-            <SelectContent>
-               <SelectGroup>
-                  <SelectLabel>Fruits</SelectLabel>
-                  <SelectItem value="apple">Apple</SelectItem>
-                  <SelectItem value="banana">Banana</SelectItem>
-                  <SelectItem value="blueberry">Blueberry</SelectItem>
-                  <SelectItem value="grapes">Grapes</SelectItem>
-                  <SelectItem value="pineapple">Pineapple</SelectItem>
-               </SelectGroup>
-            </SelectContent>
-         </Select>
-      </div>
-   );
 };
 
 export default function page({ children, className }: IProppage) {
@@ -67,33 +54,7 @@ export default function page({ children, className }: IProppage) {
       <>
          <NaveBar />
          <BaseSection className={cn("px-space-page mb-auto", className)}>
-            <div className="flex justify-between">
-               <div className="flex-1 flex items-start gap-x-6 mb-4">
-                  <div className="w-[30%] flex flex-col flex-wrap">
-                     <h3 className="text-xl font-bold mb-2">Categorias</h3>
-
-                     <ToggleGroup className="flex flex-wrap" type="multiple">
-                        {Array.from({ length: 5 }).map((x, y) => {
-                           return (
-                              <ToggleGroupItem value={`a-${y}`}>
-                                 Ciência
-                              </ToggleGroupItem>
-                           );
-                        })}
-                     </ToggleGroup>
-                  </div>
-
-                  <div>
-                     <SortSelect />
-                     <Button>Aplicar Filtros</Button>
-                  </div>
-               </div>
-
-               <SearchBar
-                  placeholder="Digite sua pesquisa..."
-                  className="h-10 bg-secondary"
-               />
-            </div>
+            <PostFilters />
 
             <div>
                {posts.map((post) => {
@@ -117,12 +78,14 @@ export default function page({ children, className }: IProppage) {
 
                            <PostTitle post={post} />
                            <PostDescription post={post} />
-                           <PostReadMoreButton onClick={() => {}} />
+                           <PostReadMoreButton post={post} />
                         </PostContent>
                      </PostContainer>
                   );
                })}
             </div>
+
+            <PostPagination />
          </BaseSection>
          <Footer />
       </>

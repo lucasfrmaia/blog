@@ -62,24 +62,20 @@ export default function NaveBar({ children, className }: IPropNaveBar) {
                </h1>
             </div>
 
-            <div className="flex justify-around items-center flex-1 gap-x-2 ">
-               <ul className="flex flex-1 items-center justify-around gap-x-2">
-                  {links.map(({ link, label }) => {
-                     return (
-                        <li
-                           key={`Navebar-${label}`}
-                           className="cursor-pointer hover:text-blue-500"
-                        >
-                           <Link href={link}>{label}</Link>
-                        </li>
-                     );
-                  })}
-               </ul>
-            </div>
+            <ul className="flex flex-1 items-center justify-around gap-x-2">
+               {links.map(({ link, label }) => {
+                  return (
+                     <li
+                        key={`Navebar-${label}`}
+                        className="cursor-pointer hover:text-blue-500"
+                     >
+                        <Link href={link}>{label}</Link>
+                     </li>
+                  );
+               })}
+            </ul>
 
-            <div className="flex flex-1 items-center justify-around">
-               <SearchBar placeholder="Buscar post..." className="h-8 w-2/3" />
-
+            <div className="flex items-center">
                <Popover>
                   <PopoverTrigger>
                      <Avatar className="cursor-pointer">
