@@ -16,7 +16,7 @@ type IPropFooter = {
    className?: string;
 };
 
-export default async function Footer({ children, className }: IPropFooter) {
+export default function Footer({ children, className }: IPropFooter) {
    const links = Object.values(globalUtils.routes);
    // const response = await fetch(globalUtils.apiRoutes.categories.all);
    // const { categories } = (await response.json()) as {

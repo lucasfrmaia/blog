@@ -38,8 +38,8 @@ export default function ToggleGroupItems({
    VariantProps<typeof toggleVariants>) {
    return (
       <ToggleGroup
+         {...props}
          className={cn("", props.className)}
-         type="multiple"
          variant="outline"
       >
          {options.map((option) => {

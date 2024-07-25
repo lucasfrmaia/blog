@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useReducer, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
    Select,
@@ -39,22 +39,137 @@ import {
    SelectTitle,
    TSortOptions,
 } from "@/components/filters-post/Select";
-import PostFilters from "@/components/posts/PostFilters";
-import PostPagination from "@/components/posts/PostPagination";
+import {
+   Pagination,
+   PaginationContent,
+   PaginationEllipsis,
+   PaginationItem,
+   PaginationLink,
+   PaginationNext,
+   PaginationPrevious,
+} from "@/components/ui/pagination";
 
 type IProppage = {
    children?: React.ReactNode;
    className?: string;
 };
 
+const sortOptions: TSortOptions = {
+   options: [
+      { label: "alfabetica", value: "21" },
+      { label: "dataCrescente", value: "21" },
+   ],
+};
+
+type Action =
+   | { type: "SET_SEARCH"; payload: string }
+   | { type: "SET_TOGGLE_GROUP"; payload: string[] }
+   | { type: "SET_SELECT"; payload: string };
+
+interface State {
+   toggleGroupValue: string[];
+   selectValue: string;
+   search: string;
+}
+
+const initialState: State = {
+   toggleGroupValue: [],
+   selectValue: "",
+   search: "",
+};
+
+const reducer = (state: State, action: Action): State => {
+   switch (action.type) {
+      case "SET_TOGGLE_GROUP":
+         return { ...state, toggleGroupValue: action.payload };
+      case "SET_SELECT":
+         return { ...state, selectValue: action.payload };
+      case "SET_SEARCH":
+         return { ...state, search: action.payload };
+      default:
+         return state;
+   }
+};
+
 export default function page({ children, className }: IProppage) {
+   const [isLoading, setIsLoading] = useState(false);
+   const [state, dispatch] = useReducer(reducer, initialState);
    const { posts } = { posts: [] as IPost[] };
+
+   const handleToggleGroupChange = (value: string[]) => {
+      dispatch({ type: "SET_TOGGLE_GROUP", payload: value });
+   };
+
+   const handleSelectChange = (value: string) => {
+      dispatch({ type: "SET_SELECT", payload: value });
+   };
+
+   const handleSearch = (value: string) => {
+      dispatch({ type: "SET_SEARCH", payload: value });
+   };
 
    return (
       <>
          <NaveBar />
          <BaseSection className={cn("px-space-page mb-auto", className)}>
-            <PostFilters />
+            <div className="flex justify-between">
+               <div className="flex-1 flex items-start gap-x-6 mb-4">
+                  <ToggleGroupContainer className="w-[30%] flex flex-col flex-wrap">
+                     <ToggleGroupTitle className="text-xl font-bold mb-2">
+                        Categorias
+                     </ToggleGroupTitle>
+
+                     <ToggleGroupItems
+                        disabled={isLoading}
+                        onValueChange={handleToggleGroupChange}
+                        type="multiple"
+                        options={[
+                           { label: "alfabetica", value: "21" },
+                           { label: "dataCrescente", value: "21" },
+                        ]}
+                     />
+                  </ToggleGroupContainer>
+
+                  <SelectContainer>
+                     <SelectTitle className="text-xl font-bold mb-2">
+                        Ordenacão
+                     </SelectTitle>
+
+                     <Select
+                        disabled={isLoading}
+                        onValueChange={handleSelectChange}
+                     >
+                        <SelectTrigger className="w-[200px]">
+                           <SelectValue placeholder="Select uma ordenação..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                           <SelectGroup>
+                              {sortOptions.options.map((option) => {
+                                 return (
+                                    <SelectItem
+                                       key={`${option.label}-${option.value}`}
+                                       value={option.value}
+                                    >
+                                       {option.label}
+                                    </SelectItem>
+                                 );
+                              })}
+                           </SelectGroup>
+                        </SelectContent>
+                     </Select>
+
+                     <Button className="mt-2">Resetar Filtros</Button>
+                  </SelectContainer>
+               </div>
+
+               <SearchBar
+                  onChange={(e) => handleSearch(e.target.value)}
+                  onButtonClick={() => setIsLoading(true)}
+                  disabled={isLoading}
+                  placeholder="Digite sua pesquisa..."
+                  className="h-10 bg-secondary"
+               />
+            </div>
 
             <div>
                {posts.map((post) => {
@@ -85,7 +200,23 @@ export default function page({ children, className }: IProppage) {
                })}
             </div>
 
-            <PostPagination />
+            <Pagination>
+               <PaginationContent>
+                  <PaginationItem>
+                     <PaginationPrevious href="#" />
+                  </PaginationItem>
+                  {Array.from({ length: 5 }).map((_, index) => {
+                     return (
+                        <PaginationItem key={`Pag-${index + 1}`}>
+                           <PaginationLink href="#">{index + 1}</PaginationLink>
+                        </PaginationItem>
+                     );
+                  })}
+                  <PaginationItem>
+                     <PaginationNext href="#" />
+                  </PaginationItem>
+               </PaginationContent>
+            </Pagination>
          </BaseSection>
          <Footer />
       </>

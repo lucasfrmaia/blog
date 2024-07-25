@@ -60,9 +60,9 @@ export default async function RecentPost({
             })}
          </div>
 
-         <Button className="self-center">
-            <Link href={"/posts"}>Ver Todos</Link>
-         </Button>
+         <Link href={"/posts"}>
+            <Button className="self-center">Ver Todos</Button>
+         </Link>
       </div>
    );
 }

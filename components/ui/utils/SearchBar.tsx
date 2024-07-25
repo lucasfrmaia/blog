@@ -6,9 +6,16 @@ import { IoIosSearch } from "react-icons/io";
 
 type IPropSearchBar = {
    className?: string;
+   isLoading?: false;
+   onButtonClick: () => void;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export default function SearchBar({ className, ...props }: IPropSearchBar) {
+export default function SearchBar({
+   className,
+   isLoading,
+   onButtonClick,
+   ...props
+}: IPropSearchBar) {
    const [isClicked, setIsClicked] = useState(false);
    const handleFocus = () => {
       setIsClicked(true);
@@ -30,11 +37,16 @@ export default function SearchBar({ className, ...props }: IPropSearchBar) {
             className=" bg-transparent flex-1 outline-none"
             {...props}
             type="text"
+            disabled={isLoading}
             onFocus={handleFocus}
             onBlur={handleBlur}
          />
 
-         <button className="clear-none">
+         <button
+            onClick={onButtonClick}
+            disabled={isLoading}
+            className="clear-none"
+         >
             <IoIosSearch className="text-foreground" size={21} />
          </button>
       </div>
