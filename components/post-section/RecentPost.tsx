@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { globalUtils } from "@/utils/classes";
 import Link from "next/link";
 import { randomApiManager } from "@/services/modules/api-manager";
-import { AMOUNT_POST_RECENT } from "@/utils/contasts/constants";
+import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 
 type IPropRecentPost = {
    children?: React.ReactNode;

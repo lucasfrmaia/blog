@@ -13,7 +13,7 @@ import {
    PostCategoriesBadge,
 } from "../post-component/PostComponent";
 import { randomApiManager } from "@/services/modules/api-manager";
-import { AMOUNT_POST_RECENT } from "@/utils/contasts/constants";
+import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 
 type IPropAsidePost = {
    children?: React.ReactNode;
