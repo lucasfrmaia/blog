@@ -1,10 +1,9 @@
-import { IPost } from "@/app/(entities)/interfaces";
 import { prisma } from "@/prisma/client/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
    try {
-      const posts: IPost[] = Array.from({ length: 5 }).map((x) => ({
+      const posts = Array.from({ length: 5 }).map((x) => ({
          id: "1",
          createdAt: new Date(),
          updateAt: new Date(),

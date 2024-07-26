@@ -16,7 +16,6 @@ import SearchBar from "../../components/ui/utils/SearchBar";
 import BaseSection from "../../components/ui/utils/BaseSection";
 import FiltersWithLabel from "../../components/ui/utils/FilterIcon";
 import { Button } from "../../components/ui/button";
-import { IPost } from "@/app/(entities)/interfaces";
 import {
    PostContainer,
    PostImage,
@@ -48,6 +47,7 @@ import {
    PaginationNext,
    PaginationPrevious,
 } from "@/components/ui/pagination";
+import { IPost } from "@/services/modules/post/entities/Post";
 
 type IProppage = {
    children?: React.ReactNode;

@@ -1,4 +1,4 @@
-import { IPost } from "@/app/(entities)/interfaces";
+import { IPost } from "../entities/Post";
 
 export interface IPostManager {
    create(note: IPost): Promise<void>;

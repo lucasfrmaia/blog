@@ -2,7 +2,6 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import TitleSection from "../ui/utils/TitleSection";
 import { ICategory } from "@/services/modules/category/entities/category";
-import { IPost } from "@/app/(entities)/interfaces";
 import {
    PostContainer,
    PostImage,

@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import NaveBar from "@/components/header/NaveBar";
 import Footer from "@/components/footer/Footer";
 import BaseSection from "@/components/ui/utils/BaseSection";
-import { IPost } from "@/app/(entities)/interfaces";
+import { IPost } from "@/services/modules/post/entities/Post";
 
 type IPropPage = {
    children?: React.ReactNode;

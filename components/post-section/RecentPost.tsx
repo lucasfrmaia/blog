@@ -9,7 +9,6 @@ import {
    PostReadMoreButton,
    PostHeader,
 } from "../post-component/PostComponent";
-import { IPost } from "@/app/(entities)/interfaces";
 import TitleSection from "../ui/utils/TitleSection";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";

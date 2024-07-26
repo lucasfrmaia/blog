@@ -1,7 +1,7 @@
-import { IPost } from "@/app/(entities)/interfaces";
 import { ICategoryManager } from "./category/repositories/category-repository";
 import { IPostManager } from "./post/repositories/post-repository";
 import { ICategory } from "./category/entities/category";
+import { IPost } from "./post/entities/Post";
 
 class PostManager implements IPostManager {
    async getLastPost(): Promise<IPost> {
