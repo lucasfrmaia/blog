@@ -1,0 +1,70 @@
+import React from "react";
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { ROUTES_PAGE } from "@/utils/constantes/routes";
+
+type IProppage = {
+   children?: React.ReactNode;
+   className?: string;
+};
+
+export default function page({ children, className }: IProppage) {
+   return (
+      <main
+         className={cn(
+            "w-screen h-screen flex items-center justify-center",
+            className
+         )}
+      >
+         <form className="w-[40vw] h-[60%]">
+            <div className="w-full text-center">
+               <h1 className="font-semibold text-3xl">Login</h1>
+            </div>
+
+            <div className="mb-4">
+               <Label>Email</Label>
+               <Input type="email" placeholder="Digite seu email..." />
+            </div>
+
+            <div className="mb-4">
+               <Label>Senha</Label>
+               <Input type="password" placeholder="Digite sua senha..." />
+            </div>
+
+            <div className="flex items-center justify-between mb-4">
+               <div className="flex gap-x-2">
+                  <Checkbox />
+                  <Label>Lembrar-me</Label>
+               </div>
+
+               <Link
+                  className="hover:underline text-primary"
+                  href={ROUTES_PAGE.recovery.link}
+               >
+                  Esqueceu sua senha?
+               </Link>
+            </div>
+
+            <Button variant="secondary" className="w-full rounded-lg h-20 mb-4">
+               Login
+            </Button>
+
+            <div className="text-center">
+               <span>
+                  Não possui uma conta?{" "}
+                  <Link
+                     className="hover:underline text-primary"
+                     href={ROUTES_PAGE.register.link}
+                  >
+                     Registre-se
+                  </Link>{" "}
+               </span>
+            </div>
+         </form>
+      </main>
+   );
+}
