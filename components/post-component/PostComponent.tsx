@@ -1,8 +1,8 @@
-import { ICategory, IPost } from "@/app/(entities)/interfaces";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { IPost } from "@/services/modules/post/entities/Post";
 
 export function PostContainer({
    children,
