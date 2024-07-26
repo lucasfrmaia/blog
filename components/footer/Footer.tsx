@@ -10,21 +10,16 @@ import { globalUtils } from "@/utils/classes";
 import { ICategory } from "@/app/(entities)/interfaces";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { randomApiManager } from "@/services/modules/api-manager";
 
 type IPropFooter = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default function Footer({ children, className }: IPropFooter) {
+export default async function Footer({ children, className }: IPropFooter) {
    const links = Object.values(globalUtils.routes);
-   // const response = await fetch(globalUtils.apiRoutes.categories.all);
-   // const { categories } = (await response.json()) as {
-   //    categories: ICategory[];
-   // };
-   const { categories } = { categories: [] } as {
-      categories: ICategory[];
-   };
+   const categories = await randomApiManager.category.findAll();
 
    return (
       <footer className="px-space-page p-4">
@@ -41,7 +36,7 @@ export default function Footer({ children, className }: IPropFooter) {
             </FooterContent>
 
             <FooterContent className="flex-1">
-               <FooterTitle>Categorias</FooterTitle>
+               <FooterTitle>Navegação</FooterTitle>
                <FooterUl className="flex flex-col">
                   {links.map(({ link, label }) => {
                      return (

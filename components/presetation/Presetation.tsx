@@ -11,33 +11,18 @@ import BaseSection from "../ui/utils/BaseSection";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { globalUtils } from "@/utils/classes";
+import { randomApiManager } from "@/services/modules/api-manager";
 
 type IPropPresetation = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default function Presetation({ children, className }: IPropPresetation) {
-   const post = {
-      id: "1",
-      createdAt: new Date(),
-      updateAt: new Date(),
-      slug: "post-1",
-      title: "Post 1",
-      description: "Description of post 1",
-      img: "https://t3.ftcdn.net/jpg/05/27/49/44/360_F_527494416_7PWpMBqkWQarxhOgD1vIDzhDxizP1cQd.jpg",
-      views: 100,
-      catSlug: "technology",
-      userEmail: "user1@example.com",
-      categories: [
-         {
-            id: "2",
-            slug: "science",
-            title: "Science",
-            color: "#007bff",
-         },
-      ],
-   };
+export default async function Presetation({
+   children,
+   className,
+}: IPropPresetation) {
+   const post = await randomApiManager.post.getLastPost();
 
    return (
       <BaseSection>

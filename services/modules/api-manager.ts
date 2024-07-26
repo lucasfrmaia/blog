@@ -3,21 +3,46 @@ import { ICategoryManager } from "./category/repositories/category-repository";
 import { IPostManager } from "./post/repositories/post-repository";
 import { ICategory } from "./category/entities/category";
 
-class t1 implements IPostManager {
-   create(note: IPost): Promise<void> {
-      throw new Error("Method not implemented.");
+class PostManager implements IPostManager {
+   async getLastPost(): Promise<IPost> {
+      return {} as IPost;
    }
-   update(post: IPost): Promise<void> {
-      throw new Error("Method not implemented.");
+   private posts: IPost[] = [];
+
+   async create(post: IPost): Promise<void> {
+      this.posts.push(post);
    }
-   findById(id: string): Promise<IPost | null> {
-      throw new Error("Method not implemented.");
+
+   async update(post: IPost): Promise<void> {
+      const index = this.posts.findIndex((p) => p.id === post.id);
+      if (index !== -1) {
+         this.posts[index] = post;
+      }
    }
-   findAll(): Promise<IPost[]> {
-      throw new Error("Method not implemented.");
+
+   async findById(id: string): Promise<IPost | null> {
+      const post = this.posts.find((p) => p.id === id);
+      return post || null;
    }
-   delete(id: string): Promise<void> {
-      throw new Error("Method not implemented.");
+
+   async findAll(amount: number): Promise<IPost[]> {
+      return this.posts.slice(0, amount);
+   }
+
+   async findPerPage(data: {
+      amountPerPage: number;
+      page: number;
+   }): Promise<IPost[]> {
+      const { amountPerPage, page } = data;
+      return this.posts.slice((page - 1) * amountPerPage, page * amountPerPage);
+   }
+
+   async findPopular(amount: number): Promise<IPost[]> {
+      return this.posts.sort((a, b) => b.views - a.views).slice(0, amount);
+   }
+
+   async delete(id: string): Promise<void> {
+      this.posts = this.posts.filter((p) => p.id !== id);
    }
 }
 
@@ -31,8 +56,8 @@ class t2 implements ICategoryManager {
    findById(id: string): Promise<ICategory | null> {
       throw new Error("Method not implemented.");
    }
-   findAll(): Promise<ICategory[]> {
-      throw new Error("Method not implemented.");
+   async findAll(): Promise<ICategory[]> {
+      return [];
    }
    delete(id: string): Promise<void> {
       throw new Error("Method not implemented.");
@@ -46,4 +71,7 @@ class RandomApiManager {
    ) {}
 }
 
-export const randomApiManager = new RandomApiManager(new t1(), new t2());
+export const randomApiManager = new RandomApiManager(
+   new PostManager(),
+   new t2()
+);

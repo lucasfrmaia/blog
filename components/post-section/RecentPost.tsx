@@ -15,6 +15,8 @@ import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { globalUtils } from "@/utils/classes";
 import Link from "next/link";
+import { randomApiManager } from "@/services/modules/api-manager";
+import { AMOUNT_POST_RECENT } from "@/utils/contasts/constants";
 
 type IPropRecentPost = {
    children?: React.ReactNode;
@@ -25,8 +27,7 @@ export default async function RecentPost({
    children,
    className,
 }: IPropRecentPost) {
-   const response = await fetch(globalUtils.apiRoutes.posts.recent);
-   const { posts } = (await response.json()) as { posts: IPost[] };
+   const posts = await randomApiManager.post.findAll(AMOUNT_POST_RECENT);
 
    return (
       <div className={cn("flex flex-col", className)}>

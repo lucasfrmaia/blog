@@ -218,7 +218,6 @@ export default function page({ children, className }: IProppage) {
                </PaginationContent>
             </Pagination>
          </BaseSection>
-         <Footer />
       </>
    );
 }
