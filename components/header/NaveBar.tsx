@@ -1,12 +1,7 @@
-"use client";
-
 import React from "react";
 import { Button } from "../ui/button";
 import { globalUtils } from "@/utils/classes";
 import SearchBar from "../ui/utils/SearchBar";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 import { useTheme } from "next-themes";
 import {
    DropdownMenu,
@@ -15,40 +10,20 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import ToggleTheme from "./ToggleTheme";
+import { getServerSession } from "next-auth";
+import { NextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
+import { ROUTES_PAGE } from "@/utils/constantes/routes";
+import PopoverUser from "./PopoverUser";
 
 type IPropNaveBar = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export function ModeToggle() {
-   const { setTheme } = useTheme();
+export default async function NaveBar({ children, className }: IPropNaveBar) {
+   const session = await getServerSession(NextAuthOptions);
 
-   return (
-      <DropdownMenu>
-         <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-               <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-               <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-               <span className="sr-only">Toggle theme</span>
-            </Button>
-         </DropdownMenuTrigger>
-         <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setTheme("light")}>
-               Light
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("dark")}>
-               Dark
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setTheme("system")}>
-               System
-            </DropdownMenuItem>
-         </DropdownMenuContent>
-      </DropdownMenu>
-   );
-}
-
-export default function NaveBar({ children, className }: IPropNaveBar) {
    const links = Object.values(globalUtils.routes);
 
    return (
@@ -75,31 +50,15 @@ export default function NaveBar({ children, className }: IPropNaveBar) {
                })}
             </ul>
 
-            <div className="flex items-center">
-               <Popover>
-                  <PopoverTrigger>
-                     <Avatar className="cursor-pointer">
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>CN</AvatarFallback>
-                     </Avatar>
-                  </PopoverTrigger>
-
-                  <PopoverContent className="flex flex-col shadow-2xl rounded-lg">
-                     <div className="flex flex-col justify-center items-center w-full mb-4">
-                        <Avatar className="w-10 h-10 mb-2">
-                           <AvatarImage src="https://github.com/shadcn.png" />
-                           <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        <span>Olá! Usuário!</span>
-                     </div>
-
-                     <div className="flex items-center justify-between">
-                        <p className="text-lg font-semibold">Tema</p>
-                        <ModeToggle />
-                     </div>
-                  </PopoverContent>
-               </Popover>
-            </div>
+            {session && (
+               <div className="flex items-center gap-x-4">
+                  <ToggleTheme />
+                  <Link href={ROUTES_PAGE.login.link}>
+                     <Button variant="secondary">Login</Button>
+                  </Link>
+               </div>
+            )}
+            {!session && <PopoverUser />}
          </header>
       </>
    );

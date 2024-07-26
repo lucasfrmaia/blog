@@ -9,7 +9,7 @@ const NextAuthOptions: AuthOptions = {
          id: "credentials",
          name: "credentials",
          credentials: {
-            username: {
+            email: {
                type: "text",
             },
             password: {
