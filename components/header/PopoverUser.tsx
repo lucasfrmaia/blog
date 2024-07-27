@@ -12,24 +12,29 @@ import { FaCommentAlt } from "react-icons/fa";
 import { CiSettings } from "react-icons/ci";
 import { Button } from "../ui/button";
 import { signOut } from "next-auth/react";
+import { IconButton, IconLink } from "./IconSetting";
 
 type IPropPopoverUser = {
    children?: React.ReactNode;
    className?: string;
 };
-
-const Setting = ({ children, className }: IPropPopoverUser) => {
-   return (
-      <div
-         className={cn(
-            "flex p-1 gap-x-2 items-center w-full h-auto hover:bg-white/30 cursor-pointer",
-            className
-         )}
-      >
-         {children}
-      </div>
-   );
-};
+const settings = [
+   {
+      label: "Posts Salvos",
+      Icon: CiBookmark,
+      href: "#",
+   },
+   {
+      label: "Meus Comentários",
+      Icon: FaCommentAlt,
+      href: "#",
+   },
+   {
+      label: "Configurações",
+      Icon: CiSettings,
+      href: "#",
+   },
+];
 
 export default function PopoverUser({ children, className }: IPropPopoverUser) {
    return (
@@ -56,26 +61,17 @@ export default function PopoverUser({ children, className }: IPropPopoverUser) {
             </div>
 
             <div className="flex flex-col gap-y-2 mb-4 mt-4">
-               <Setting>
-                  <CiBookmark />
-                  <span>Posts Salvos</span>
-               </Setting>
-
-               <Setting>
-                  <FaCommentAlt />
-                  <span>Meus Comentários</span>
-               </Setting>
-
-               <Setting>
-                  <CiSettings />
-                  <span>Configurações</span>
-               </Setting>
+               {settings.map((setting) => {
+                  return <IconLink key={`C-${setting.label}`} {...setting} />;
+               })}
             </div>
 
-            <Setting className="text-destructive hover:bg-destructive/20">
-               <IoIosLogOut />
-               <span>Sair</span>
-            </Setting>
+            <IconButton
+               onClick={() => signOut()}
+               Icon={IoIosLogOut}
+               label="Sair"
+               className="text-destructive hover:bg-destructive/20"
+            />
          </PopoverContent>
       </Popover>
    );
