@@ -1,4 +1,4 @@
-export const ROUTES_PAGE = {
+export const NAVEBAR_ROUTES = {
    home: {
       link: "/",
       label: "Início",
@@ -8,13 +8,17 @@ export const ROUTES_PAGE = {
       label: "Posts",
    },
    contact: {
-      link: "/",
+      link: "/contact",
       label: "Contato",
    },
    about: {
-      link: "/",
+      link: "/about",
       label: "Sobre",
    },
+};
+
+export const ROUTES_PAGE = {
+   ...NAVEBAR_ROUTES,
    register: {
       link: "/register",
       label: "Cadastra-se",

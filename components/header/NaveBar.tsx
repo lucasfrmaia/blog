@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "../ui/button";
-import { globalUtils } from "@/utils/classes";
 import SearchBar from "../ui/utils/SearchBar";
 import { useTheme } from "next-themes";
 import {
@@ -13,7 +12,7 @@ import Link from "next/link";
 import ToggleTheme from "./ToggleTheme";
 import { getServerSession } from "next-auth";
 import { NextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
-import { ROUTES_PAGE } from "@/utils/constantes/routes";
+import { NAVEBAR_ROUTES, ROUTES_PAGE } from "@/utils/constantes/routes";
 import PopoverUser from "./PopoverUser";
 
 type IPropNaveBar = {
@@ -24,7 +23,7 @@ type IPropNaveBar = {
 export default async function NaveBar({ children, className }: IPropNaveBar) {
    const session = await getServerSession(NextAuthOptions);
 
-   const links = Object.values(globalUtils.routes);
+   const links = Object.values(NAVEBAR_ROUTES);
 
    return (
       <>
@@ -33,7 +32,7 @@ export default async function NaveBar({ children, className }: IPropNaveBar) {
             <div className="flex-1">
                <h1 className="text-2xl font-semibold">
                   {" "}
-                  <a href={globalUtils.routes.home.link}>Maia Blog</a>{" "}
+                  <a href={NAVEBAR_ROUTES.home.link}>Maia Blog</a>{" "}
                </h1>
             </div>
 

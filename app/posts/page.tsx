@@ -26,7 +26,6 @@ import {
    PostDescription,
    PostReadMoreButton,
 } from "../../components/post-component/PostComponent";
-import { globalUtils } from "@/utils/classes";
 import NaveBar from "@/components/header/NaveBar";
 import Footer from "@/components/footer/Footer";
 import ToggleGroupItems, {

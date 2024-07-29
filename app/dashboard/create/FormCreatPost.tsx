@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,12 +21,7 @@ type IPropFormCreatePost = {
 const schema = z.object({
    title: z.string().min(1, "Este campo é obrigatório"),
    description: z.string().min(1, "Este campo é obrigatório"),
-   categories: z.array(
-      z.object({
-         id: z.string(),
-         name: z.string(),
-      })
-   ),
+   categories: z.array(z.string()),
 });
 
 type FormProps = z.infer<typeof schema>;
@@ -36,16 +31,26 @@ export default function FormCreatePost({
    className,
 }: IPropFormCreatePost) {
    const [selected, setSelected] = useState<string[]>([]);
-   const [value, setValue] = useState("");
+
+   useEffect(() => {
+      setValue("categories", selected);
+   }, [selected]);
 
    const {
       register,
       handleSubmit,
       setError,
+      setValue,
+      watch,
       formState: { errors, isSubmitting },
    } = useForm<FormProps>({ resolver: zodResolver(schema) });
 
-   const onSubmit: SubmitHandler<FormProps> = async (data) => {};
+   const onSubmit: SubmitHandler<FormProps> = async (data) => {
+      try {
+      } catch (error) {}
+   };
+
+   const descriptionContent = watch("description");
 
    return (
       <div className={cn("w-1/2 min-w-80", className)}>
@@ -57,7 +62,11 @@ export default function FormCreatePost({
                   <h3 className="text-2xl font-semibold line-clamp-2 mb-2">
                      Título
                   </h3>
-                  <Input placeholder="Digite o título do post..." />
+                  <Input
+                     disabled={isSubmitting}
+                     {...register("title")}
+                     placeholder="Digite o título do post..."
+                  />
                </div>
 
                <div>
@@ -68,8 +77,8 @@ export default function FormCreatePost({
                      placeholder="Digite a descrição do post..."
                      className="border"
                      theme="snow"
-                     value={value}
-                     onChange={setValue}
+                     value={descriptionContent}
+                     onChange={(content) => setValue("description", content)}
                   />
                </div>
 
@@ -78,6 +87,7 @@ export default function FormCreatePost({
                      Categorias
                   </h3>
                   <MultiSelect
+                     className="w-full"
                      selected={selected}
                      options={[
                         {
@@ -113,7 +123,12 @@ export default function FormCreatePost({
                   />
                </div>
 
-               <Button variant="secondary" type="submit">
+               <Button
+                  disabled={isSubmitting}
+                  variant="secondary"
+                  type="submit"
+                  className="inline-block"
+               >
                   Criar Post
                </Button>
             </div>

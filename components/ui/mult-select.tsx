@@ -65,24 +65,15 @@ export function MultiSelect({
                            variant="secondary"
                            key={item}
                            className="mr-1 mb-1"
-                           onClick={() => handleUnselect(item)}
+                           onClick={(e) => {
+                              handleUnselect(item);
+                              e.stopPropagation();
+                           }}
                         >
                            {item}
-                           <button
-                              className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                              onKeyDown={(e) => {
-                                 if (e.key === "Enter") {
-                                    handleUnselect(item);
-                                 }
-                              }}
-                              onMouseDown={(e) => {
-                                 e.preventDefault();
-                                 e.stopPropagation();
-                              }}
-                              onClick={() => handleUnselect(item)}
-                           >
+                           <span className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
                               <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                           </button>
+                           </span>
                         </Badge>
                      ))}
                   </div>
@@ -96,7 +87,7 @@ export function MultiSelect({
                <CommandList>
                   <CommandEmpty>No item found.</CommandEmpty>
                   <CommandGroup
-                     heading="Options"
+                     heading="Escolha uma opção..."
                      className="max-h-64 overflow-auto"
                   >
                      {options.map((option) => (
@@ -126,7 +117,7 @@ export function MultiSelect({
                         </CommandItem>
                      ))}
                      <CommandItem
-                        onClick={() => {
+                        onSelect={() => {
                            onChange([]);
                            setOpen(false);
                         }}

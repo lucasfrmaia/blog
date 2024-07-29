@@ -12,9 +12,8 @@ import {
 import TitleSection from "../ui/utils/TitleSection";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { globalUtils } from "@/utils/classes";
 import Link from "next/link";
-import { randomApiManager } from "@/services/modules/api-manager";
+import { randomApiManager } from "@/services/modules/ApiManager";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 
 type IPropRecentPost = {
@@ -29,7 +28,7 @@ export default async function RecentPost({
    const posts = await randomApiManager.post.findAll(AMOUNT_POST_RECENT);
 
    return (
-      <div className={cn("flex flex-col", className)}>
+      <section className={cn("flex flex-col", className)}>
          <TitleSection>Posts Recentes</TitleSection>
          <div className="mb-4">
             {posts.map((post) => {
@@ -60,9 +59,9 @@ export default async function RecentPost({
             })}
          </div>
 
-         <Link href={"/posts"}>
+         <Link className="block self-center" href={"/posts"}>
             <Button className="self-center">Ver Todos</Button>
          </Link>
-      </div>
+      </section>
    );
 }

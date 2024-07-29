@@ -12,7 +12,7 @@ import {
    PostReadMoreButton,
    PostCategoriesBadge,
 } from "../post-component/PostComponent";
-import { randomApiManager } from "@/services/modules/api-manager";
+import { randomApiManager } from "@/services/modules/ApiManager";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 
 type IPropAsidePost = {

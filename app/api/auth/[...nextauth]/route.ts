@@ -1,3 +1,4 @@
+import { randomApiManager } from "@/services/modules/ApiManager";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
 import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
@@ -18,7 +19,16 @@ const NextAuthOptions: AuthOptions = {
          },
 
          async authorize(credentials, req) {
-            return null;
+            try {
+               const user = await randomApiManager.user.authenticate(
+                  credentials?.email,
+                  credentials?.password
+               );
+
+               return user;
+            } catch (error) {
+               return null;
+            }
          },
       }),
    ],

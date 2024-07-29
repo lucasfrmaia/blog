@@ -24,13 +24,12 @@ export default function ToggleTheme({ children, className }: IPropToggleTheme) {
             className
          )}
       >
-         {theme === "ligth" && (
+         {theme === "ligth" ? (
             <SunIcon
                onClick={toggleTheme}
                className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
             />
-         )}
-         {theme === "dark" && (
+         ) : (
             <MoonIcon
                onClick={toggleTheme}
                className="h-[1.2rem] w-[1.2rem] transition-all"

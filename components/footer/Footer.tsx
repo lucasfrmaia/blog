@@ -6,11 +6,10 @@ import {
    FooterTitle,
    FooterUl,
 } from "./FooterComponent";
-import { globalUtils } from "@/utils/classes";
-import { ICategory } from "@/app/(entities)/interfaces";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { randomApiManager } from "@/services/modules/api-manager";
+import { randomApiManager } from "@/services/modules/ApiManager";
+import { NAVEBAR_ROUTES } from "@/utils/constantes/routes";
 
 type IPropFooter = {
    children?: React.ReactNode;
@@ -18,7 +17,7 @@ type IPropFooter = {
 };
 
 export default async function Footer({ children, className }: IPropFooter) {
-   const links = Object.values(globalUtils.routes);
+   const links = Object.values(NAVEBAR_ROUTES);
    const categories = await randomApiManager.category.findAll();
 
    return (
@@ -27,11 +26,9 @@ export default async function Footer({ children, className }: IPropFooter) {
             <FooterContent className="flex-[2]">
                <FooterTitle>Sobre</FooterTitle>
                <p className="text-muted-foreground">
-                  Neste exemplo, o contêiner flexível .container se ajustará
-                  automaticamente à largura do texto dentro do elemento .text,
-                  sem a necessidade de inline-block. O uso de flex-wrap: wrap;
-                  permite que o texto quebre para a próxima linha, se
-                  necessário.
+                  Bem-vindo ao meu blog! Aqui, você encontrará uma mistura de
+                  insights e tutoriais sobre uma ampla gama de tópicos em
+                  computação e matemática.
                </p>
             </FooterContent>
 

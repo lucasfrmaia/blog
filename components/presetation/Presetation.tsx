@@ -10,8 +10,7 @@ import {
 import BaseSection from "../ui/utils/BaseSection";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { globalUtils } from "@/utils/classes";
-import { randomApiManager } from "@/services/modules/api-manager";
+import { randomApiManager } from "@/services/modules/ApiManager";
 
 type IPropPresetation = {
    children?: React.ReactNode;
