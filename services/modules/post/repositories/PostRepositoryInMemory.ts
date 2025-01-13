@@ -3,7 +3,19 @@ import { IPostRepository } from "./PostRepository";
 
 export class PostRepositoryInMemory implements IPostRepository {
    async getLastPost(): Promise<IPost> {
-      return {} as IPost;
+      return {
+         id: "123e4567-e89b-12d3-a456-426614174000",
+         createdAt: new Date(),
+         updateAt: new Date(),
+         slug: "my-first-post",
+         title: "My First Post Title",
+         description: "This is the description of my first post.",
+         img: "https://buffer.com/resources/content/images/2024/09/best-time-to-post-on-Facbeook.png",
+         views: 100,
+         catSlug: "technology",
+         userEmail: "john.doe@example.com",
+         categories: [],
+      };
    }
    private posts: IPost[] = [];
 
@@ -24,7 +36,21 @@ export class PostRepositoryInMemory implements IPostRepository {
    }
 
    async findAll(amount: number): Promise<IPost[]> {
-      return this.posts.slice(0, amount);
+      return Array.from({ length: amount }).map((x) => {
+         return {
+            id: `123e4567-e89b-12d3-a456-426614174000 ${Math.random()}`,
+            createdAt: new Date(),
+            updateAt: new Date(),
+            slug: "my-first-post",
+            title: "My First Post Title",
+            description: "This is the description of my first post.",
+            img: "https://buffer.com/resources/content/images/2024/09/best-time-to-post-on-Facbeook.png",
+            views: 100,
+            catSlug: "technology",
+            userEmail: "john.doe@example.com",
+            categories: [],
+         };
+      });
    }
 
    async findPerPage(data: {
@@ -36,7 +62,21 @@ export class PostRepositoryInMemory implements IPostRepository {
    }
 
    async findPopular(amount: number): Promise<IPost[]> {
-      return this.posts.sort((a, b) => b.views - a.views).slice(0, amount);
+      return Array.from({ length: amount }).map((x) => {
+         return {
+            id: `123e4567-e89b-12d3-a456-426614174000 ${Math.random()}`,
+            createdAt: new Date(),
+            updateAt: new Date(),
+            slug: "my-first-post",
+            title: "Popular Post",
+            description: "This is the description of my first post.",
+            img: "https://buffer.com/resources/content/images/2024/09/best-time-to-post-on-Facbeook.png",
+            views: 100,
+            catSlug: "technology",
+            userEmail: "john.doe@example.com",
+            categories: [],
+         };
+      });
    }
 
    async delete(id: string): Promise<void> {

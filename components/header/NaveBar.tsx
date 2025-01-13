@@ -20,8 +20,8 @@ type IPropNaveBar = {
    className?: string;
 };
 
-export default async function NaveBar({ children, className }: IPropNaveBar) {
-   const session = await getServerSession(NextAuthOptions);
+export default function NaveBar({ children, className }: IPropNaveBar) {
+   // const session = await getServerSession(NextAuthOptions);
 
    const links = Object.values(NAVEBAR_ROUTES);
 
@@ -49,7 +49,7 @@ export default async function NaveBar({ children, className }: IPropNaveBar) {
                })}
             </ul>
 
-            {!session && (
+            {/* {!session && (
                <div className="flex items-center gap-x-4">
                   <ToggleTheme />
                   <Link href={ROUTES_PAGE.login.link}>
@@ -57,7 +57,7 @@ export default async function NaveBar({ children, className }: IPropNaveBar) {
                   </Link>
                </div>
             )}
-            {session && <PopoverUser />}
+            {session && <PopoverUser />} */}
          </header>
       </>
    );

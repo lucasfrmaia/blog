@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
    PostContainer,
@@ -15,17 +17,28 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { randomApiManager } from "@/services/modules/ApiManager";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
+import { useQuery } from "@tanstack/react-query";
 
 type IPropRecentPost = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default async function RecentPost({
-   children,
-   className,
-}: IPropRecentPost) {
-   const posts = await randomApiManager.post.findAll(AMOUNT_POST_RECENT);
+export default function RecentPost({ children, className }: IPropRecentPost) {
+   const { data: posts, isLoading } = useQuery({
+      queryKey: ["recent_posts"],
+      queryFn: async () => {
+         const response = await randomApiManager.post.findAll(
+            AMOUNT_POST_RECENT
+         );
+
+         return response;
+      },
+   });
+
+   if (isLoading || posts == null) {
+      return null;
+   }
 
    return (
       <section className={cn("flex flex-col", className)}>

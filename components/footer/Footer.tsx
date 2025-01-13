@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
    FooterContent,
@@ -10,15 +12,26 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { randomApiManager } from "@/services/modules/ApiManager";
 import { NAVEBAR_ROUTES } from "@/utils/constantes/routes";
+import { useQuery } from "@tanstack/react-query";
 
 type IPropFooter = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default async function Footer({ children, className }: IPropFooter) {
+export default function Footer({ children, className }: IPropFooter) {
    const links = Object.values(NAVEBAR_ROUTES);
-   const categories = await randomApiManager.category.findAll();
+   const { data: categories, isLoading } = useQuery({
+      queryKey: ["all_categories"],
+      queryFn: async () => {
+         const response = await randomApiManager.category.findAll();
+         return response;
+      },
+   });
+
+   if (isLoading) {
+      return null;
+   }
 
    return (
       <footer className="px-space-page p-4">
@@ -48,7 +61,7 @@ export default async function Footer({ children, className }: IPropFooter) {
             <FooterContent className="flex-1">
                <FooterTitle>Categorias</FooterTitle>
                <FooterUl>
-                  {categories.map((category) => {
+                  {categories?.map((category) => {
                      return (
                         <FooterText key={`Footer-${category.id}`}>
                            {category.title}

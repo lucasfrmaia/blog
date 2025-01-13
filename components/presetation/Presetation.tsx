@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
    PostContainer,
@@ -11,17 +13,26 @@ import BaseSection from "../ui/utils/BaseSection";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { randomApiManager } from "@/services/modules/ApiManager";
+import { useQuery } from "@tanstack/react-query";
 
 type IPropPresetation = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default async function Presetation({
-   children,
-   className,
-}: IPropPresetation) {
-   const post = await randomApiManager.post.getLastPost();
+export default function Presetation({ children, className }: IPropPresetation) {
+   const { data: post, isLoading } = useQuery({
+      queryKey: ["last_post"],
+      queryFn: async () => {
+         const response = await randomApiManager.post.getLastPost();
+
+         return response;
+      },
+   });
+
+   if (isLoading || post == null) {
+      return null;
+   }
 
    return (
       <BaseSection>
@@ -34,6 +45,7 @@ export default async function Presetation({
 
          <PostContainer className="flex gap-x-4 items-center">
             <PostImage
+               className="w-64 h-52 object-cover"
                post={post}
                alt={`Imagem do post ${post.title}`}
             ></PostImage>

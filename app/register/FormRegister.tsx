@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
 
@@ -40,7 +39,6 @@ export default function FormRegister({
          </div>
 
          <div className="flex items-center gap-x-2 mb-4">
-            <Checkbox />
             <Label>
                Li e aceito os{" "}
                <Link

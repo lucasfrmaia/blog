@@ -37,16 +37,11 @@ import {
    SelectTitle,
    TSortOptions,
 } from "@/components/filters-post/Select";
-import {
-   Pagination,
-   PaginationContent,
-   PaginationEllipsis,
-   PaginationItem,
-   PaginationLink,
-   PaginationNext,
-   PaginationPrevious,
-} from "@/components/ui/pagination";
+
 import { IPost } from "@/services/modules/post/entities/Post";
+import { useQuery } from "@tanstack/react-query";
+import { randomApiManager } from "@/services/modules/ApiManager";
+import CustomPagination from "@/components/pagination/CustomPagination";
 
 type IProppage = {
    children?: React.ReactNode;
@@ -91,9 +86,15 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export default function page({ children, className }: IProppage) {
-   const [isLoading, setIsLoading] = useState(false);
    const [state, dispatch] = useReducer(reducer, initialState);
-   const { posts } = { posts: [] as IPost[] };
+   const { data: posts, isLoading } = useQuery({
+      queryKey: ["all_posts"],
+      queryFn: async () => {
+         const response = await randomApiManager.post.findAll(10);
+
+         return response;
+      },
+   });
 
    const handleToggleGroupChange = (value: string[]) => {
       dispatch({ type: "SET_TOGGLE_GROUP", payload: value });
@@ -106,6 +107,10 @@ export default function page({ children, className }: IProppage) {
    const handleSearch = (value: string) => {
       dispatch({ type: "SET_SEARCH", payload: value });
    };
+
+   if (isLoading) {
+      return null;
+   }
 
    return (
       <>
@@ -156,22 +161,24 @@ export default function page({ children, className }: IProppage) {
                            </SelectGroup>
                         </SelectContent>
                      </Select>
-
-                     <Button className="mt-2">Resetar Filtros</Button>
+                     <div className="flex items-center gap-x-2 mt-2">
+                        <Button>Aplicar Filtros</Button>
+                        <Button>Resetar Filtros</Button>
+                     </div>
                   </SelectContainer>
                </div>
 
                <SearchBar
                   onChange={(e) => handleSearch(e.target.value)}
-                  onButtonClick={() => setIsLoading(true)}
+                  onButtonClick={() => {}}
                   disabled={isLoading}
                   placeholder="Digite sua pesquisa..."
                   className="h-10 bg-secondary"
                />
             </div>
 
-            <div>
-               {posts.map((post) => {
+            <div className="mt-4">
+               {posts?.map((post) => {
                   return (
                      <PostContainer
                         className="flex items-center gap-x-4 mb-8 w-2/3"
@@ -199,24 +206,9 @@ export default function page({ children, className }: IProppage) {
                })}
             </div>
 
-            <Pagination>
-               <PaginationContent>
-                  <PaginationItem>
-                     <PaginationPrevious href="#" />
-                  </PaginationItem>
-                  {Array.from({ length: 5 }).map((_, index) => {
-                     return (
-                        <PaginationItem key={`Pag-${index + 1}`}>
-                           <PaginationLink href="#">{index + 1}</PaginationLink>
-                        </PaginationItem>
-                     );
-                  })}
-                  <PaginationItem>
-                     <PaginationNext href="#" />
-                  </PaginationItem>
-               </PaginationContent>
-            </Pagination>
+            <CustomPagination currentPage={0} totalItems={100} />
          </BaseSection>
+         <Footer />
       </>
    );
 }
