@@ -5,6 +5,9 @@ import { IPost } from "./post/entities/Post";
 import { IUserRepository } from "./user/repositories/UserRepository";
 import { IUser } from "./user/entities/user";
 import { PostRepositoryInMemory } from "./post/repositories/PostRepositoryInMemory";
+import { CategoryRepositoryInMemory } from "./category/repositories/CategoryRepositoryInMemory";
+import { ICommentRepository } from "./comment/repositories/CommentRepository";
+import { CommentRepositoryInMemory } from "./comment/repositories/CommentRepositoryInMemory";
 
 class t2 implements ICategoryManager {
    create(note: ICategory): Promise<void> {
@@ -33,16 +36,18 @@ class t3 implements IUserRepository {
    }
 }
 
-class RandomApiManager {
+class ApiManager {
    constructor(
       public readonly post: IPostRepository,
       public readonly category: ICategoryManager,
-      public readonly user: IUserRepository
+      public readonly user: IUserRepository,
+      public readonly comment: ICommentRepository
    ) {}
 }
 
-export const randomApiManager = new RandomApiManager(
+export const apiManager = new ApiManager(
    new PostRepositoryInMemory(),
-   new t2(),
-   new t3()
+   new CategoryRepositoryInMemory(),
+   new t3(),
+   new CommentRepositoryInMemory()
 );

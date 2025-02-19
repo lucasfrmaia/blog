@@ -1,54 +1,124 @@
+"use client";
+
 import React from "react";
-import { cn } from "@/lib/utils";
-import NaveBar from "@/components/header/NaveBar";
-import Footer from "@/components/footer/Footer";
-import BaseSection from "@/components/ui/utils/BaseSection";
-import { IPost } from "@/services/modules/post/entities/Post";
+import { useQuery } from "@tanstack/react-query";
+import { apiManager } from "@/services/modules/ApiManager";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MessageSquare, ThumbsUp, Share2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 
-type IPropPage = {
-   children?: React.ReactNode;
-   className?: string;
-};
+export default function PostPage({ params }: { params: { id: string } }) {
+   const { data: post } = useQuery({
+      queryKey: ["post", params.id],
+      queryFn: () => apiManager.post.findById(params.id),
+   });
 
-export default function Page({ children, className }: IPropPage) {
-   const post: IPost = {
-      id: "1",
-      createdAt: new Date(),
-      updateAt: new Date(),
-      slug: "post-1",
-      title: "Post 1",
-      description: "Description of post 1",
-      img: "https://t3.ftcdn.net/jpg/05/27/49/44/360_F_527494416_7PWpMBqkWQarxhOgD1vIDzhDxizP1cQd.jpg",
-      views: 100,
-      catSlug: "technology",
-      userEmail: "user1@example.com",
-      categories: [
-         {
-            id: "2",
-            slug: "science",
-            title: "Ciência",
-            color: "#007bff",
-         },
-      ],
-   };
+   const { data: comments } = useQuery({
+      queryKey: ["comments", params.id],
+      queryFn: () => apiManager.comment.findByPostSlug(post?.slug || ""),
+      enabled: !!post?.slug,
+   });
+
+   if (!post) {
+      return <div>Carregando...</div>;
+   }
 
    return (
-      <>
-         <NaveBar />
+      <div className="container mx-auto px-4 py-8">
+         <article className="max-w-4xl mx-auto">
+            {post.img && (
+               <div className="relative w-full h-[400px] mb-8 rounded-lg overflow-hidden">
+                  <Image
+                     src={post.img}
+                     alt={post.title}
+                     fill
+                     className="object-cover"
+                  />
+               </div>
+            )}
 
-         <BaseSection>
-            <h1 className="text-4xl font-semibold">{post.title}</h1>
+            <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
 
-            <ul className="flex items-center gap-x-2">
+            <div className="flex items-center space-x-4 mb-8">
+               <Avatar>
+                  <AvatarImage src="/placeholder-avatar.jpg" />
+                  <AvatarFallback>AU</AvatarFallback>
+               </Avatar>
+               <div>
+                  <p className="font-medium">Autor</p>
+                  <p className="text-sm text-muted-foreground">
+                     {new Date(post.createdAt).toLocaleDateString()} •{" "}
+                     {post.views} visualizações
+                  </p>
+               </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-8">
                {post.categories.map((category) => (
-                  <li key={`Post-${post.id}-${category.id}`}>
+                  <Badge key={category.id} variant="secondary">
                      {category.title}
-                  </li>
+                  </Badge>
                ))}
-            </ul>
-         </BaseSection>
+            </div>
 
-         <Footer />
-      </>
+            <div className="prose max-w-none mb-8">{post.description}</div>
+
+            <div className="flex items-center justify-between py-4">
+               <div className="flex space-x-4">
+                  <Button variant="ghost" size="sm">
+                     <ThumbsUp className="h-4 w-4 mr-2" />
+                     Curtir
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                     <MessageSquare className="h-4 w-4 mr-2" />
+                     Comentar
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                     <Share2 className="h-4 w-4 mr-2" />
+                     Compartilhar
+                  </Button>
+               </div>
+            </div>
+
+            <Separator className="my-8" />
+
+            <section>
+               <h2 className="text-2xl font-bold mb-6">
+                  Comentários ({comments?.length || 0})
+               </h2>
+               <div className="space-y-6">
+                  {comments?.map((comment) => (
+                     <Card key={comment.id}>
+                        <CardContent className="pt-6">
+                           <div className="flex items-start space-x-4">
+                              <Avatar>
+                                 <AvatarImage src="/placeholder-avatar.jpg" />
+                                 <AvatarFallback>AU</AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1">
+                                 <div className="flex items-center justify-between">
+                                    <p className="font-medium">
+                                       {comment.userEmail}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                       {new Date(
+                                          comment.createdAt
+                                       ).toLocaleDateString()}
+                                    </p>
+                                 </div>
+                                 <p className="mt-2">{comment.description}</p>
+                              </div>
+                           </div>
+                        </CardContent>
+                     </Card>
+                  ))}
+               </div>
+            </section>
+         </article>
+      </div>
    );
 }

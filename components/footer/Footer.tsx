@@ -1,30 +1,20 @@
 "use client";
 
 import React from "react";
-import {
-   FooterContent,
-   FooterLink,
-   FooterText,
-   FooterTitle,
-   FooterUl,
-} from "./FooterComponent";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { randomApiManager } from "@/services/modules/ApiManager";
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { apiManager } from "@/services/modules/ApiManager";
 import { NAVEBAR_ROUTES } from "@/utils/constantes/routes";
 import { useQuery } from "@tanstack/react-query";
+import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
 
-type IPropFooter = {
-   children?: React.ReactNode;
-   className?: string;
-};
-
-export default function Footer({ children, className }: IPropFooter) {
+export default function Footer() {
    const links = Object.values(NAVEBAR_ROUTES);
    const { data: categories, isLoading } = useQuery({
       queryKey: ["all_categories"],
       queryFn: async () => {
-         const response = await randomApiManager.category.findAll();
+         const response = await apiManager.category.findAll();
          return response;
       },
    });
@@ -34,70 +24,126 @@ export default function Footer({ children, className }: IPropFooter) {
    }
 
    return (
-      <footer className="px-space-page p-4">
-         <div className="flex gap-x-8 py">
-            <FooterContent className="flex-[2]">
-               <FooterTitle>Sobre</FooterTitle>
-               <p className="text-muted-foreground">
-                  Bem-vindo ao meu blog! Aqui, você encontrará uma mistura de
-                  insights e tutoriais sobre uma ampla gama de tópicos em
-                  computação e matemática.
-               </p>
-            </FooterContent>
+      <footer className="bg-card">
+         <div className="container mx-auto px-4 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+               {/* Sobre */}
+               <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Blog Dev</h3>
+                  <p className="text-sm text-muted-foreground">
+                     Um espaço dedicado ao compartilhamento de conhecimento e
+                     experiências no mundo do desenvolvimento de software.
+                  </p>
+                  <div className="flex space-x-4">
+                     <Link
+                        href="#"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                     >
+                        <Facebook className="h-5 w-5" />
+                     </Link>
+                     <Link
+                        href="#"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                     >
+                        <Twitter className="h-5 w-5" />
+                     </Link>
+                     <Link
+                        href="#"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                     >
+                        <Instagram className="h-5 w-5" />
+                     </Link>
+                     <Link
+                        href="#"
+                        className="text-muted-foreground hover:text-foreground transition-colors"
+                     >
+                        <Linkedin className="h-5 w-5" />
+                     </Link>
+                  </div>
+               </div>
 
-            <FooterContent className="flex-1">
-               <FooterTitle>Navegação</FooterTitle>
-               <FooterUl className="flex flex-col">
-                  {links.map(({ link, label }) => {
-                     return (
-                        <FooterLink href={link} key={`Footer-${label}`}>
-                           {label}
-                        </FooterLink>
-                     );
-                  })}
-               </FooterUl>
-            </FooterContent>
+               {/* Links */}
+               <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Links Rápidos</h3>
+                  <ul className="space-y-2">
+                     {links.map(({ link, label }) => (
+                        <li key={`footer-${label}`}>
+                           <Link
+                              href={link}
+                              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                           >
+                              {label}
+                           </Link>
+                        </li>
+                     ))}
+                  </ul>
+               </div>
 
-            <FooterContent className="flex-1">
-               <FooterTitle>Categorias</FooterTitle>
-               <FooterUl>
-                  {categories?.map((category) => {
-                     return (
-                        <FooterText key={`Footer-${category.id}`}>
-                           {category.title}
-                        </FooterText>
-                     );
-                  })}
-               </FooterUl>
-            </FooterContent>
+               {/* Categorias */}
+               <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Categorias</h3>
+                  <ul className="space-y-2">
+                     {categories?.map((category) => (
+                        <li key={`footer-${category.id}`}>
+                           <Link
+                              href={`/category/${category.slug}`}
+                              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                           >
+                              {category.title}
+                           </Link>
+                        </li>
+                     ))}
+                  </ul>
+               </div>
 
-            <FooterContent className="flex-[2]">
-               <FooterTitle>Notificações de Post</FooterTitle>
-               <FooterText>
-                  Insira seu email para receber Notificações de novos posts
-               </FooterText>
+               {/* Newsletter */}
+               <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Newsletter</h3>
+                  <p className="text-sm text-muted-foreground">
+                     Inscreva-se para receber atualizações sobre novos posts e
+                     conteúdos exclusivos.
+                  </p>
+                  <form className="flex gap-2">
+                     <Input
+                        type="email"
+                        placeholder="Seu email"
+                        className="max-w-[240px]"
+                     />
+                     <Button type="submit" size="icon">
+                        <Send className="h-4 w-4" />
+                     </Button>
+                  </form>
+               </div>
+            </div>
 
-               <form className="mt-4">
-                  <Input
-                     type="email"
-                     className="w-full mb-2"
-                     placeholder="Digite seu email..."
-                  />
-                  <Button type="submit" className="w-full">
-                     Cadastrar Email
-                  </Button>
-               </form>
-            </FooterContent>
-         </div>
-
-         <div className="flex items-center justify-between">
-            <FooterContent className="flex-1">Logo...</FooterContent>
-
-            <FooterContent className="flex items-center gap-x-4">
-               <FooterLink href="#">Termos de Uso</FooterLink>
-               <FooterLink href="#">Politícas de Privacidade</FooterLink>
-               <FooterLink href="#">Politícas de Cookies</FooterLink>
-            </FooterContent>
+            <div className="mt-12 pt-8 border-t border-border">
+               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                  <p className="text-sm text-muted-foreground">
+                     © {new Date().getFullYear()} Blog Dev. Todos os direitos
+                     reservados.
+                  </p>
+                  <div className="flex items-center gap-4">
+                     <Link
+                        href="/terms"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                     >
+                        Termos de Uso
+                     </Link>
+                     <Link
+                        href="/privacy"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                     >
+                        Política de Privacidade
+                     </Link>
+                     <Link
+                        href="/cookies"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                     >
+                        Política de Cookies
+                     </Link>
+                  </div>
+               </div>
+            </div>
          </div>
       </footer>
    );

@@ -15,7 +15,7 @@ import TitleSection from "../ui/utils/TitleSection";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { randomApiManager } from "@/services/modules/ApiManager";
+import { apiManager } from "@/services/modules/ApiManager";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 import { useQuery } from "@tanstack/react-query";
 
@@ -28,9 +28,7 @@ export default function RecentPost({ children, className }: IPropRecentPost) {
    const { data: posts, isLoading } = useQuery({
       queryKey: ["recent_posts"],
       queryFn: async () => {
-         const response = await randomApiManager.post.findAll(
-            AMOUNT_POST_RECENT
-         );
+         const response = await apiManager.post.findAll(AMOUNT_POST_RECENT);
 
          return response;
       },

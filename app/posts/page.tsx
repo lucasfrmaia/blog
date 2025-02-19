@@ -40,7 +40,7 @@ import {
 
 import { IPost } from "@/services/modules/post/entities/Post";
 import { useQuery } from "@tanstack/react-query";
-import { randomApiManager } from "@/services/modules/ApiManager";
+import { apiManager } from "@/services/modules/ApiManager";
 import CustomPagination from "@/components/pagination/CustomPagination";
 
 type IProppage = {
@@ -90,7 +90,7 @@ export default function page({ children, className }: IProppage) {
    const { data: posts, isLoading } = useQuery({
       queryKey: ["all_posts"],
       queryFn: async () => {
-         const response = await randomApiManager.post.findAll(10);
+         const response = await apiManager.post.findAll(10);
 
          return response;
       },

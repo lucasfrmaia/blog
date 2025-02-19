@@ -1,67 +1,94 @@
 "use client";
 
-import React from "react";
-import {
-   PostContainer,
-   PostContent,
-   PostDescription,
-   PostImage,
-   PostReadMoreButton,
-   PostTitle,
-} from "../post-component/PostComponent";
-import BaseSection from "../ui/utils/BaseSection";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { randomApiManager } from "@/services/modules/ApiManager";
-import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 
-type IPropPresetation = {
-   children?: React.ReactNode;
-   className?: string;
-};
-
-export default function Presetation({ children, className }: IPropPresetation) {
-   const { data: post, isLoading } = useQuery({
-      queryKey: ["last_post"],
-      queryFn: async () => {
-         const response = await randomApiManager.post.getLastPost();
-
-         return response;
-      },
-   });
-
-   if (isLoading || post == null) {
-      return null;
-   }
-
+export default function Presentation() {
    return (
-      <BaseSection>
-         <div className="w-[80%] mb-4">
-            <h1 className="text-[3rem] font-normal">
-               <span className="font-semibold">Olá Devs! </span>
-               Explore minhas histórias e artigos.
-            </h1>
-         </div>
+      <section className="relative overflow-hidden bg-background py-24">
+         {/* Gradient Background */}
+         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-background" />
 
-         <PostContainer className="flex gap-x-4 items-center">
-            <PostImage
-               className="w-64 h-52 object-cover"
-               post={post}
-               alt={`Imagem do post ${post.title}`}
-            ></PostImage>
+         {/* Content */}
+         <div className="container relative mx-auto px-4">
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-8">
+               <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="max-w-2xl"
+               >
+                  <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
+                     Explore o Mundo do{" "}
+                     <span className="text-primary">Desenvolvimento</span>
+                  </h1>
+                  <p className="mt-6 text-lg leading-8 text-muted-foreground">
+                     Descubra artigos, tutoriais e insights sobre
+                     desenvolvimento de software, tecnologia e as últimas
+                     tendências do mundo da programação.
+                  </p>
+                  <div className="mt-10 flex items-center gap-x-6">
+                     <Button asChild size="lg">
+                        <Link href="/blog" className="inline-flex items-center">
+                           Explorar Posts
+                           <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                     </Button>
+                     <Button variant="outline" size="lg" asChild>
+                        <Link href="/about">Saiba Mais</Link>
+                     </Button>
+                  </div>
+               </motion.div>
 
-            <PostContent>
-               <PostTitle post={post} />
-               <PostDescription post={post} />
-
-               <div className="flex gap-x-2 items-center">
-                  <PostReadMoreButton post={post} />
-                  <Link href={"/posts"}>
-                     <Button variant="link">Ver Todos</Button>
-                  </Link>
+               {/* Decorative Elements */}
+               <div className="relative">
+                  <motion.div
+                     initial={{ opacity: 0, scale: 0.8 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     transition={{ duration: 0.5, delay: 0.2 }}
+                     className="absolute -left-4 top-4 h-72 w-72 rounded-full bg-primary/10 blur-3xl"
+                  />
+                  <motion.div
+                     initial={{ opacity: 0, scale: 0.8 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     transition={{ duration: 0.5, delay: 0.4 }}
+                     className="absolute -right-4 bottom-4 h-72 w-72 rounded-full bg-secondary/10 blur-3xl"
+                  />
                </div>
-            </PostContent>
-         </PostContainer>
-      </BaseSection>
+            </div>
+
+            {/* Features */}
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.5, delay: 0.6 }}
+               className="mt-24 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+            >
+               <div className="rounded-lg border bg-card p-6">
+                  <h3 className="text-lg font-semibold">Artigos Detalhados</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                     Conteúdo aprofundado sobre as mais recentes tecnologias e
+                     práticas de desenvolvimento.
+                  </p>
+               </div>
+               <div className="rounded-lg border bg-card p-6">
+                  <h3 className="text-lg font-semibold">Tutoriais Práticos</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                     Aprenda na prática com tutoriais passo a passo e exemplos
+                     de código real.
+                  </p>
+               </div>
+               <div className="rounded-lg border bg-card p-6">
+                  <h3 className="text-lg font-semibold">Comunidade Ativa</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                     Participe de discussões e compartilhe conhecimento com
+                     outros desenvolvedores.
+                  </p>
+               </div>
+            </motion.div>
+         </div>
+      </section>
    );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { randomApiManager } from "@/services/modules/ApiManager";
+import { apiManager } from "@/services/modules/ApiManager";
 import { useQuery } from "@tanstack/react-query";
 import {
    PostContainer,
@@ -30,7 +30,7 @@ const PopularPosts: React.FC<IPopularPostsProps> = ({
    const { data: posts, isLoading } = useQuery({
       queryKey: ["popular_post"],
       queryFn: async () => {
-         const response = await randomApiManager.post.findPopular(5);
+         const response = await apiManager.post.findPopular(5);
 
          return response;
       },
