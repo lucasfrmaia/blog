@@ -12,6 +12,16 @@ import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { motion } from "framer-motion";
+import { Mail, Lock, Loader2 } from "lucide-react";
+import {
+   Card,
+   CardContent,
+   CardHeader,
+   CardTitle,
+   CardDescription,
+} from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type IPropFormLogin = {
    children?: React.ReactNode;
@@ -52,97 +62,124 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
       }
    };
 
-   const onInvalid = (errors: any) => console.log(errors);
-
    return (
-      <form
-         onSubmit={handleSubmit(onSubmit, onInvalid)}
-         className="w-[40vw] h-[60%]"
+      <motion.div
+         initial={{ opacity: 0, y: 20 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ duration: 0.5 }}
+         className="w-full max-w-md mx-auto"
       >
-         <div className="w-full text-center">
-            <h1 className="font-semibold text-3xl">Login</h1>
-         </div>
+         <Card className="p-6">
+            <CardHeader className="space-y-2 text-center">
+               <CardTitle className="text-3xl font-bold">
+                  Bem-vindo de volta!
+               </CardTitle>
+               <CardDescription>
+                  Entre com suas credenciais para acessar sua conta
+               </CardDescription>
+            </CardHeader>
+            <CardContent>
+               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="space-y-4">
+                     <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <div className="relative">
+                           <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                           <Input
+                              {...register("email")}
+                              disabled={isSubmitting}
+                              id="email"
+                              type="email"
+                              placeholder="Digite seu email..."
+                              className={cn(
+                                 "pl-9",
+                                 errors.email && "border-red-500"
+                              )}
+                           />
+                        </div>
+                        {errors.email && (
+                           <p className="text-sm text-red-500">
+                              {errors.email.message}
+                           </p>
+                        )}
+                     </div>
 
-         <div className="mb-4">
-            <Label>Email</Label>
-            <Input
-               {...register("email")}
-               disabled={isSubmitting}
-               id="email"
-               className={`text-primary-foreground rounded-lg mt-2 p-2 focus:border-blue-500 ${
-                  errors.email ? "border-red-500" : ""
-               } focus:bg-white focus:outline-none`}
-               type="email"
-               placeholder="Digite seu email..."
-            />
-            {errors.email && (
-               <p className="text-red-500 mt-2 text-sm">
-                  {errors.email.message}
-               </p>
-            )}
-         </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="password">Senha</Label>
+                        <div className="relative">
+                           <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                           <Input
+                              {...register("password")}
+                              disabled={isSubmitting}
+                              id="password"
+                              type="password"
+                              placeholder="Digite sua senha..."
+                              className={cn(
+                                 "pl-9",
+                                 errors.password && "border-red-500"
+                              )}
+                           />
+                        </div>
+                        {errors.password && (
+                           <p className="text-sm text-red-500">
+                              {errors.password.message}
+                           </p>
+                        )}
+                     </div>
+                  </div>
 
-         <div className="mb-4">
-            <Label htmlFor="password">Senha</Label>
-            <Input
-               {...register("password")}
-               disabled={isSubmitting}
-               id="password"
-               placeholder="Digite sua senha..."
-               className={`p-2 rounded-lg text-primary-foreground mt-2 focus:border-blue-500 ${
-                  errors.password ? "border-red-500" : ""
-               } focus:bg-white focus:outline-none`}
-               type="password"
-            />
-            {errors.password && (
-               <p className="text-red-500 mt-2 text-sm">
-                  {errors.password.message}
-               </p>
-            )}
-         </div>
+                  <div className="flex items-center justify-between">
+                     <div className="flex items-center space-x-2">
+                        <Checkbox
+                           id="remember"
+                           {...register("remember")}
+                           disabled={isSubmitting}
+                        />
+                        <Label
+                           htmlFor="remember"
+                           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                        >
+                           Manter Conectado
+                        </Label>
+                     </div>
 
-         <div className="flex items-center justify-between mb-4">
-            <div className="flex gap-x-2">
-               <Label htmlFor="checkbox-remember" className="flex items-center">
-                  <input
-                     {...register("remember")}
-                     type="checkbox"
+                     <Link
+                        href={ROUTES_PAGE.recovery.link}
+                        className="text-sm text-primary hover:underline"
+                     >
+                        Esqueceu sua senha?
+                     </Link>
+                  </div>
+
+                  <Button
+                     type="submit"
+                     className="w-full"
                      disabled={isSubmitting}
-                     className="mr-1 w-4 h-4"
-                     id="checkbox-remember"
-                  />{" "}
-                  Manter Conectado
-               </Label>
-            </div>
+                  >
+                     {isSubmitting ? (
+                        <>
+                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                           Entrando...
+                        </>
+                     ) : (
+                        "Entrar"
+                     )}
+                  </Button>
 
-            <Link
-               className="hover:underline text-primary"
-               href={ROUTES_PAGE.recovery.link}
-            >
-               Esqueceu sua senha?
-            </Link>
-         </div>
-
-         <Button
-            type="submit"
-            variant="secondary"
-            className="w-full rounded-lg h-20 mb-4"
-            disabled={isSubmitting}
-         >
-            Login
-         </Button>
-
-         <div className="text-center">
-            <span>
-               Não possui uma conta?{" "}
-               <Link
-                  className="hover:underline text-primary"
-                  href={ROUTES_PAGE.register.link}
-               >
-                  Registre-se
-               </Link>{" "}
-            </span>
-         </div>
-      </form>
+                  <div className="text-center text-sm">
+                     <span className="text-muted-foreground">
+                        Não possui uma conta?{" "}
+                        <Link
+                           href={ROUTES_PAGE.register.link}
+                           className="text-primary hover:underline"
+                        >
+                           Registre-se
+                        </Link>
+                     </span>
+                  </div>
+               </form>
+            </CardContent>
+         </Card>
+      </motion.div>
    );
 }

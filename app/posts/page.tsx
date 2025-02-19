@@ -1,214 +1,181 @@
 "use client";
 
-import React, { useReducer, useState } from "react";
-import { cn } from "@/lib/utils";
-import {
-   Select,
-   SelectContent,
-   SelectGroup,
-   SelectItem,
-   SelectLabel,
-   SelectTrigger,
-   SelectValue,
-} from "../../components/ui/select";
-import { ToggleGroup, ToggleGroupItem } from "../../components/ui/toggle-group";
-import SearchBar from "../../components/ui/utils/SearchBar";
-import BaseSection from "../../components/ui/utils/BaseSection";
-import FiltersWithLabel from "../../components/ui/utils/FilterIcon";
-import { Button } from "../../components/ui/button";
-import {
-   PostContainer,
-   PostImage,
-   PostContent,
-   PostHeader,
-   PostCategories,
-   PostTitle,
-   PostDescription,
-   PostReadMoreButton,
-} from "../../components/post-component/PostComponent";
-import NaveBar from "@/components/header/NaveBar";
-import Footer from "@/components/footer/Footer";
-import ToggleGroupItems, {
-   ToggleGroupContainer,
-   ToggleGroupTitle,
-} from "@/components/filters-post/ToggleGroup";
-import {
-   SelectContainer,
-   SelectTitle,
-   TSortOptions,
-} from "@/components/filters-post/Select";
-
-import { IPost } from "@/services/modules/post/entities/Post";
+import { useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
+import { motion } from "framer-motion";
+import BaseLayout from "@/components/layout/BaseLayout";
 import { apiManager } from "@/services/modules/ApiManager";
-import CustomPagination from "@/components/pagination/CustomPagination";
+import PostFilters from "@/components/post/PostFilters";
+import PostGrid from "@/components/post/PostGrid";
+import Pagination from "@/components/shared/Pagination";
 
-type IProppage = {
-   children?: React.ReactNode;
-   className?: string;
-};
+const ITEMS_PER_PAGE = 9;
 
-const sortOptions: TSortOptions = {
-   options: [
-      { label: "alfabetica", value: "21" },
-      { label: "dataCrescente", value: "21" },
-   ],
-};
+export default function BlogPage() {
+   const router = useRouter();
+   const searchParams = useSearchParams();
 
-type Action =
-   | { type: "SET_SEARCH"; payload: string }
-   | { type: "SET_TOGGLE_GROUP"; payload: string[] }
-   | { type: "SET_SELECT"; payload: string };
+   // URL State
+   const page = Number(searchParams.get("page")) || 1;
+   const search = searchParams.get("search") || "";
+   const category = searchParams.get("category") || "";
+   const sortBy = searchParams.get("sortBy") || "recent";
 
-interface State {
-   toggleGroupValue: string[];
-   selectValue: string;
-   search: string;
-}
+   // Queries
+   const { data: categories } = useQuery({
+      queryKey: ["categories"],
+      queryFn: () => apiManager.category.findAll(),
+   });
 
-const initialState: State = {
-   toggleGroupValue: [],
-   selectValue: "",
-   search: "",
-};
-
-const reducer = (state: State, action: Action): State => {
-   switch (action.type) {
-      case "SET_TOGGLE_GROUP":
-         return { ...state, toggleGroupValue: action.payload };
-      case "SET_SELECT":
-         return { ...state, selectValue: action.payload };
-      case "SET_SEARCH":
-         return { ...state, search: action.payload };
-      default:
-         return state;
-   }
-};
-
-export default function page({ children, className }: IProppage) {
-   const [state, dispatch] = useReducer(reducer, initialState);
-   const { data: posts, isLoading } = useQuery({
-      queryKey: ["all_posts"],
+   const { data: posts, isLoading: isLoadingPosts } = useQuery({
+      queryKey: ["posts", page, search, category, sortBy],
       queryFn: async () => {
-         const response = await apiManager.post.findAll(10);
-
+         const response = await apiManager.post.findAll(100);
          return response;
       },
    });
 
-   const handleToggleGroupChange = (value: string[]) => {
-      dispatch({ type: "SET_TOGGLE_GROUP", payload: value });
-   };
+   // Filtered and Sorted Posts
+   const filteredPosts = useMemo(() => {
+      if (!posts) return [];
 
-   const handleSelectChange = (value: string) => {
-      dispatch({ type: "SET_SELECT", payload: value });
-   };
+      let filtered = [...posts];
 
-   const handleSearch = (value: string) => {
-      dispatch({ type: "SET_SEARCH", payload: value });
-   };
+      if (search) {
+         const searchLower = search.toLowerCase();
+         filtered = filtered.filter(
+            (post) =>
+               post.title.toLowerCase().includes(searchLower) ||
+               post.description.toLowerCase().includes(searchLower)
+         );
+      }
 
-   if (isLoading) {
-      return null;
+      if (category) {
+         filtered = filtered.filter((post) =>
+            post.categories.some((cat) => cat.slug === category)
+         );
+      }
+
+      if (sortBy === "popular") {
+         filtered.sort((a, b) => b.views - a.views);
+      } else {
+         filtered.sort(
+            (a, b) =>
+               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+         );
+      }
+
+      return filtered;
+   }, [posts, search, category, sortBy]);
+
+   // Pagination
+   const paginatedPosts = useMemo(() => {
+      const start = (page - 1) * ITEMS_PER_PAGE;
+      const end = start + ITEMS_PER_PAGE;
+      return filteredPosts.slice(start, end);
+   }, [filteredPosts, page]);
+
+   const totalPages = Math.ceil(filteredPosts.length / ITEMS_PER_PAGE);
+
+   // URL State Update
+   const updateQuery = useCallback(
+      (updates: Record<string, string>) => {
+         const params = new URLSearchParams(searchParams.toString());
+         Object.entries(updates).forEach(([key, value]) => {
+            if (value) {
+               params.set(key, value);
+            } else {
+               params.delete(key);
+            }
+         });
+         router.push(`/blog?${params.toString()}`);
+      },
+      [router, searchParams]
+   );
+
+   // Loading State
+   if (isLoadingPosts) {
+      return (
+         <BaseLayout>
+            <div className="container mx-auto px-4 py-8">
+               <div className="animate-pulse space-y-8">
+                  <div className="h-12 bg-muted rounded-lg w-full max-w-md" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                     {Array.from({ length: 6 }).map((_, index) => (
+                        <div
+                           key={index}
+                           className="space-y-4 rounded-lg border p-4"
+                        >
+                           <div className="h-48 bg-muted rounded-lg" />
+                           <div className="space-y-2">
+                              <div className="h-6 bg-muted rounded w-3/4" />
+                              <div className="h-4 bg-muted rounded w-full" />
+                              <div className="h-4 bg-muted rounded w-2/3" />
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+            </div>
+         </BaseLayout>
+      );
    }
 
    return (
-      <>
-         <NaveBar />
-         <BaseSection className={cn("px-space-page mb-auto", className)}>
-            <div className="flex justify-between">
-               <div className="flex-1 flex items-start gap-x-6 mb-4">
-                  <ToggleGroupContainer className="w-[30%] flex flex-col flex-wrap">
-                     <ToggleGroupTitle className="text-xl font-bold mb-2">
-                        Categorias
-                     </ToggleGroupTitle>
+      <BaseLayout>
+         <div className="container mx-auto px-4 py-8">
+            {/* Header */}
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.5 }}
+               className="text-center mb-12"
+            >
+               <h1 className="text-4xl font-bold mb-4">Blog</h1>
+               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Explore nossos artigos sobre desenvolvimento, tecnologia e
+                  programação
+               </p>
+            </motion.div>
 
-                     <ToggleGroupItems
-                        disabled={isLoading}
-                        onValueChange={handleToggleGroupChange}
-                        type="multiple"
-                        options={[
-                           { label: "alfabetica", value: "21" },
-                           { label: "dataCrescente", value: "21" },
-                        ]}
-                     />
-                  </ToggleGroupContainer>
+            {/* Filters */}
+            <PostFilters
+               search={search}
+               category={category}
+               sortBy={sortBy}
+               categories={categories}
+               onUpdateFilters={updateQuery}
+            />
 
-                  <SelectContainer>
-                     <SelectTitle className="text-xl font-bold mb-2">
-                        Ordenacão
-                     </SelectTitle>
+            {/* Posts Grid */}
+            {paginatedPosts.length > 0 ? (
+               <PostGrid posts={paginatedPosts} />
+            ) : (
+               <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-12"
+               >
+                  <p className="text-lg text-muted-foreground">
+                     Nenhum post encontrado com os filtros selecionados.
+                  </p>
+               </motion.div>
+            )}
 
-                     <Select
-                        disabled={isLoading}
-                        onValueChange={handleSelectChange}
-                     >
-                        <SelectTrigger className="w-[200px]">
-                           <SelectValue placeholder="Select uma ordenação..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                           <SelectGroup>
-                              {sortOptions.options.map((option) => {
-                                 return (
-                                    <SelectItem
-                                       key={`${option.label}-${option.value}`}
-                                       value={option.value}
-                                    >
-                                       {option.label}
-                                    </SelectItem>
-                                 );
-                              })}
-                           </SelectGroup>
-                        </SelectContent>
-                     </Select>
-                     <div className="flex items-center gap-x-2 mt-2">
-                        <Button>Aplicar Filtros</Button>
-                        <Button>Resetar Filtros</Button>
-                     </div>
-                  </SelectContainer>
+            {/* Pagination */}
+            {totalPages > 1 && (
+               <div className="mt-12">
+                  <Pagination
+                     currentPage={page}
+                     totalPages={totalPages}
+                     onPageChange={(newPage) =>
+                        updateQuery({ page: String(newPage) })
+                     }
+                  />
                </div>
-
-               <SearchBar
-                  onChange={(e) => handleSearch(e.target.value)}
-                  onButtonClick={() => {}}
-                  disabled={isLoading}
-                  placeholder="Digite sua pesquisa..."
-                  className="h-10 bg-secondary"
-               />
-            </div>
-
-            <div className="mt-4">
-               {posts?.map((post) => {
-                  return (
-                     <PostContainer
-                        className="flex items-center gap-x-4 mb-8 w-2/3"
-                        key={`SearchPost-${post.id}`}
-                     >
-                        <PostImage
-                           className="w-full h-32"
-                           post={post}
-                           alt={`Post Image- ${post.title}`}
-                        ></PostImage>
-
-                        <PostContent>
-                           <PostHeader className="flex gap-x-2">
-                              {new Date(post.createdAt).toDateString()}
-                              <span>•</span>
-                              <PostCategories post={post} />
-                           </PostHeader>
-
-                           <PostTitle post={post} />
-                           <PostDescription post={post} />
-                           <PostReadMoreButton post={post} />
-                        </PostContent>
-                     </PostContainer>
-                  );
-               })}
-            </div>
-
-            <CustomPagination currentPage={0} totalItems={100} />
-         </BaseSection>
-         <Footer />
-      </>
+            )}
+         </div>
+      </BaseLayout>
    );
 }
