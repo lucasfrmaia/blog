@@ -1,40 +1,11 @@
 import { ICategoryManager } from "./category/repositories/category-repository";
 import { IPostRepository } from "./post/repositories/PostRepository";
-import { ICategory } from "./category/entities/category";
-import { IPost } from "./post/entities/Post";
 import { IUserRepository } from "./user/repositories/UserRepository";
-import { IUser } from "./user/entities/user";
 import { PostRepositoryInMemory } from "./post/repositories/PostRepositoryInMemory";
 import { CategoryRepositoryInMemory } from "./category/repositories/CategoryRepositoryInMemory";
 import { ICommentRepository } from "./comment/repositories/CommentRepository";
 import { CommentRepositoryInMemory } from "./comment/repositories/CommentRepositoryInMemory";
-
-class t2 implements ICategoryManager {
-   create(note: ICategory): Promise<void> {
-      throw new Error("Method not implemented.");
-   }
-   update(category: ICategory): Promise<void> {
-      throw new Error("Method not implemented.");
-   }
-   findById(id: string): Promise<ICategory | null> {
-      throw new Error("Method not implemented.");
-   }
-   async findAll(): Promise<ICategory[]> {
-      return [];
-   }
-   delete(id: string): Promise<void> {
-      throw new Error("Method not implemented.");
-   }
-}
-
-class t3 implements IUserRepository {
-   authenticate(email?: string, password?: string): Promise<IUser> {
-      throw new Error("Method not implemented.");
-   }
-   create(user: IUser): Promise<void> {
-      throw new Error("Method not implemented.");
-   }
-}
+import { UserRepositoryInMemory } from "./user/repositories/UserRepositoryInMemory";
 
 class ApiManager {
    constructor(
@@ -48,6 +19,6 @@ class ApiManager {
 export const apiManager = new ApiManager(
    new PostRepositoryInMemory(),
    new CategoryRepositoryInMemory(),
-   new t3(),
+   new UserRepositoryInMemory(),
    new CommentRepositoryInMemory()
 );

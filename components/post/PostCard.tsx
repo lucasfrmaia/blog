@@ -26,7 +26,7 @@ export default function PostCard({
    commentsCount = 0,
 }: PostCardProps) {
    return (
-      <Link href={`/post/${id}`}>
+      <Link href={`/posts/${id}`}>
          <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow group">
             <div className="relative h-48 overflow-hidden">
                <img

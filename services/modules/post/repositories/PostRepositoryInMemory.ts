@@ -19,6 +19,24 @@ export class PostRepositoryInMemory implements IPostRepository {
    }
    private posts: IPost[] = [];
 
+   constructor() {
+      this.posts = Array.from({ length: 10 }).map((x) => {
+         return {
+            id: `123e4567-e89b-12d3-a456-${~~(Math.random() * 1_000_000_000)}`,
+            createdAt: new Date(),
+            updateAt: new Date(),
+            slug: "my-first-post",
+            title: "My First Post Title",
+            description: "This is the description of my first post.",
+            img: "https://buffer.com/resources/content/images/2024/09/best-time-to-post-on-Facbeook.png",
+            views: 100,
+            catSlug: "technology",
+            userEmail: "john.doe@example.com",
+            categories: [],
+         };
+      });
+   }
+
    async create(post: IPost): Promise<void> {
       this.posts.push(post);
    }
@@ -36,21 +54,7 @@ export class PostRepositoryInMemory implements IPostRepository {
    }
 
    async findAll(amount: number): Promise<IPost[]> {
-      return Array.from({ length: amount }).map((x) => {
-         return {
-            id: `123e4567-e89b-12d3-a456-426614174000 ${Math.random()}`,
-            createdAt: new Date(),
-            updateAt: new Date(),
-            slug: "my-first-post",
-            title: "My First Post Title",
-            description: "This is the description of my first post.",
-            img: "https://buffer.com/resources/content/images/2024/09/best-time-to-post-on-Facbeook.png",
-            views: 100,
-            catSlug: "technology",
-            userEmail: "john.doe@example.com",
-            categories: [],
-         };
-      });
+      return this.posts;
    }
 
    async findPerPage(data: {

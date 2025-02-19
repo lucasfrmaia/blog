@@ -89,7 +89,7 @@ export default function BlogPage() {
                params.delete(key);
             }
          });
-         router.push(`/blog?${params.toString()}`);
+         router.push(`/posts?${params.toString()}`);
       },
       [router, searchParams]
    );

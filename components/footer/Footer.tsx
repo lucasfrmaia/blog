@@ -130,13 +130,13 @@ export default function Footer() {
                         Termos de Uso
                      </Link>
                      <Link
-                        href="/privacy"
+                        href="/privacy-policy"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                      >
                         Política de Privacidade
                      </Link>
                      <Link
-                        href="/cookies"
+                        href="/cookie-policy"
                         className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                      >
                         Política de Cookies

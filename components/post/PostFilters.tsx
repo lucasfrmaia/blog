@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select";
 import { ICategory } from "@/services/modules/category/entities/category";
 import { Search, SlidersHorizontal } from "lucide-react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { Badge } from "../ui/badge";
 import {
    Sheet,
@@ -35,12 +35,11 @@ export default function PostFilters({
    categories,
    onUpdateFilters,
 }: PostFiltersProps) {
-   const handleSearch = useCallback(
-      (value: string) => {
-         onUpdateFilters({ search: value, page: "1" });
-      },
-      [onUpdateFilters]
-   );
+   const [searchInput, setSearchInput] = useState(search);
+
+   const handleSearch = useCallback(() => {
+      onUpdateFilters({ search: searchInput, page: "1" });
+   }, [searchInput, onUpdateFilters]);
 
    const handleCategoryChange = useCallback(
       (value: string) => {
@@ -57,6 +56,7 @@ export default function PostFilters({
    );
 
    const clearFilters = useCallback(() => {
+      setSearchInput("");
       onUpdateFilters({
          search: "",
          category: "",
@@ -69,15 +69,19 @@ export default function PostFilters({
       <div className="mb-8">
          {/* Desktop Filters */}
          <div className="hidden md:flex items-center gap-4">
-            <div className="flex-1 flex items-center gap-2 bg-card rounded-lg border p-2">
-               <Search className="h-4 w-4 text-muted-foreground" />
-               <Input
-                  type="text"
-                  placeholder="Buscar posts..."
-                  value={search}
-                  onChange={(e) => handleSearch(e.target.value)}
-                  className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-               />
+            <div className="flex-1 flex items-center gap-2">
+               <div className="flex-1 flex items-center gap-2 bg-card rounded-lg border p-2">
+                  <Search className="h-4 w-4 text-muted-foreground" />
+                  <Input
+                     type="text"
+                     placeholder="Buscar posts..."
+                     value={searchInput}
+                     onChange={(e) => setSearchInput(e.target.value)}
+                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                     className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+               </div>
+               <Button onClick={handleSearch}>Buscar</Button>
             </div>
             <Select value={category} onValueChange={handleCategoryChange}>
                <SelectTrigger className="w-[180px]">
@@ -111,15 +115,19 @@ export default function PostFilters({
          {/* Mobile Filters */}
          <div className="md:hidden">
             <div className="flex items-center gap-4">
-               <div className="flex-1 flex items-center gap-2 bg-card rounded-lg border p-2">
-                  <Search className="h-4 w-4 text-muted-foreground" />
-                  <Input
-                     type="text"
-                     placeholder="Buscar posts..."
-                     value={search}
-                     onChange={(e) => handleSearch(e.target.value)}
-                     className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
-                  />
+               <div className="flex-1 flex items-center gap-2">
+                  <div className="flex-1 flex items-center gap-2 bg-card rounded-lg border p-2">
+                     <Search className="h-4 w-4 text-muted-foreground" />
+                     <Input
+                        type="text"
+                        placeholder="Buscar posts..."
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                        className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                     />
+                  </div>
+                  <Button onClick={handleSearch}>Buscar</Button>
                </div>
                <Sheet>
                   <SheetTrigger asChild>
@@ -131,7 +139,7 @@ export default function PostFilters({
                      <SheetHeader>
                         <SheetTitle>Filtros</SheetTitle>
                         <SheetDescription>
-                           Ajuste os filtros para encontrar os posts desejados
+                           Ajuste os filtros para encontrar os posts
                         </SheetDescription>
                      </SheetHeader>
                      <div className="mt-4 space-y-4">
@@ -200,9 +208,10 @@ export default function PostFilters({
                      Busca: {search}
                      <button
                         className="ml-2"
-                        onClick={() =>
-                           onUpdateFilters({ search: "", page: "1" })
-                        }
+                        onClick={() => {
+                           setSearchInput("");
+                           onUpdateFilters({ search: "", page: "1" });
+                        }}
                      >
                         ×
                      </button>
