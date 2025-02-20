@@ -31,7 +31,10 @@ export default function Presentation() {
                   </p>
                   <div className="mt-10 flex items-center gap-x-6">
                      <Button asChild size="lg">
-                        <Link href="/blog" className="inline-flex items-center">
+                        <Link
+                           href="/posts"
+                           className="inline-flex items-center"
+                        >
                            Explorar Posts
                            <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>

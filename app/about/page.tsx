@@ -30,7 +30,7 @@ export default function AboutPage() {
                   </p>
                   <div className="flex gap-4">
                      <Button asChild>
-                        <Link href="/blog">
+                        <Link href="/posts">
                            Explorar Posts
                            <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
@@ -173,7 +173,7 @@ export default function AboutPage() {
                   comunidade.
                </p>
                <Button size="lg" asChild>
-                  <Link href="/blog">
+                  <Link href="/posts">
                      Começar a Explorar
                      <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

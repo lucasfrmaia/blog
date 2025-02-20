@@ -22,6 +22,7 @@ import {
    CardDescription,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/components/ui/use-toast";
 
 type IPropFormLogin = {
    children?: React.ReactNode;
@@ -29,8 +30,8 @@ type IPropFormLogin = {
 };
 
 const schema = z.object({
-   email: z.string().email().min(1, "Este campo é obrigatório"),
-   password: z.string().min(1, "Este campo é obrigatório"),
+   email: z.string().email("Email inválido").min(1, "O email é obrigatório"),
+   password: z.string().min(1, "A senha é obrigatória"),
    remember: z.boolean(),
 });
 
@@ -38,27 +39,43 @@ type FormProps = z.infer<typeof schema>;
 
 export default function FormLogin({ children, className }: IPropFormLogin) {
    const router = useRouter();
+   const { toast } = useToast();
 
    const {
       register,
       handleSubmit,
-      setError,
       formState: { errors, isSubmitting },
    } = useForm<FormProps>({ resolver: zodResolver(schema) });
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
-      const { email, password } = data;
+      try {
+         const response = await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+         });
 
-      const response = await signIn("credentials", {
-         email: email,
-         password: password,
-         redirect: false,
-      });
+         if (response?.error) {
+            toast({
+               title: "Erro ao fazer login",
+               description: "Email ou senha incorretos",
+               variant: "destructive",
+            });
+            return;
+         }
 
-      if (!response?.error) {
          router.replace(ROUTES_PAGE.home.link);
-      } else {
-         setError("email", { message: "O usuário ou senha está incorreto" });
+
+         toast({
+            title: "Login realizado com sucesso",
+            description: "Bem-vindo de volta!",
+         });
+      } catch (error) {
+         toast({
+            title: "Erro ao fazer login",
+            description: "Ocorreu um erro inesperado",
+            variant: "destructive",
+         });
       }
    };
 
@@ -130,7 +147,9 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
 
                   <div className="flex items-center justify-between">
                      <div className="flex items-center space-x-2">
-                        <Checkbox
+                        <input
+                           type="checkbox"
+                           className="h-4 w-4 rounded border border-primary text-primary focus:ring-primary"
                            id="remember"
                            {...register("remember")}
                            disabled={isSubmitting}

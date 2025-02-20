@@ -3,4 +3,5 @@ export interface IUser {
    name?: string | null;
    email: string;
    image?: string | null;
+   role?: "admin" | "user";
 }

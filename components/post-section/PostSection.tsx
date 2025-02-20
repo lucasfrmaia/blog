@@ -43,7 +43,7 @@ export default function PostSection() {
                   </p>
                </div>
                <Button asChild>
-                  <Link href="/blog" className="inline-flex items-center">
+                  <Link href="/posts" className="inline-flex items-center">
                      Ver Todos
                      <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>

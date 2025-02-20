@@ -2,14 +2,14 @@ import { ICategory } from "../../category/entities/category";
 
 export interface IPost {
    id: string;
-   createdAt: Date;
-   updateAt: Date;
-   slug: string;
    title: string;
    description: string;
-   img?: string | null;
+   content: string;
+   slug: string;
+   img?: string;
    views: number;
-   catSlug: string;
-   userEmail: string;
+   createdAt: string;
+   updateAt: string;
    categories: ICategory[];
+   authorId: string;
 }

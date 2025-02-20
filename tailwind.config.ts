@@ -75,8 +75,31 @@ const config: Config = {
          padding: {
             "space-page": "10%",
          },
+         typography: {
+            DEFAULT: {
+               css: {
+                  maxWidth: "none",
+                  code: {
+                     color: "var(--tw-prose-code)",
+                     padding: "0.2em 0.4em",
+                     backgroundColor: "var(--tw-prose-pre-bg)",
+                     borderRadius: "6px",
+                     fontWeight: "400",
+                  },
+                  "code::before": {
+                     content: '""',
+                  },
+                  "code::after": {
+                     content: '""',
+                  },
+               },
+            },
+         },
       },
    },
-   plugins: [require("tailwindcss-animate")],
+   plugins: [
+      require("tailwindcss-animate"),
+      require("@tailwindcss/typography"),
+   ],
 };
 export default config;

@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge";
 import { MessageSquare, ThumbsUp, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import Image from "next/image";
 import BaseLayout from "@/components/layout/BaseLayout";
 
 export default function PostPage({ params }: { params: { id: string } }) {
@@ -37,7 +36,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                      <img
                         src={post.img}
                         alt={post.title}
-                        className="object-cover"
+                        className="object-cover w-full h-full"
                      />
                   </div>
                )}
@@ -66,7 +65,16 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   ))}
                </div>
 
-               <div className="prose max-w-none mb-8">{post.description}</div>
+               <Card className="p-6 mb-8">
+                  <p className="text-lg text-muted-foreground">
+                     {post.description}
+                  </p>
+               </Card>
+
+               <div
+                  className="prose dark:prose-invert max-w-none mb-8"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+               />
 
                <div className="flex items-center justify-between py-4">
                   <div className="flex space-x-4">

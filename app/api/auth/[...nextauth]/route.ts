@@ -1,42 +1,56 @@
-import { apiManager } from "@/services/modules/ApiManager";
-import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { AuthOptions } from "next-auth";
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { apiManager } from "@/services/modules/ApiManager";
+import { AuthUser } from "@/utils/types/auth";
 
-const NextAuthOptions: AuthOptions = {
+const handler = NextAuth({
    providers: [
       CredentialsProvider({
-         id: "credentials",
-         name: "credentials",
+         name: "Credentials",
          credentials: {
-            email: {
-               type: "text",
-            },
-            password: {
-               type: "password",
-            },
+            email: { label: "Email", type: "email" },
+            password: { label: "Password", type: "password" },
          },
-
-         async authorize(credentials, req) {
+         async authorize(credentials) {
             try {
+               if (!credentials?.email || !credentials?.password) {
+                  return null;
+               }
+
                const user = await apiManager.user.authenticate(
-                  credentials?.email,
-                  credentials?.password
+                  credentials.email,
+                  credentials.password
                );
 
-               return user;
+               if (!user) {
+                  return null;
+               }
+
+               return user as AuthUser;
             } catch (error) {
                return null;
             }
          },
       }),
    ],
-   pages: {
-      signIn: ROUTES_PAGE.login.link,
+   callbacks: {
+      async jwt({ token, user }) {
+         if (user) {
+            token.role = (user as AuthUser).role;
+         }
+         return token;
+      },
+      async session({ session, token }) {
+         if (session.user) {
+            (session.user as AuthUser).role = token.role as AuthUser["role"];
+         }
+         return session;
+      },
    },
-};
+   pages: {
+      signIn: "/login",
+      error: "/login",
+   },
+});
 
-export const handler = NextAuth(NextAuthOptions);
-
-export { handler as GET, handler as POST, NextAuthOptions };
+export { handler as GET, handler as POST };
