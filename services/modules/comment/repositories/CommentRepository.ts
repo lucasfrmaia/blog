@@ -1,10 +1,10 @@
-import { IComment } from "../entities/comment";
+import { IComment, ICommentCreate, ICommentUpdate } from "../entities/comment";
 
 export interface ICommentRepository {
-   create(comment: IComment): Promise<void>;
-   update(comment: IComment): Promise<void>;
-   findById(id: string): Promise<IComment | null>;
-   findByPostSlug(postSlug: string): Promise<IComment[]>;
+   create(data: ICommentCreate): Promise<void>;
+   update(data: ICommentUpdate): Promise<void>;
+   findById(id: number): Promise<IComment | null>;
    findAll(): Promise<IComment[]>;
-   delete(id: string): Promise<void>;
+   delete(id: number): Promise<void>;
+   findByPostId(postId: number): Promise<IComment[]>;
 }

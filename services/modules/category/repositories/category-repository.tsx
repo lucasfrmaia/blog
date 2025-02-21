@@ -1,9 +1,14 @@
-import { ICategory } from "../entities/category";
+import {
+   ICategory,
+   ICategoryCreate,
+   ICategoryUpdate,
+} from "../entities/category";
 
 export interface ICategoryManager {
-   create(note: ICategory): Promise<void>;
-   update(category: ICategory): Promise<void>;
-   findById(id: string): Promise<ICategory | null>;
+   create(data: ICategoryCreate): Promise<void>;
+   update(data: ICategoryUpdate): Promise<void>;
+   findById(id: number): Promise<ICategory | null>;
    findAll(): Promise<ICategory[]>;
-   delete(id: string): Promise<void>;
+   delete(id: number): Promise<void>;
+   findPopularCategories(limit?: number): Promise<ICategory[]>;
 }

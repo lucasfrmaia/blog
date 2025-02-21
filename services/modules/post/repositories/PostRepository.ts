@@ -1,12 +1,19 @@
-import { IPost } from "../entities/Post";
+import { IPost, IPostCreate, IPostUpdate } from "../entities/Post";
 
 export interface IPostRepository {
-   create(note: IPost): Promise<void>;
-   update(post: IPost): Promise<void>;
-   findById(id: string): Promise<IPost | null>;
-   findAll(amount: number): Promise<IPost[]>;
-   getLastPost(): Promise<IPost>;
-   findPerPage(data: { amountPerPage: number; page: number }): Promise<IPost[]>;
-   findPopular(amount: number): Promise<IPost[]>;
-   delete(id: string): Promise<void>;
+   create(data: IPostCreate): Promise<void>;
+   update(data: IPostUpdate): Promise<void>;
+   findById(id: number): Promise<IPost | null>;
+   findAll(limit?: number): Promise<IPost[]>;
+   delete(id: number): Promise<void>;
+   findByCategory(categoryId: number): Promise<IPost[]>;
+   findPopular(limit?: number): Promise<IPost[]>;
+   findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{
+      posts: IPost[];
+      total: number;
+   }>;
+   getLastPost(): Promise<IPost | null>;
 }

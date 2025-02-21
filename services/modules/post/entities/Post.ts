@@ -1,15 +1,27 @@
-import { ICategory } from "../../category/entities/category";
+import { Category, Comment, User } from "@/services/lib/prisma";
 
 export interface IPost {
-   id: string;
+   id: number;
    title: string;
-   description: string;
    content: string;
-   slug: string;
-   img?: string;
-   views: number;
-   createdAt: string;
-   updateAt: string;
-   categories: ICategory[];
-   authorId: string;
+   createdAt: Date;
+   categoryId: number;
+   authorId: number;
+   author?: User;
+   comments?: Comment[];
+   categories?: Category[];
+}
+
+export interface IPostCreate {
+   title: string;
+   content: string;
+   categoryId: number;
+   authorId: number;
+}
+
+export interface IPostUpdate {
+   id: number;
+   title?: string;
+   content?: string;
+   categoryId?: number;
 }

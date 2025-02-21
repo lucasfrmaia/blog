@@ -2,6 +2,7 @@ import { IUser } from "@/services/modules/user/entities/user";
 
 export type AuthUser = IUser & {
    role: "admin" | "user";
+   image?: string | null;
 };
 
 export type LoginCredentials = {
