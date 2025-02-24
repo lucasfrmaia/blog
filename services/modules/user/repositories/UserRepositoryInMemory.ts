@@ -7,8 +7,11 @@ export class UserRepositoryInMemory implements IUserRepository {
          id: "1",
          name: "Admin",
          email: "admin@admin.com",
-         image: "https://github.com/shadcn.png",
-         role: "admin" as const,
+         password: "admin",
+         salt: "admin",
+         createdAt: new Date(),
+         updatedAt: new Date(),
+         role: [],
       },
    ];
 

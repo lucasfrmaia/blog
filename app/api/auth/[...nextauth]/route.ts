@@ -26,8 +26,14 @@ const handler = NextAuth({
                   return null;
                }
 
-               return user as AuthUser;
+               return {
+                  id: user.id,
+                  name: user.name,
+                  email: user.email,
+                  role: user.role?.[0]?.name || "user",
+               } as AuthUser;
             } catch (error) {
+               console.error("Erro na autenticação:", error);
                return null;
             }
          },
@@ -36,13 +42,15 @@ const handler = NextAuth({
    callbacks: {
       async jwt({ token, user }) {
          if (user) {
-            token.role = (user as AuthUser).role;
+            token.id = user.id;
+            token.role = user.role;
          }
          return token;
       },
       async session({ session, token }) {
          if (session.user) {
-            (session.user as AuthUser).role = token.role as AuthUser["role"];
+            session.user.id = token.id as string;
+            session.user.role = token.role as string;
          }
          return session;
       },
@@ -50,6 +58,10 @@ const handler = NextAuth({
    pages: {
       signIn: "/login",
       error: "/login",
+   },
+   session: {
+      strategy: "jwt",
+      maxAge: 30 * 24 * 60 * 60, // 30 dias
    },
 });
 

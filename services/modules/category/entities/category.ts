@@ -1,9 +1,10 @@
-import { IPost } from "../../post/entities/Post";
+import { Post } from "@/services/lib/prisma";
 
 export interface ICategory {
-   id: number;
+   id: string;
    name: string;
    color: string;
+   posts?: Post[];
 }
 
 export interface ICategoryCreate {
@@ -12,7 +13,7 @@ export interface ICategoryCreate {
 }
 
 export interface ICategoryUpdate {
-   id: number;
+   id: string;
    name?: string;
    color?: string;
 }

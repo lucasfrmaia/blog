@@ -1,27 +1,30 @@
-import { Category, Comment, User } from "@/services/lib/prisma";
+import { Category, User, Comment } from "@/services/lib/prisma";
 
 export interface IPost {
-   id: number;
+   id: string;
    title: string;
    content: string;
    createdAt: Date;
-   categoryId: number;
-   authorId: number;
+   updatedAt: Date;
+   authorId: string;
+   img?: string;
    author?: User;
    comments?: Comment[];
-   categories?: Category[];
+   category?: Category[];
 }
 
 export interface IPostCreate {
    title: string;
    content: string;
-   categoryId: number;
-   authorId: number;
+   authorId: string;
+   img?: string;
+   categoryId?: string[];
 }
 
 export interface IPostUpdate {
-   id: number;
+   id: string;
    title?: string;
    content?: string;
-   categoryId?: number;
+   img?: string;
+   categoryId?: string[];
 }

@@ -4,29 +4,37 @@ import { IPostRepository } from "./PostRepository";
 
 export class PostRepositoryPrisma implements IPostRepository {
    async create(data: IPostCreate): Promise<void> {
+      const { categoryId, ...postData } = data;
       await prisma.post.create({
-         data,
+         data: {
+            ...postData,
+            ...(categoryId && { categoryId }),
+         },
       });
    }
 
    async update(data: IPostUpdate): Promise<void> {
+      const { categoryId, ...postData } = data;
       await prisma.post.update({
          where: { id: data.id },
-         data,
+         data: {
+            ...postData,
+            ...(categoryId && { categoryId }),
+         },
       });
    }
 
-   async findById(id: number): Promise<IPost | null> {
+   async findById(id: string): Promise<IPost | null> {
       const post = await prisma.post.findUnique({
          where: { id },
          include: {
             author: true,
             comments: true,
-            categories: true,
+            category: true,
          },
       });
 
-      return post;
+      return post as IPost | null;
    }
 
    async findAll(limit?: number): Promise<IPost[]> {
@@ -35,39 +43,35 @@ export class PostRepositoryPrisma implements IPostRepository {
          include: {
             author: true,
             comments: true,
-            categories: true,
+            category: true,
          },
          orderBy: {
             createdAt: "desc",
          },
       });
 
-      return posts;
+      return posts as IPost[];
    }
 
-   async delete(id: number): Promise<void> {
+   async delete(id: string): Promise<void> {
       await prisma.post.delete({
          where: { id },
       });
    }
 
-   async findByCategory(categoryId: number): Promise<IPost[]> {
+   async findByCategory(categoryId: string): Promise<IPost[]> {
       const posts = await prisma.post.findMany({
          where: {
-            categories: {
-               some: {
-                  id: categoryId,
-               },
-            },
+            category: {},
          },
          include: {
             author: true,
             comments: true,
-            categories: true,
+            category: true,
          },
       });
 
-      return posts;
+      return posts as IPost[];
    }
 
    async findPopular(limit: number = 5): Promise<IPost[]> {
@@ -76,7 +80,7 @@ export class PostRepositoryPrisma implements IPostRepository {
          include: {
             author: true,
             comments: true,
-            categories: true,
+            category: true,
          },
          orderBy: {
             comments: {
@@ -85,13 +89,10 @@ export class PostRepositoryPrisma implements IPostRepository {
          },
       });
 
-      return posts;
+      return posts as IPost[];
    }
 
-   async findPerPage(
-      page: number,
-      limit: number
-   ): Promise<{ posts: IPost[]; total: number }> {
+   async findPerPage(page: number, limit: number): Promise<IPost[]> {
       const skip = (page - 1) * limit;
 
       const [posts, total] = await Promise.all([
@@ -101,7 +102,7 @@ export class PostRepositoryPrisma implements IPostRepository {
             include: {
                author: true,
                comments: true,
-               categories: true,
+               category: true,
             },
             orderBy: {
                createdAt: "desc",
@@ -110,10 +111,7 @@ export class PostRepositoryPrisma implements IPostRepository {
          prisma.post.count(),
       ]);
 
-      return {
-         posts,
-         total,
-      };
+      return posts as IPost[];
    }
 
    async getLastPost(): Promise<IPost | null> {
@@ -121,13 +119,13 @@ export class PostRepositoryPrisma implements IPostRepository {
          include: {
             author: true,
             comments: true,
-            categories: true,
+            category: true,
          },
          orderBy: {
             createdAt: "desc",
          },
       });
 
-      return post;
+      return post as IPost | null;
    }
 }

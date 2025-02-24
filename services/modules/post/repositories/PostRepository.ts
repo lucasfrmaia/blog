@@ -3,17 +3,11 @@ import { IPost, IPostCreate, IPostUpdate } from "../entities/Post";
 export interface IPostRepository {
    create(data: IPostCreate): Promise<void>;
    update(data: IPostUpdate): Promise<void>;
-   findById(id: number): Promise<IPost | null>;
-   findAll(limit?: number): Promise<IPost[]>;
-   delete(id: number): Promise<void>;
-   findByCategory(categoryId: number): Promise<IPost[]>;
+   findById(id: string): Promise<IPost | null>;
+   findAll(): Promise<IPost[]>;
+   delete(id: string): Promise<void>;
+   findByCategory(categoryId: string): Promise<IPost[]>;
    findPopular(limit?: number): Promise<IPost[]>;
-   findPerPage(
-      page: number,
-      limit: number
-   ): Promise<{
-      posts: IPost[];
-      total: number;
-   }>;
+   findPerPage(page: number, limit: number): Promise<IPost[]>;
    getLastPost(): Promise<IPost | null>;
 }

@@ -10,21 +10,22 @@ import { MessageSquare, ThumbsUp, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import BaseLayout from "@/components/layout/BaseLayout";
+import CommentSection from "@/components/comment/CommentSection";
 
 export default function PostPage({ params }: { params: { id: string } }) {
-   const { data: post } = useQuery({
+   const { data: post, isLoading } = useQuery({
       queryKey: ["post", params.id],
       queryFn: () => apiManager.post.findById(params.id),
    });
 
-   const { data: comments } = useQuery({
-      queryKey: ["comments", params.id],
-      queryFn: () => apiManager.comment.findByPostSlug(post?.slug || ""),
-      enabled: !!post?.slug,
-   });
-
-   if (!post) {
-      return <div>Carregando...</div>;
+   if (isLoading || !post) {
+      return (
+         <BaseLayout>
+            <div className="container mx-auto px-4 py-8">
+               <div>Carregando...</div>
+            </div>
+         </BaseLayout>
+      );
    }
 
    return (
@@ -45,31 +46,40 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
                <div className="flex items-center space-x-4 mb-8">
                   <Avatar>
-                     <AvatarImage src="/placeholder-avatar.jpg" />
-                     <AvatarFallback>AU</AvatarFallback>
+                     <AvatarImage
+                        src={post.author?.image || "/placeholder-avatar.jpg"}
+                        alt={post.author?.name || ""}
+                     />
+                     <AvatarFallback>
+                        {post.author?.name
+                           ?.split(" ")
+                           .map((n) => n[0])
+                           .join("")
+                           .toUpperCase() || "AU"}
+                     </AvatarFallback>
                   </Avatar>
                   <div>
-                     <p className="font-medium">Autor</p>
+                     <p className="font-medium">{post.author?.name}</p>
                      <p className="text-sm text-muted-foreground">
-                        {new Date(post.createdAt).toLocaleDateString()} •{" "}
-                        {post.views} visualizações
+                        {new Date(post.createdAt).toLocaleDateString()}
                      </p>
                   </div>
                </div>
 
                <div className="flex flex-wrap gap-2 mb-8">
-                  {post.categories.map((category) => (
-                     <Badge key={category.id} variant="secondary">
-                        {category.title}
+                  {post.category?.map((category) => (
+                     <Badge
+                        key={category.id}
+                        variant="secondary"
+                        style={{
+                           backgroundColor: category.color,
+                           color: "white",
+                        }}
+                     >
+                        {category.name}
                      </Badge>
                   ))}
                </div>
-
-               <Card className="p-6 mb-8">
-                  <p className="text-lg text-muted-foreground">
-                     {post.description}
-                  </p>
-               </Card>
 
                <div
                   className="prose dark:prose-invert max-w-none mb-8"
@@ -95,40 +105,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
                <Separator className="my-8" />
 
-               <section>
-                  <h2 className="text-2xl font-bold mb-6">
-                     Comentários ({comments?.length || 0})
-                  </h2>
-                  <div className="space-y-6">
-                     {comments?.map((comment) => (
-                        <Card key={comment.id}>
-                           <CardContent className="pt-6">
-                              <div className="flex items-start space-x-4">
-                                 <Avatar>
-                                    <AvatarImage src="/placeholder-avatar.jpg" />
-                                    <AvatarFallback>AU</AvatarFallback>
-                                 </Avatar>
-                                 <div className="flex-1">
-                                    <div className="flex items-center justify-between">
-                                       <p className="font-medium">
-                                          {comment.userEmail}
-                                       </p>
-                                       <p className="text-sm text-muted-foreground">
-                                          {new Date(
-                                             comment.createdAt
-                                          ).toLocaleDateString()}
-                                       </p>
-                                    </div>
-                                    <p className="mt-2">
-                                       {comment.description}
-                                    </p>
-                                 </div>
-                              </div>
-                           </CardContent>
-                        </Card>
-                     ))}
-                  </div>
-               </section>
+               <CommentSection postId={post.id} />
             </article>
          </div>
       </BaseLayout>

@@ -21,6 +21,7 @@ import {
    CardDescription,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { apiManager } from "@/services/modules/ApiManager";
 
 type IPropFormRegister = {
    children?: React.ReactNode;
@@ -56,9 +57,15 @@ export default function FormRegister({
    } = useForm<FormProps>({ resolver: zodResolver(schema) });
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
+      const { name, email, password } = data;
+
       try {
-         // Implementar lógica de registro
-         await new Promise((resolve) => setTimeout(resolve, 2000));
+         const response = await apiManager.user.create({
+            name,
+            email,
+            password,
+         });
+
          router.push(ROUTES_PAGE.login.link);
       } catch (error) {
          console.error("Erro ao registrar:", error);

@@ -22,7 +22,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
       });
    }
 
-   async findById(id: number): Promise<IComment | null> {
+   async findById(id: string): Promise<IComment | null> {
       const comment = await prisma.comment.findUnique({
          where: { id },
          include: {
@@ -31,21 +31,10 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          },
       });
 
-      if (!comment) return null;
-
-      return {
-         id: comment.id,
-         content: comment.content,
-         createdAt: comment.createdAt,
-         updatedAt: comment.updatedAt,
-         userId: comment.userId,
-         postId: comment.postId,
-         user: comment.user,
-         post: comment.post,
-      };
+      return comment;
    }
 
-   async findByPostId(postId: number): Promise<IComment[]> {
+   async findByPostId(postId: string): Promise<IComment[]> {
       const comments = await prisma.comment.findMany({
          where: {
             postId,
@@ -59,16 +48,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          },
       });
 
-      return comments.map((comment) => ({
-         id: comment.id,
-         content: comment.content,
-         createdAt: comment.createdAt,
-         updatedAt: comment.updatedAt,
-         userId: comment.userId,
-         postId: comment.postId,
-         user: comment.user,
-         post: comment.post,
-      }));
+      return comments;
    }
 
    async findAll(): Promise<IComment[]> {
@@ -82,19 +62,10 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          },
       });
 
-      return comments.map((comment) => ({
-         id: comment.id,
-         content: comment.content,
-         createdAt: comment.createdAt,
-         updatedAt: comment.updatedAt,
-         userId: comment.userId,
-         postId: comment.postId,
-         user: comment.user,
-         post: comment.post,
-      }));
+      return comments;
    }
 
-   async delete(id: number): Promise<void> {
+   async delete(id: string): Promise<void> {
       await prisma.comment.delete({
          where: { id },
       });

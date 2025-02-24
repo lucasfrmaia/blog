@@ -8,6 +8,10 @@ export class CategoryRepositoryInMemory implements ICategoryManager {
       this.categories.push(category);
    }
 
+   async findPopularCategories(limit?: number): Promise<ICategory[]> {
+      return this.categories.slice(0, limit);
+   }
+
    async update(category: ICategory): Promise<void> {
       const index = this.categories.findIndex((c) => c.id === category.id);
       if (index !== -1) {

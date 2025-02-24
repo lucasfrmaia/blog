@@ -1,7 +1,7 @@
 import { prisma } from "@/services/lib/prisma";
 import { IUser, IUserCreate, IUserUpdate } from "../entities/user";
 import { IUserRepository } from "./UserRepository";
-import { hash, genSalt } from "bcryptjs";
+import { hash, compare, genSalt } from "bcryptjs";
 
 export class UserRepositoryPrisma implements IUserRepository {
    async create(data: IUserCreate): Promise<void> {
@@ -10,9 +10,13 @@ export class UserRepositoryPrisma implements IUserRepository {
 
       await prisma.user.create({
          data: {
-            ...data,
+            name: data.name,
+            email: data.email,
             password: hashedPassword,
             salt,
+            role: {
+               connect: { name: "user" },
+            },
          },
       });
    }
@@ -22,16 +26,18 @@ export class UserRepositoryPrisma implements IUserRepository {
          where: { email },
          include: {
             role: true,
+            posts: true,
+            comments: true,
          },
       });
 
       if (!user) {
-         throw new Error("User not found");
+         throw new Error("Usuário não encontrado");
       }
 
-      const hashedPassword = await hash(password, user.salt);
-      if (hashedPassword !== user.password) {
-         throw new Error("Invalid password");
+      const isValidPassword = await compare(password, user.password);
+      if (!isValidPassword) {
+         throw new Error("Senha inválida");
       }
 
       return user;
@@ -42,6 +48,8 @@ export class UserRepositoryPrisma implements IUserRepository {
          where: { email },
          include: {
             role: true,
+            posts: true,
+            comments: true,
          },
       });
 

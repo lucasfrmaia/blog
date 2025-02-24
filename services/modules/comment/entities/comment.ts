@@ -1,23 +1,23 @@
 import { Post, User } from "@/services/lib/prisma";
 
 export interface IComment {
-   id: number;
+   id: string;
    content: string;
    createdAt: Date;
    updatedAt: Date;
-   userId: number;
-   postId: number;
+   userId: string;
+   postId: string;
    user?: User;
    post?: Post;
 }
 
 export interface ICommentCreate {
    content: string;
-   userId: number;
-   postId: number;
+   userId: string;
+   postId: string;
 }
 
 export interface ICommentUpdate {
-   id: number;
+   id: string;
    content?: string;
 }

@@ -26,7 +26,7 @@ export class CategoryRepositoryPrisma implements ICategoryManager {
       });
    }
 
-   async findById(id: number): Promise<ICategory | null> {
+   async findById(id: string): Promise<ICategory | null> {
       const category = await prisma.category.findUnique({
          where: { id },
          include: {
@@ -34,26 +34,20 @@ export class CategoryRepositoryPrisma implements ICategoryManager {
          },
       });
 
-      if (!category) return null;
-
-      return {
-         id: category.id,
-         name: category.name,
-         color: category.color,
-      };
+      return category;
    }
 
    async findAll(): Promise<ICategory[]> {
-      const categories = await prisma.category.findMany();
+      const categories = await prisma.category.findMany({
+         include: {
+            posts: true,
+         },
+      });
 
-      return categories.map((category) => ({
-         id: category.id,
-         name: category.name,
-         color: category.color,
-      }));
+      return categories;
    }
 
-   async delete(id: number): Promise<void> {
+   async delete(id: string): Promise<void> {
       await prisma.category.delete({
          where: { id },
       });
@@ -72,11 +66,6 @@ export class CategoryRepositoryPrisma implements ICategoryManager {
          take: limit,
       });
 
-      return categories.map((category) => ({
-         id: category.id,
-         name: category.name,
-         color: category.color,
-         posts: category.posts,
-      }));
+      return categories;
    }
 }

@@ -12,28 +12,28 @@ generator client {
 }
 
 model Role {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   name  String @unique
 
   users User[]
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String @id @default(uuid())
   name      String
   email     String   @unique
   password  String
   salt      String
-  roleId    Int
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  role      Role      @relation(fields: [roleId], references: [id])
+  role      Role[]
   posts     Post[]
   comments  Comment[]
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(uuid())
   name  String @unique
   color String
 
@@ -41,25 +41,25 @@ model Category {
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        String @id @default(uuid())
   title     String
   content   String
   createdAt DateTime @default(now())
-  authorId  Int
-  categoryId Int
-
+  updatedAt DateTime @updatedAt
+  authorId  String
   author    User      @relation(fields: [authorId], references: [id])
-  category  Category  @relation(fields: [categoryId], references: [id])
+
+  category  Category[]
   comments  Comment[]
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
+  id        String @id @default(uuid())
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  userId    Int
-  postId    Int
+  userId    String
+  postId    String
 
   user      User     @relation(fields: [userId], references: [id])
   post      Post     @relation(fields: [postId], references: [id])

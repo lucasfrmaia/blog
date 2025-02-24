@@ -1,7 +1,10 @@
 import { IUser } from "@/services/modules/user/entities/user";
 
-export type AuthUser = IUser & {
-   role: "admin" | "user";
+export type AuthUser = {
+   id: string;
+   name: string;
+   email: string;
+   role: string;
    image?: string | null;
 };
 

@@ -6,6 +6,10 @@ import { UserRepositoryPrisma } from "./user/repositories/UserRepositoryPrisma";
 import { PostRepositoryPrisma } from "./post/repositories/PostRepositoryPrisma";
 import { CategoryRepositoryPrisma } from "./category/repositories/CategoryRepositoryPrisma";
 import { CommentRepositoryPrisma } from "./comment/repositories/CommentRepositoryPrisma";
+import { PostRepositoryInMemory } from "./post/repositories/PostRepositoryInMemory";
+import { CategoryRepositoryInMemory } from "./category/repositories/CategoryRepositoryInMemory";
+import { UserRepositoryInMemory } from "./user/repositories/UserRepositoryInMemory";
+import { CommentRepositoryInMemory } from "./comment/repositories/CommentRepositoryInMemory";
 
 class ApiManager {
    constructor(
@@ -17,8 +21,8 @@ class ApiManager {
 }
 
 export const apiManager = new ApiManager(
-   new PostRepositoryPrisma(),
-   new CategoryRepositoryPrisma(),
-   new UserRepositoryPrisma(),
-   new CommentRepositoryPrisma()
+   new PostRepositoryInMemory(),
+   new CategoryRepositoryInMemory(),
+   new UserRepositoryInMemory(),
+   new CommentRepositoryInMemory()
 );
