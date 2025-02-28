@@ -14,13 +14,14 @@ export default withAuth(
          return NextResponse.redirect(new URL(ROUTES_PAGE.login.link, req.url));
       }
 
-      // Se for rota de admin e usuário não for admin
+      /* Se for rota de admin e usuário não for admin
       if (
          req.nextUrl.pathname.startsWith("/dashboard") &&
          token?.role !== "admin"
       ) {
          return NextResponse.redirect(new URL(ROUTES_PAGE.home.link, req.url));
       }
+      */
 
       return NextResponse.next();
    },

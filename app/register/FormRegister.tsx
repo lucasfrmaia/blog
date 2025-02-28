@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { apiManager } from "@/services/modules/ApiManager";
+import { toast } from "@/components/ui/use-toast";
 
 type IPropFormRegister = {
    children?: React.ReactNode;
@@ -69,6 +70,12 @@ export default function FormRegister({
          router.push(ROUTES_PAGE.login.link);
       } catch (error) {
          console.error("Erro ao registrar:", error);
+
+         toast({
+            title: "Erro ao fazer login",
+            description: "Ocorreu um erro inesperado",
+            variant: "destructive",
+         });
       }
    };
 

@@ -10,9 +10,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PostForm from "@/components/post/form/PostForm";
 
-export default function CreatePostPage() {
+interface EditPostPageProps {
+   params: {
+      id: string;
+   };
+}
+
+export default function EditPostPage({ params }: EditPostPageProps) {
    const router = useRouter();
    const [isLoading, setIsLoading] = useState(false);
+
+   const { data: post } = useQuery({
+      queryKey: ["post", params.id],
+      queryFn: () => apiManager.post.findById(params.id),
+   });
 
    const { data: categories } = useQuery({
       queryKey: ["categories"],
@@ -20,10 +31,12 @@ export default function CreatePostPage() {
    });
 
    const handleSubmit = async (formData: FormData) => {
+      if (!post) return;
       setIsLoading(true);
 
       try {
          const data = {
+            ...post,
             title: formData.get("title") as string,
             description: formData.get("description") as string,
             content: formData.get("content") as string,
@@ -31,14 +44,18 @@ export default function CreatePostPage() {
             img: formData.get("coverImage") as string,
          };
 
-         await apiManager.post.create(data);
+         await apiManager.post.update(data);
          router.push("/dashboard");
       } catch (error) {
-         console.error("Erro ao criar post:", error);
+         console.error("Erro ao atualizar post:", error);
       } finally {
          setIsLoading(false);
       }
    };
+
+   if (!post || !categories) {
+      return <div>Carregando...</div>;
+   }
 
    return (
       <div className="container mx-auto px-4 py-8">
@@ -57,16 +74,16 @@ export default function CreatePostPage() {
                   </Link>
                </Button>
                <div>
-                  <h1 className="text-3xl font-bold">Criar Novo Post</h1>
+                  <h1 className="text-3xl font-bold">Editar Post</h1>
                   <p className="text-muted-foreground">
-                     Crie um novo post para o blog
+                     Edite as informações do seu post
                   </p>
                </div>
             </div>
 
             <PostForm
-               categories={categories}
                isLoading={isLoading}
+               defaultValues={post}
                onSubmit={handleSubmit}
             />
          </motion.div>

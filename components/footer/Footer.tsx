@@ -12,9 +12,9 @@ import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
 export default function Footer() {
    const links = Object.values(NAVEBAR_ROUTES);
    const { data: categories, isLoading } = useQuery({
-      queryKey: ["all_categories"],
+      queryKey: ["popular_categories"],
       queryFn: async () => {
-         const response = await apiManager.category.findAll();
+         const response = await apiManager.category.findPopularCategories(5);
          return response;
       },
    });
@@ -86,10 +86,10 @@ export default function Footer() {
                      {categories?.map((category) => (
                         <li key={`footer-${category.id}`}>
                            <Link
-                              href={`/category/${category.slug}`}
+                              href={`/category/${category.id}`}
                               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                            >
-                              {category.title}
+                              {category.name}
                            </Link>
                         </li>
                      ))}

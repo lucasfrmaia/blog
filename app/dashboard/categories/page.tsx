@@ -13,7 +13,7 @@ import {
    TableHeader,
    TableRow,
 } from "@/components/ui/table";
-import { Edit2, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Edit2, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
 import { ICategory } from "@/services/modules/category/entities/category";
@@ -27,7 +27,7 @@ export default function CategoriesPage() {
       queryFn: () => apiManager.category.findAll(),
    });
 
-   const handleDelete = async (id: number) => {
+   const handleDelete = async (id: string) => {
       if (isDeleting) return;
 
       try {
@@ -57,11 +57,19 @@ export default function CategoriesPage() {
             transition={{ duration: 0.5 }}
          >
             <div className="flex justify-between items-center mb-8">
-               <div>
-                  <h1 className="text-3xl font-bold">Categorias</h1>
-                  <p className="text-muted-foreground">
-                     Gerencie as categorias do blog
-                  </p>
+               <div className="flex items-center gap-4">
+                  <Button variant="ghost" size="icon" asChild>
+                     <Link href="/dashboard">
+                        <ArrowLeft className="h-4 w-4" />
+                        <span className="sr-only">Voltar</span>
+                     </Link>
+                  </Button>
+                  <div>
+                     <h1 className="text-3xl font-bold">Categorias</h1>
+                     <p className="text-muted-foreground">
+                        Gerencie as categorias do blog
+                     </p>
+                  </div>
                </div>
                <Button asChild>
                   <Link

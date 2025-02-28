@@ -4,6 +4,16 @@ import { ICategoryManager } from "./category-repository";
 export class CategoryRepositoryInMemory implements ICategoryManager {
    private categories: ICategory[] = [];
 
+   constructor() {
+      this.categories = Array.from({ length: 10 }, (_, index) => ({
+         id: `category-${index + 1}`,
+         name: `Category ${index + 1}`,
+         color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+         createdAt: new Date(),
+         updatedAt: new Date(),
+      }));
+   }
+
    async create(category: ICategory): Promise<void> {
       this.categories.push(category);
    }

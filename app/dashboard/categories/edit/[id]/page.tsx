@@ -33,7 +33,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
 
    const { data: category } = useQuery({
       queryKey: ["category", params.id],
-      queryFn: () => apiManager.category.findById(Number(params.id)),
+      queryFn: () => apiManager.category.findById(params.id),
    });
 
    const handleSubmit = async (values: FormValues) => {

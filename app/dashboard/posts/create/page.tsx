@@ -1,61 +1,44 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
-import { apiManager } from "@/services/modules/ApiManager";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { apiManager } from "@/services/modules/ApiManager";
 import PostForm from "@/components/post/form/PostForm";
+import { AuthUser } from "@/utils/types/auth";
 
-interface EditPostPageProps {
-   params: {
-      id: string;
-   };
-}
-
-export default function EditPostPage({ params }: EditPostPageProps) {
+export default function CreatePostPage() {
    const router = useRouter();
+   const { data: session } = useSession();
+   const user = session?.user as AuthUser;
    const [isLoading, setIsLoading] = useState(false);
 
-   const { data: post } = useQuery({
-      queryKey: ["post", params.id],
-      queryFn: () => apiManager.post.findById(params.id),
-   });
-
-   const { data: categories } = useQuery({
-      queryKey: ["categories"],
-      queryFn: () => apiManager.category.findAll(),
-   });
-
    const handleSubmit = async (formData: FormData) => {
-      if (!post) return;
+      if (!user) return;
       setIsLoading(true);
 
       try {
          const data = {
-            ...post,
             title: formData.get("title") as string,
             description: formData.get("description") as string,
             content: formData.get("content") as string,
-            categories: JSON.parse(formData.get("categories") as string),
+            categoryId: JSON.parse(formData.get("categories") as string),
             img: formData.get("coverImage") as string,
+            authorId: user.id,
          };
 
-         await apiManager.post.update(data);
+         await apiManager.post.create(data);
          router.push("/dashboard");
       } catch (error) {
-         console.error("Erro ao atualizar post:", error);
+         console.error("Erro ao criar post:", error);
       } finally {
          setIsLoading(false);
       }
    };
-
-   if (!post || !categories) {
-      return <div>Carregando...</div>;
-   }
 
    return (
       <div className="container mx-auto px-4 py-8">
@@ -74,19 +57,14 @@ export default function EditPostPage({ params }: EditPostPageProps) {
                   </Link>
                </Button>
                <div>
-                  <h1 className="text-3xl font-bold">Editar Post</h1>
+                  <h1 className="text-3xl font-bold">Criar Post</h1>
                   <p className="text-muted-foreground">
-                     Edite as informações do seu post
+                     Crie um novo post para o blog
                   </p>
                </div>
             </div>
 
-            <PostForm
-               categories={categories}
-               isLoading={isLoading}
-               defaultValues={post}
-               onSubmit={handleSubmit}
-            />
+            <PostForm isLoading={isLoading} onSubmit={handleSubmit} />
          </motion.div>
       </div>
    );

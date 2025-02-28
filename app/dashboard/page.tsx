@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,53 +29,88 @@ import {
    TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
-import { useQuery } from "@tanstack/react-query";
 import { apiManager } from "@/services/modules/ApiManager";
 import BaseLayout from "@/components/layout/BaseLayout";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import CategoryList from "@/components/category/CategoryList";
 
 export default function DashboardPage() {
-   const { data: posts, isLoading } = useQuery({
+   const { data: posts, isLoading: isLoadingPosts } = useQuery({
       queryKey: ["posts"],
       queryFn: async () => {
-         const response = await apiManager.post.findAll(100);
+         const response = await apiManager.post.findAll();
          return response;
       },
    });
 
-   if (isLoading) {
+   const { data: categories, isLoading: isLoadingCategories } = useQuery({
+      queryKey: ["categories"],
+      queryFn: () => apiManager.category.findAll(),
+   });
+
+   if (isLoadingPosts || isLoadingCategories) {
       return null;
    }
 
    const totalViews = posts?.reduce((acc, post) => acc + post.views, 0) || 0;
-   // const totalComments =
-   //   posts?.reduce((acc, post) => acc + (post.comments?.length || 0), 0) || 0;
-   const totalComments = 0;
+   const totalComments =
+      posts?.reduce((acc, post) => acc + (post.comments?.length || 0), 0) || 0;
 
    return (
       <BaseLayout>
          <div className="container mx-auto px-4 py-8">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-8">
-               <div>
-                  <h1 className="text-3xl font-bold">Dashboard</h1>
-                  <p className="text-muted-foreground">
-                     Gerencie seus posts e monitore o desempenho
-                  </p>
-               </div>
-               <Button asChild>
-                  <Link href="/dashboard/create">
-                     <Plus className="mr-2 h-4 w-4" />
-                     Novo Post
-                  </Link>
-               </Button>
-            </div>
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.5 }}
+            >
+               <Tabs defaultValue="posts" className="space-y-8">
+                  <div className="flex items-center justify-between">
+                     <TabsList>
+                        <TabsTrigger value="posts">Posts</TabsTrigger>
+                        <TabsTrigger value="categories">Categorias</TabsTrigger>
+                     </TabsList>
+
+                     <TabsContent value="posts" className="mt-0">
+                        <Button asChild>
+                           <Link href="/dashboard/posts/create">
+                              <Plus className="mr-2 h-4 w-4" />
+                              Novo Post
+                           </Link>
+                        </Button>
+                     </TabsContent>
+
+                     <TabsContent value="categories" className="mt-0">
+                        <Button asChild>
+                           <Link href="/dashboard/categories/create">
+                              <Plus className="mr-2 h-4 w-4" />
+                              Nova Categoria
+                           </Link>
+                        </Button>
+                     </TabsContent>
+                  </div>
+
+                  <TabsContent value="categories">
+                     <div className="grid gap-6">
+                        <div>
+                           <h2 className="text-2xl font-bold">Categorias</h2>
+                           <p className="text-muted-foreground">
+                              Gerencie as categorias do blog
+                           </p>
+                        </div>
+
+                        {categories && <CategoryList categories={categories} />}
+                     </div>
+                  </TabsContent>
+               </Tabs>
+            </motion.div>
 
             {/* Stats */}
             <motion.div
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5 }}
-               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+               transition={{ duration: 0.5, delay: 0.2 }}
+               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-8"
             >
                <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -148,7 +184,7 @@ export default function DashboardPage() {
             <motion.div
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.2 }}
+               transition={{ duration: 0.5, delay: 0.4 }}
             >
                <Card>
                   <CardHeader>
@@ -189,7 +225,7 @@ export default function DashboardPage() {
                                           asChild
                                        >
                                           <Link
-                                             href={`/dashboard/edit/${post.id}`}
+                                             href={`/dashboard/posts/edit/${post.id}`}
                                           >
                                              <Edit className="h-4 w-4" />
                                              <span className="sr-only">
@@ -221,7 +257,7 @@ export default function DashboardPage() {
             <motion.div
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.4 }}
+               transition={{ duration: 0.5, delay: 0.6 }}
                className="mt-8"
             >
                <Card>
