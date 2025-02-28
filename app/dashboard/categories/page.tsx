@@ -17,6 +17,7 @@ import { ArrowLeft, Edit2, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
 import { ICategory } from "@/services/modules/category/entities/category";
+import { BackDashboard } from "@/components/buttons/BackDashboard";
 
 export default function CategoriesPage() {
    const { toast } = useToast();
@@ -58,12 +59,7 @@ export default function CategoriesPage() {
          >
             <div className="flex justify-between items-center mb-8">
                <div className="flex items-center gap-4">
-                  <Button variant="ghost" size="icon" asChild>
-                     <Link href="/dashboard">
-                        <ArrowLeft className="h-4 w-4" />
-                        <span className="sr-only">Voltar</span>
-                     </Link>
-                  </Button>
+                  <BackDashboard />
                   <div>
                      <h1 className="text-3xl font-bold">Categorias</h1>
                      <p className="text-muted-foreground">

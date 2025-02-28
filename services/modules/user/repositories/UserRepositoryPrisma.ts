@@ -4,6 +4,19 @@ import { IUserRepository } from "./UserRepository";
 import { hash, compare, genSalt } from "bcryptjs";
 
 export class UserRepositoryPrisma implements IUserRepository {
+   findById(id: string): Promise<IUser | null> {
+      throw new Error("Method not implemented.");
+   }
+   findAll(): Promise<IUser[]> {
+      throw new Error("Method not implemented.");
+   }
+   findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{ users: IUser[]; total: number }> {
+      throw new Error("Method not implemented.");
+   }
+
    async create(data: IUserCreate): Promise<void> {
       const salt = await genSalt(10);
       const hashedPassword = await hash(data.password, salt);

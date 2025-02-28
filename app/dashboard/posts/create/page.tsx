@@ -10,6 +10,7 @@ import { useState } from "react";
 import { apiManager } from "@/services/modules/ApiManager";
 import PostForm from "@/components/post/form/PostForm";
 import { AuthUser } from "@/utils/types/auth";
+import { BackDashboard } from "@/components/buttons/BackDashboard";
 
 export default function CreatePostPage() {
    const router = useRouter();
@@ -50,12 +51,8 @@ export default function CreatePostPage() {
          >
             {/* Header */}
             <div className="flex items-center gap-4 mb-8">
-               <Button variant="ghost" size="icon" asChild>
-                  <Link href="/dashboard">
-                     <ArrowLeft className="h-4 w-4" />
-                     <span className="sr-only">Voltar</span>
-                  </Link>
-               </Button>
+               <BackDashboard />
+
                <div>
                   <h1 className="text-3xl font-bold">Criar Post</h1>
                   <p className="text-muted-foreground">

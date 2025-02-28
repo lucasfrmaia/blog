@@ -4,9 +4,36 @@ import { useRouter } from "next/navigation";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiManager } from "@/services/modules/ApiManager";
 import { toast } from "@/components/ui/use-toast";
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import UserForm from "@/components/forms/UserForm";
-import { IUserUpdate } from "@/services/modules/user/entities/user";
+import { motion } from "framer-motion";
+import { BackDashboard } from "@/components/buttons/BackDashboard";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+   Form,
+   FormControl,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+   Select,
+   SelectContent,
+   SelectItem,
+   SelectTrigger,
+   SelectValue,
+} from "@/components/ui/select";
+
+const formSchema = z.object({
+   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
+   email: z.string().email("Email inválido"),
+   roleId: z.string().min(1, "Selecione uma função"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface EditUserPageProps {
    params: {
@@ -17,13 +44,32 @@ interface EditUserPageProps {
 export default function EditUserPage({ params }: EditUserPageProps) {
    const router = useRouter();
 
-   const { data: user, isLoading } = useQuery({
+   const { data: user, isLoading: isLoadingUser } = useQuery({
       queryKey: ["user", params.id],
       queryFn: () => apiManager.user.findById(params.id),
    });
 
+   const { data: roles, isLoading: isLoadingRoles } = useQuery({
+      queryKey: ["roles"],
+      queryFn: () => apiManager.role.findAll(),
+   });
+
+   const form = useForm<FormValues>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+         name: user?.name || "",
+         email: user?.email || "",
+         roleId: user?.role?.[0]?.id || "",
+      },
+   });
+
    const { mutateAsync: updateUser, isPending } = useMutation({
-      mutationFn: (data: IUserUpdate) => apiManager.user.update(data),
+      mutationFn: async (data: FormValues) => {
+         await apiManager.user.update({
+            id: params.id,
+            ...data,
+         });
+      },
       onSuccess: () => {
          toast({
             title: "Usuário atualizado com sucesso!",
@@ -40,8 +86,8 @@ export default function EditUserPage({ params }: EditUserPageProps) {
       },
    });
 
-   if (isLoading) {
-      return null;
+   if (isLoadingUser || isLoadingRoles) {
+      return <div>Carregando...</div>;
    }
 
    if (!user) {
@@ -49,17 +95,91 @@ export default function EditUserPage({ params }: EditUserPageProps) {
    }
 
    return (
-      <DashboardLayout>
-         <div className="container mx-auto px-4 py-8">
-            <div className="max-w-2xl mx-auto">
-               <h1 className="text-3xl font-bold mb-8">Editar Usuário</h1>
-               <UserForm
-                  defaultValues={user}
-                  isSubmitting={isPending}
-                  onSubmit={updateUser}
-               />
+      <div className="container mx-auto px-4 py-8">
+         <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="max-w-2xl mx-auto"
+         >
+            <div className="flex items-center gap-4 mb-8">
+               <BackDashboard />
+
+               <div>
+                  <h1 className="text-3xl font-bold">Editar Usuário</h1>
+                  <p className="text-muted-foreground">
+                     Edite as informações do usuário
+                  </p>
+               </div>
             </div>
-         </div>
-      </DashboardLayout>
+
+            <Form {...form}>
+               <form
+                  onSubmit={form.handleSubmit(updateUser)}
+                  className="space-y-6"
+               >
+                  <FormField
+                     control={form.control}
+                     name="name"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Nome</FormLabel>
+                           <FormControl>
+                              <Input {...field} />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="email"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Email</FormLabel>
+                           <FormControl>
+                              <Input {...field} type="email" />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="roleId"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Função</FormLabel>
+                           <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                           >
+                              <FormControl>
+                                 <SelectTrigger>
+                                    <SelectValue placeholder="Selecione uma função" />
+                                 </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                 {roles?.map((role) => (
+                                    <SelectItem key={role.id} value={role.id}>
+                                       {role.name}
+                                    </SelectItem>
+                                 ))}
+                              </SelectContent>
+                           </Select>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <Button type="submit" disabled={isPending}>
+                     {isPending ? "Salvando..." : "Salvar"}
+                  </Button>
+               </form>
+            </Form>
+         </motion.div>
+      </div>
    );
 }

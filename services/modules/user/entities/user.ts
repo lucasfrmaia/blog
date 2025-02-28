@@ -1,5 +1,6 @@
 import { Comment } from "@/services/lib/prisma";
 import { IPost } from "@/services/modules/post/entities/Post";
+import { IRole } from "../../role/entities/role";
 
 export interface IUser {
    id: string;
@@ -8,20 +9,11 @@ export interface IUser {
    password: string;
    salt: string;
    image?: string;
+   createdAt: Date;
+   updatedAt: Date;
    role?: IRole[];
    posts?: IPost[];
    comments?: Comment[];
-   createdAt: Date;
-   updatedAt: Date;
-}
-
-export interface IRole {
-   id: string;
-   name: string;
-   description?: string;
-   createdAt: Date;
-   updatedAt: Date;
-   users?: IUser[];
 }
 
 export interface IUserCreate {

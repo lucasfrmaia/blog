@@ -1,19 +1,31 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { useToast } from "@/components/ui/use-toast";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiManager } from "@/services/modules/ApiManager";
-import CategoryForm from "@/components/category/CategoryForm";
+import { toast } from "@/components/ui/use-toast";
+import { motion } from "framer-motion";
+import { BackDashboard } from "@/components/buttons/BackDashboard";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import {
-   ICategory,
-   ICategoryUpdate,
-} from "@/services/modules/category/entities/category";
+   Form,
+   FormControl,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+const formSchema = z.object({
+   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
+   color: z.string().min(4, "Selecione uma cor válida"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface EditCategoryPageProps {
    params: {
@@ -21,51 +33,51 @@ interface EditCategoryPageProps {
    };
 }
 
-interface FormValues {
-   name: string;
-   color: string;
-}
-
 export default function EditCategoryPage({ params }: EditCategoryPageProps) {
    const router = useRouter();
-   const { toast } = useToast();
-   const [isLoading, setIsLoading] = useState(false);
 
-   const { data: category } = useQuery({
+   const { data: category, isLoading } = useQuery({
       queryKey: ["category", params.id],
       queryFn: () => apiManager.category.findById(params.id),
    });
 
-   const handleSubmit = async (values: FormValues) => {
-      if (!category) return;
-      setIsLoading(true);
+   const form = useForm<FormValues>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+         name: category?.name || "",
+         color: category?.color || "",
+      },
+   });
 
-      try {
-         const updateData: ICategoryUpdate = {
-            id: category.id,
-            name: values.name,
-            color: values.color,
-         };
-
-         await apiManager.category.update(updateData);
-         router.push("/dashboard/");
-         toast({
-            title: "Categoria atualizada",
-            description: "A categoria foi atualizada com sucesso.",
+   const { mutateAsync: updateCategory, isPending } = useMutation({
+      mutationFn: async (data: FormValues) => {
+         await apiManager.category.update({
+            id: params.id,
+            ...data,
          });
-      } catch (error) {
+      },
+      onSuccess: () => {
+         toast({
+            title: "Categoria atualizada com sucesso!",
+            description: "As informações da categoria foram atualizadas.",
+         });
+         router.push("/dashboard");
+      },
+      onError: () => {
          toast({
             title: "Erro ao atualizar categoria",
-            description: "Ocorreu um erro ao atualizar a categoria.",
+            description: "Ocorreu um erro ao tentar atualizar a categoria.",
             variant: "destructive",
          });
-      } finally {
-         setIsLoading(false);
-      }
-   };
+      },
+   });
+
+   if (isLoading) {
+      return <div>Carregando...</div>;
+   }
 
    if (!category) {
-      return <div>Carregando...</div>;
+      return <div>Categoria não encontrada</div>;
    }
 
    return (
@@ -77,12 +89,8 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
             className="max-w-2xl mx-auto"
          >
             <div className="flex items-center gap-4 mb-8">
-               <Button variant="ghost" size="icon" asChild>
-                  <Link href="/dashboard/">
-                     <ArrowLeft className="h-4 w-4" />
-                     <span className="sr-only">Voltar</span>
-                  </Link>
-               </Button>
+               <BackDashboard />
+
                <div>
                   <h1 className="text-3xl font-bold">Editar Categoria</h1>
                   <p className="text-muted-foreground">
@@ -91,11 +99,44 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
                </div>
             </div>
 
-            <CategoryForm
-               defaultValues={category}
-               isLoading={isLoading}
-               onSubmit={handleSubmit}
-            />
+            <Form {...form}>
+               <form
+                  onSubmit={form.handleSubmit(updateCategory)}
+                  className="space-y-6"
+               >
+                  <FormField
+                     control={form.control}
+                     name="name"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Nome</FormLabel>
+                           <FormControl>
+                              <Input {...field} />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="color"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Cor</FormLabel>
+                           <FormControl>
+                              <Input {...field} type="color" />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <Button type="submit" disabled={isPending}>
+                     {isPending ? "Salvando..." : "Salvar"}
+                  </Button>
+               </form>
+            </Form>
          </motion.div>
       </div>
    );

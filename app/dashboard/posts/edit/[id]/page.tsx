@@ -9,6 +9,7 @@ import { apiManager } from "@/services/modules/ApiManager";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import PostForm from "@/components/post/form/PostForm";
+import { BackDashboard } from "@/components/buttons/BackDashboard";
 
 interface EditPostPageProps {
    params: {
@@ -67,12 +68,7 @@ export default function EditPostPage({ params }: EditPostPageProps) {
          >
             {/* Header */}
             <div className="flex items-center gap-4 mb-8">
-               <Button variant="ghost" size="icon" asChild>
-                  <Link href="/dashboard">
-                     <ArrowLeft className="h-4 w-4" />
-                     <span className="sr-only">Voltar</span>
-                  </Link>
-               </Button>
+               <BackDashboard />
                <div>
                   <h1 className="text-3xl font-bold">Editar Post</h1>
                   <p className="text-muted-foreground">
