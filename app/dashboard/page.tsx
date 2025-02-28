@@ -11,28 +11,20 @@ import {
    CardTitle,
 } from "@/components/ui/card";
 import {
-   Table,
-   TableBody,
-   TableCell,
-   TableHead,
-   TableHeader,
-   TableRow,
-} from "@/components/ui/table";
-import {
    BarChart3,
-   Edit,
    Eye,
    FileText,
    MessageSquare,
    Plus,
-   Trash2,
    TrendingUp,
+   Users,
 } from "lucide-react";
 import Link from "next/link";
 import { apiManager } from "@/services/modules/ApiManager";
 import BaseLayout from "@/components/layout/BaseLayout";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CategoryList from "@/components/category/CategoryList";
+import { UserList } from "@/components/user/UserList";
+import { CategoryList } from "@/components/category/CategoryList";
+import { PostList } from "@/components/post/PostList";
 
 export default function DashboardPage() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
@@ -59,58 +51,12 @@ export default function DashboardPage() {
    return (
       <BaseLayout>
          <div className="container mx-auto px-4 py-8">
-            <motion.div
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5 }}
-            >
-               <Tabs defaultValue="posts" className="space-y-8">
-                  <div className="flex items-center justify-between">
-                     <TabsList>
-                        <TabsTrigger value="posts">Posts</TabsTrigger>
-                        <TabsTrigger value="categories">Categorias</TabsTrigger>
-                     </TabsList>
-
-                     <TabsContent value="posts" className="mt-0">
-                        <Button asChild>
-                           <Link href="/dashboard/posts/create">
-                              <Plus className="mr-2 h-4 w-4" />
-                              Novo Post
-                           </Link>
-                        </Button>
-                     </TabsContent>
-
-                     <TabsContent value="categories" className="mt-0">
-                        <Button asChild>
-                           <Link href="/dashboard/categories/create">
-                              <Plus className="mr-2 h-4 w-4" />
-                              Nova Categoria
-                           </Link>
-                        </Button>
-                     </TabsContent>
-                  </div>
-
-                  <TabsContent value="categories">
-                     <div className="grid gap-6">
-                        <div>
-                           <h2 className="text-2xl font-bold">Categorias</h2>
-                           <p className="text-muted-foreground">
-                              Gerencie as categorias do blog
-                           </p>
-                        </div>
-
-                        {categories && <CategoryList categories={categories} />}
-                     </div>
-                  </TabsContent>
-               </Tabs>
-            </motion.div>
-
             {/* Stats */}
             <motion.div
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.2 }}
-               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 mt-8"
+               transition={{ duration: 0.5 }}
+               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
             >
                <Card>
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -180,75 +126,81 @@ export default function DashboardPage() {
                </Card>
             </motion.div>
 
-            {/* Recent Posts */}
+            {/* Posts Section */}
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.5, delay: 0.2 }}
+               className="mb-8"
+            >
+               <Card>
+                  <CardHeader className="flex flex-row items-center justify-between">
+                     <div>
+                        <CardTitle>Posts</CardTitle>
+                        <CardDescription>
+                           Gerencie os posts do blog
+                        </CardDescription>
+                     </div>
+                     <Button asChild>
+                        <Link href="/dashboard/posts/create">
+                           <Plus className="mr-2 h-4 w-4" />
+                           Novo Post
+                        </Link>
+                     </Button>
+                  </CardHeader>
+                  <CardContent>
+                     <PostList />
+                  </CardContent>
+               </Card>
+            </motion.div>
+
+            {/* Categories Section */}
+            <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.5, delay: 0.6 }}
+               className="mb-8"
+            >
+               <Card>
+                  <CardHeader className="flex flex-row items-center justify-between">
+                     <div>
+                        <CardTitle>Categorias</CardTitle>
+                        <CardDescription>
+                           Gerencie as categorias do blog
+                        </CardDescription>
+                     </div>
+                     <Button asChild>
+                        <Link href="/dashboard/categories/create">
+                           <Plus className="mr-2 h-4 w-4" />
+                           Nova Categoria
+                        </Link>
+                     </Button>
+                  </CardHeader>
+                  <CardContent>
+                     <CategoryList />
+                  </CardContent>
+               </Card>
+            </motion.div>
+
+            {/* Users Section */}
             <motion.div
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
                transition={{ duration: 0.5, delay: 0.4 }}
+               className="mb-8"
             >
                <Card>
-                  <CardHeader>
-                     <CardTitle>Posts Recentes</CardTitle>
-                     <CardDescription>
-                        Gerencie seus posts mais recentes
-                     </CardDescription>
+                  <CardHeader className="flex flex-row items-center justify-between">
+                     <div>
+                        <CardTitle>Usuários</CardTitle>
+                        <CardDescription>
+                           Gerencie os usuários do sistema
+                        </CardDescription>
+                     </div>
+                     <Users className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                     <Table>
-                        <TableHeader>
-                           <TableRow>
-                              <TableHead>Título</TableHead>
-                              <TableHead>Data</TableHead>
-                              <TableHead>Visualizações</TableHead>
-                              <TableHead>Comentários</TableHead>
-                              <TableHead>Ações</TableHead>
-                           </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                           {posts?.map((post) => (
-                              <TableRow key={post.id}>
-                                 <TableCell className="font-medium">
-                                    {post.title}
-                                 </TableCell>
-                                 <TableCell>
-                                    {new Date(
-                                       post.createdAt
-                                    ).toLocaleDateString()}
-                                 </TableCell>
-                                 <TableCell>{post.views}</TableCell>
-                                 <TableCell>0</TableCell>
-                                 <TableCell>
-                                    <div className="flex items-center gap-2">
-                                       <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          asChild
-                                       >
-                                          <Link
-                                             href={`/dashboard/posts/edit/${post.id}`}
-                                          >
-                                             <Edit className="h-4 w-4" />
-                                             <span className="sr-only">
-                                                Editar post
-                                             </span>
-                                          </Link>
-                                       </Button>
-                                       <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          className="text-destructive"
-                                       >
-                                          <Trash2 className="h-4 w-4" />
-                                          <span className="sr-only">
-                                             Excluir post
-                                          </span>
-                                       </Button>
-                                    </div>
-                                 </TableCell>
-                              </TableRow>
-                           ))}
-                        </TableBody>
-                     </Table>
+                     <UserList />
                   </CardContent>
                </Card>
             </motion.div>
@@ -257,8 +209,7 @@ export default function DashboardPage() {
             <motion.div
                initial={{ opacity: 0, y: 20 }}
                animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.6 }}
-               className="mt-8"
+               transition={{ duration: 0.5, delay: 0.8 }}
             >
                <Card>
                   <CardHeader>

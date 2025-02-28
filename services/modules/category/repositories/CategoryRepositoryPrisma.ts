@@ -7,6 +7,13 @@ import {
 import { ICategoryManager } from "./category-repository";
 
 export class CategoryRepositoryPrisma implements ICategoryManager {
+   async findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{ categories: ICategory[]; total: number }> {
+      throw new Error("Method not implemented.");
+   }
+
    async create(data: ICategoryCreate): Promise<void> {
       await prisma.category.create({
          data: {

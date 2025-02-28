@@ -8,6 +8,12 @@ export interface IPostRepository {
    delete(id: string): Promise<void>;
    findByCategory(categoryId: string): Promise<IPost[]>;
    findPopular(limit?: number): Promise<IPost[]>;
-   findPerPage(page: number, limit: number): Promise<IPost[]>;
+   findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{
+      posts: IPost[];
+      total: number;
+   }>;
    getLastPost(): Promise<IPost | null>;
 }

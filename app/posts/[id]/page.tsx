@@ -47,7 +47,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                <div className="flex items-center space-x-4 mb-8">
                   <Avatar>
                      <AvatarImage
-                        src={post.author?.image || "/placeholder-avatar.jpg"}
+                        src={"/placeholder-avatar.jpg"}
                         alt={post.author?.name || ""}
                      />
                      <AvatarFallback>
@@ -67,7 +67,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                </div>
 
                <div className="flex flex-wrap gap-2 mb-8">
-                  {post.category?.map((category) => (
+                  {post.categories?.map((category) => (
                      <Badge
                         key={category.id}
                         variant="secondary"

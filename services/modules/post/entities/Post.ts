@@ -12,11 +12,12 @@ export interface IPost {
    img?: string;
    author?: User;
    comments?: Comment[];
-   category?: Category[];
+   categories?: Category[];
 }
 
 export interface IPostCreate {
    title: string;
+   description: string;
    content: string;
    authorId: string;
    img?: string;

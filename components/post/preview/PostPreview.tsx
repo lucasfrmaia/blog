@@ -50,7 +50,7 @@ export default function PostPreview({
          <div className="flex flex-wrap gap-2 mb-8">
             {categories.map((category) => (
                <Badge key={category.id} variant="secondary">
-                  {category.title}
+                  {category.name}
                </Badge>
             ))}
          </div>

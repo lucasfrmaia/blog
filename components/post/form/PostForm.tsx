@@ -33,7 +33,7 @@ export default function PostForm({
 }: PostFormProps) {
    const [content, setContent] = useState(defaultValues?.content || "");
    const [selectedCategories, setSelectedCategories] = useState<string[]>(
-      defaultValues?.category?.map((cat) => cat.id) || []
+      defaultValues?.categories?.map((cat) => cat.id) || []
    );
 
    const { data: categories } = useQuery<ICategory[]>({

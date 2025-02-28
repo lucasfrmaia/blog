@@ -31,7 +31,7 @@ export default function BlogPage() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
       queryKey: ["posts", page, search, category, sortBy],
       queryFn: async () => {
-         const response = await apiManager.post.findAll(100);
+         const response = await apiManager.post.findAll();
          return response;
       },
    });
@@ -53,7 +53,7 @@ export default function BlogPage() {
 
       if (category) {
          filtered = filtered.filter((post) =>
-            post.categories.some((cat) => cat.slug === category)
+            post?.categories?.some((cat) => cat.id === category)
          );
       }
 

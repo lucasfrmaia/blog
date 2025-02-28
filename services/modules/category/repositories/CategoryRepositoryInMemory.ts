@@ -5,21 +5,36 @@ export class CategoryRepositoryInMemory implements ICategoryManager {
    private categories: ICategory[] = [];
 
    constructor() {
-      this.categories = Array.from({ length: 10 }, (_, index) => ({
-         id: `category-${index + 1}`,
-         name: `Category ${index + 1}`,
-         color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
-         createdAt: new Date(),
-         updatedAt: new Date(),
-      }));
+      // Criar algumas categorias de exemplo
+      for (let i = 1; i <= 20; i++) {
+         this.categories.push({
+            id: `category-${i}`,
+            name: `Categoria ${i}`,
+            color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+         });
+      }
    }
 
    async create(category: ICategory): Promise<void> {
       this.categories.push(category);
    }
 
-   async findPopularCategories(limit?: number): Promise<ICategory[]> {
-      return this.categories.slice(0, limit);
+   async findPopularCategories(limit: number = 5): Promise<ICategory[]> {
+      return this.categories
+         .sort((a, b) => (b.posts?.length || 0) - (a.posts?.length || 0))
+         .slice(0, limit);
+   }
+
+   async findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{ categories: ICategory[]; total: number }> {
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      return {
+         categories: this.categories.slice(start, end),
+         total: this.categories.length,
+      };
    }
 
    async update(category: ICategory): Promise<void> {

@@ -11,4 +11,11 @@ export interface ICategoryManager {
    findAll(): Promise<ICategory[]>;
    delete(id: string): Promise<void>;
    findPopularCategories(limit?: number): Promise<ICategory[]>;
+   findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{
+      categories: ICategory[];
+      total: number;
+   }>;
 }

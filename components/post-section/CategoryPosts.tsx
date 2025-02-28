@@ -47,14 +47,14 @@ const CategoryPosts: React.FC<ICategoryPostsProps> = ({
          <TitleSection>Categorias Populares</TitleSection>
 
          <ul className="flex flex-wrap gap-4">
-            {categories.map(({ color, title, id }) => {
+            {categories.map(({ color, name, id }) => {
                return (
                   <li
                      key={`category-popular-${id}`}
                      style={{ backgroundColor: color + "80" }}
                      className="inline-flex justify-center items-center h-9 text-center px-4 rounded-md font-bold"
                   >
-                     {title}
+                     {name}
                   </li>
                );
             })}

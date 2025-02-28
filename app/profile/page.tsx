@@ -1,17 +1,35 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
-import { motion } from "framer-motion";
+import { apiManager } from "@/services/modules/ApiManager";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import {
+   Card,
+   CardContent,
+   CardDescription,
+   CardHeader,
+   CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FileText, Mail, User } from "lucide-react";
 import BaseLayout from "@/components/layout/BaseLayout";
-import { ProfileInfo } from "@/components/profile/ProfileInfo";
-import { AuthUser } from "@/utils/types/auth";
+import { redirect } from "next/navigation";
 
 export default function ProfilePage() {
    const { data: session, status } = useSession();
-   const user = session?.user as AuthUser | undefined;
 
-   if (status === "loading") {
+   const { data: user, isLoading } = useQuery({
+      queryKey: ["user", session?.user?.id],
+      queryFn: async () => {
+         if (!session?.user?.id) return null;
+         return apiManager.user.findById(session.user.id);
+      },
+      enabled: !!session?.user?.id,
+   });
+
+   if (status === "loading" || isLoading) {
       return null;
    }
 
@@ -19,20 +37,72 @@ export default function ProfilePage() {
       redirect("/login");
    }
 
+   if (!user) {
+      return <div>Usuário não encontrado</div>;
+   }
+
    return (
       <BaseLayout>
          <div className="container mx-auto px-4 py-8">
-            <motion.div
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5 }}
-               className="max-w-4xl mx-auto"
-            >
-               <h1 className="text-3xl font-bold mb-8">Meu Perfil</h1>
-               <div className="grid gap-8">
-                  <ProfileInfo user={user!} />
-               </div>
-            </motion.div>
+            <Card>
+               <CardHeader className="flex flex-row items-center gap-4">
+                  <Avatar className="h-16 w-16">
+                     <AvatarImage src={user.image} alt={user.name} />
+                     <AvatarFallback>
+                        <User className="h-8 w-8" />
+                     </AvatarFallback>
+                  </Avatar>
+                  <div>
+                     <CardTitle>{user.name}</CardTitle>
+                     <CardDescription className="flex items-center gap-2">
+                        <Mail className="h-4 w-4" />
+                        {user.email}
+                     </CardDescription>
+                  </div>
+               </CardHeader>
+               <CardContent className="space-y-6">
+                  <div>
+                     <h3 className="text-lg font-semibold mb-2">Informações</h3>
+                     <div className="grid gap-4">
+                        <div>
+                           <span className="text-sm text-muted-foreground">
+                              Membro desde
+                           </span>
+                           <p>
+                              {format(
+                                 new Date(user.createdAt),
+                                 "dd 'de' MMMM 'de' yyyy",
+                                 { locale: ptBR }
+                              )}
+                           </p>
+                        </div>
+                        <div>
+                           <span className="text-sm text-muted-foreground">
+                              Função
+                           </span>
+                           <p className="capitalize">
+                              {user.role?.map((r) => r.name).join(", ") ||
+                                 "Usuário"}
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div>
+                     <h3 className="text-lg font-semibold mb-2">
+                        Atividade no Blog
+                     </h3>
+                     <div className="grid gap-4">
+                        <div className="flex items-center gap-2">
+                           <FileText className="h-4 w-4 text-muted-foreground" />
+                           <span>
+                              {user.posts?.length || 0} posts publicados
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               </CardContent>
+            </Card>
          </div>
       </BaseLayout>
    );

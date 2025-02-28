@@ -48,7 +48,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
          };
 
          await apiManager.category.update(updateData);
-         router.push("/dashboard/categories");
+         router.push("/dashboard/");
          toast({
             title: "Categoria atualizada",
             description: "A categoria foi atualizada com sucesso.",
@@ -78,7 +78,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
          >
             <div className="flex items-center gap-4 mb-8">
                <Button variant="ghost" size="icon" asChild>
-                  <Link href="/dashboard/categories">
+                  <Link href="/dashboard/">
                      <ArrowLeft className="h-4 w-4" />
                      <span className="sr-only">Voltar</span>
                   </Link>

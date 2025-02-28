@@ -39,6 +39,27 @@ export class UserRepositoryInMemory implements IUserRepository {
       return user || null;
    }
 
+   async findById(id: string): Promise<IUser | null> {
+      const user = this.users.find((u) => u.id === id);
+      return user || null;
+   }
+
+   async findAll(): Promise<IUser[]> {
+      return this.users;
+   }
+
+   async findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{ users: IUser[]; total: number }> {
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      return {
+         users: this.users.slice(start, end),
+         total: this.users.length,
+      };
+   }
+
    async update(user: IUser): Promise<void> {
       const index = this.users.findIndex((u) => u.email === user.email);
       if (index !== -1) {

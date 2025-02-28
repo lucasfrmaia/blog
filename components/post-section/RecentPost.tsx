@@ -28,7 +28,7 @@ export default function RecentPost({ children, className }: IPropRecentPost) {
    const { data: posts, isLoading } = useQuery({
       queryKey: ["recent_posts"],
       queryFn: async () => {
-         const response = await apiManager.post.findAll(AMOUNT_POST_RECENT);
+         const response = await apiManager.post.findAll();
 
          return response;
       },

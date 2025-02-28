@@ -13,7 +13,7 @@ export default function PostSection() {
    const { data: posts, isLoading } = useQuery({
       queryKey: ["featured_posts"],
       queryFn: async () => {
-         const response = await apiManager.post.findAll(6);
+         const response = await apiManager.post.findAll();
          return response;
       },
    });
@@ -53,7 +53,7 @@ export default function PostSection() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                {posts?.map((post, index) => {
                   const postComments = comments?.filter(
-                     (comment) => comment.postSlug === post.slug
+                     (comment) => comment.postId === post.id
                   );
 
                   return (
@@ -74,7 +74,7 @@ export default function PostSection() {
                            readTime={`${Math.ceil(
                               post.description.length / 1000
                            )} min de leitura`}
-                           category={post.categories[0]?.title || "Geral"}
+                           category={"Geral"}
                            views={post.views}
                            commentsCount={postComments?.length || 0}
                         />

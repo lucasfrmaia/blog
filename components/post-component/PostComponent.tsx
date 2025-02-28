@@ -114,9 +114,9 @@ export function PostCategories({
 }) {
    return (
       <ul className={cn("inline-block", className)}>
-         {post.categories.map((category, index) => (
+         {post.categories?.map((category, index) => (
             <li key={index} className={cn("inline-block", classNameLi)}>
-               <span>{category.title}</span>
+               <span>{category.name}</span>
             </li>
          ))}
       </ul>
@@ -134,16 +134,16 @@ export function PostCategoriesBadge({
 }) {
    return (
       <ul className={cn("", className)}>
-         {post.categories.map((category, index) => (
+         {post.categories?.map((category, index) => (
             <li
                style={{ backgroundColor: category.color }}
-               key={`PostCatrgoriesBadge-${category.slug}`}
+               key={`PostCatrgoriesBadge-${category.id}`}
                className={cn(
                   "inline-block px-2 text-center h-6 text-secondary rounded-3xl",
                   classNameLi
                )}
             >
-               <span>{category.title}</span>
+               <span>{category.name}</span>
             </li>
          ))}
       </ul>

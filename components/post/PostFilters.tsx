@@ -90,8 +90,8 @@ export default function PostFilters({
                <SelectContent>
                   <SelectItem value="all">Todas</SelectItem>
                   {categories?.map((cat) => (
-                     <SelectItem key={cat.id} value={cat.slug}>
-                        {cat.title}
+                     <SelectItem key={cat.id} value={cat.id}>
+                        {cat.name}
                      </SelectItem>
                   ))}
                </SelectContent>
@@ -157,8 +157,8 @@ export default function PostFilters({
                               <SelectContent>
                                  <SelectItem value="all">Todas</SelectItem>
                                  {categories?.map((cat) => (
-                                    <SelectItem key={cat.id} value={cat.slug}>
-                                       {cat.title}
+                                    <SelectItem key={cat.id} value={cat.id}>
+                                       {cat.name}
                                     </SelectItem>
                                  ))}
                               </SelectContent>
@@ -220,7 +220,7 @@ export default function PostFilters({
                {category && (
                   <Badge variant="secondary" className="text-sm">
                      Categoria:{" "}
-                     {categories?.find((c) => c.slug === category)?.title}
+                     {categories?.find((c) => c.id === category)?.name}
                      <button
                         className="ml-2"
                         onClick={() =>
