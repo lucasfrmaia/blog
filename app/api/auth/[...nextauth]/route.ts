@@ -11,11 +11,13 @@ const handler = NextAuth({
             email: { label: "Email", type: "email" },
             password: { label: "Password", type: "password" },
          },
-         async authorize(credentials) {
+         async authorize(credentials): Promise<AuthUser | null> {
             try {
                if (!credentials?.email || !credentials?.password) {
                   return null;
                }
+
+               console.log(credentials);
 
                const user = await apiManager.user.authenticate(
                   credentials.email,
@@ -30,7 +32,7 @@ const handler = NextAuth({
                   id: user.id,
                   name: user.name,
                   email: user.email,
-                  role: user.role?.[0]?.name || "user",
+                  role: user.role?.id,
                } as AuthUser;
             } catch (error) {
                console.error("Erro na autenticação:", error);
@@ -39,11 +41,25 @@ const handler = NextAuth({
          },
       }),
    ],
+
    callbacks: {
       async jwt({ token, user }) {
+         if (user) {
+            token.role = user.role;
+         }
+
+         if (user?.id) {
+            token.sub = user.id;
+         }
+
          return token;
       },
       async session({ session, token }) {
+         if (session.user) {
+            session.user.role = token.role as string;
+            session.user.id = token.sub as string;
+         }
+
          return session;
       },
    },

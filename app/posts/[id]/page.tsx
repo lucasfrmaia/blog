@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import BaseLayout from "@/components/layout/BaseLayout";
 import CommentSection from "@/components/comment/CommentSection";
+import { LoadingOnePost } from "@/components/loadings/posts/LoadingOnePost";
 
 export default function PostPage({ params }: { params: { id: string } }) {
    const { data: post, isLoading } = useQuery({
@@ -18,14 +19,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
       queryFn: () => apiManager.post.findById(params.id),
    });
 
-   if (isLoading || !post) {
-      return (
-         <BaseLayout>
-            <div className="container mx-auto px-4 py-8">
-               <div>Carregando...</div>
-            </div>
-         </BaseLayout>
-      );
+   if (!post) {
+      return null;
+   }
+
+   if (isLoading) {
+      return <LoadingOnePost />;
    }
 
    return (
@@ -51,16 +50,13 @@ export default function PostPage({ params }: { params: { id: string } }) {
                         alt={post.author?.name || ""}
                      />
                      <AvatarFallback>
-                        {post.author?.name
-                           ?.split(" ")
-                           .map((n) => n[0])
-                           .join("")
-                           .toUpperCase() || "AU"}
+                        {post.author?.name?.charAt(0).toUpperCase() || "A"}
                      </AvatarFallback>
                   </Avatar>
                   <div>
                      <p className="font-medium">{post.author?.name}</p>
                      <p className="text-sm text-muted-foreground">
+                        Criado em:{" "}
                         {new Date(post.createdAt).toLocaleDateString()}
                      </p>
                   </div>
@@ -81,27 +77,16 @@ export default function PostPage({ params }: { params: { id: string } }) {
                   ))}
                </div>
 
+               <Card className="p-6 mb-8">
+                  <p className="text-lg text-muted-foreground">
+                     {post.description}
+                  </p>
+               </Card>
+
                <div
                   className="prose dark:prose-invert max-w-none mb-8"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                />
-
-               <div className="flex items-center justify-between py-4">
-                  <div className="flex space-x-4">
-                     <Button variant="ghost" size="sm">
-                        <ThumbsUp className="h-4 w-4 mr-2" />
-                        Curtir
-                     </Button>
-                     <Button variant="ghost" size="sm">
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        Comentar
-                     </Button>
-                     <Button variant="ghost" size="sm">
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Compartilhar
-                     </Button>
-                  </div>
-               </div>
 
                <Separator className="my-8" />
 

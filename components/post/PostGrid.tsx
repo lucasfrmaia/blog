@@ -27,9 +27,9 @@ export default function PostGrid({ posts }: PostGridProps) {
                   readTime={`${Math.ceil(
                      post.description.length / 1000
                   )} min de leitura`}
-                  category={"Geral"}
+                  category={post?.categories?.[9]?.name || "Geral"}
                   views={post.views}
-                  commentsCount={0}
+                  commentsCount={post?.comments?.length || 0}
                />
             </motion.div>
          ))}

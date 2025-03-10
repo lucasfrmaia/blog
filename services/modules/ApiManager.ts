@@ -13,6 +13,15 @@ import { CommentRepositoryInMemory } from "./comment/repositories/CommentReposit
 import { IRoleRepository } from "./role/repositories/RoleRepository";
 import { RoleRepositoryInMemory } from "./role/repositories/RoleRepositoryInMemory";
 
+// Singleton para manter os repositórios em memória
+const inMemoryRepositories = {
+   post: new PostRepositoryInMemory(),
+   category: new CategoryRepositoryInMemory(),
+   user: new UserRepositoryInMemory(),
+   comment: new CommentRepositoryInMemory(),
+   role: new RoleRepositoryInMemory(),
+};
+
 class ApiManager {
    constructor(
       public readonly post: IPostRepository,
@@ -21,12 +30,21 @@ class ApiManager {
       public readonly comment: ICommentRepository,
       public readonly role: IRoleRepository
    ) {}
+
+   private static instance: ApiManager | null = null;
+
+   public static getInstance(): ApiManager {
+      if (!ApiManager.instance) {
+         ApiManager.instance = new ApiManager(
+            inMemoryRepositories.post,
+            inMemoryRepositories.category,
+            inMemoryRepositories.user,
+            inMemoryRepositories.comment,
+            inMemoryRepositories.role
+         );
+      }
+      return ApiManager.instance;
+   }
 }
 
-export const apiManager = new ApiManager(
-   new PostRepositoryInMemory(),
-   new CategoryRepositoryInMemory(),
-   new UserRepositoryInMemory(),
-   new CommentRepositoryInMemory(),
-   new RoleRepositoryInMemory()
-);
+export const apiManager = ApiManager.getInstance();

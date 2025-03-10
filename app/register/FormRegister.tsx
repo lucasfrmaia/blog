@@ -32,12 +32,10 @@ type IPropFormRegister = {
 const schema = z.object({
    name: z.string().min(1, "O nome é obrigatório"),
    email: z.string().email("Email inválido").min(1, "O email é obrigatório"),
-   password: z
-      .string()
-      .min(8, "A senha deve ter no mínimo 8 caracteres")
-      .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
-      .regex(/[a-z]/, "A senha deve conter pelo menos uma letra minúscula")
-      .regex(/[0-9]/, "A senha deve conter pelo menos um número"),
+   password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
+   // .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
+   // .regex(/[a-z]/, "A senha deve conter pelo menos uma letra minúscula")
+   // .regex(/[0-9]/, "A senha deve conter pelo menos um número"),
    terms: z.boolean().refine((val) => val === true, {
       message: "Você precisa aceitar os termos de uso",
    }),
@@ -61,7 +59,7 @@ export default function FormRegister({
       const { name, email, password } = data;
 
       try {
-         const response = await apiManager.user.create({
+         await apiManager.user.create({
             name,
             email,
             password,
@@ -168,7 +166,8 @@ export default function FormRegister({
                   </div>
 
                   <div className="flex items-center space-x-2">
-                     <Checkbox
+                     <input
+                        type="checkbox"
                         id="terms"
                         {...register("terms")}
                         disabled={isSubmitting}

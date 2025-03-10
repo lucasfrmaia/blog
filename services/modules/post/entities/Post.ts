@@ -1,4 +1,6 @@
-import { Category, User, Comment } from "@/services/lib/prisma";
+import { ICategory } from "../../category/entities/category";
+import { IComment } from "../../comment/entities/comment";
+import { IUser } from "../../user/entities/user";
 
 export interface IPost {
    id: string;
@@ -10,9 +12,9 @@ export interface IPost {
    authorId: string;
    views: number;
    img?: string;
-   author?: User;
-   comments?: Comment[];
-   categories?: Category[];
+   author?: IUser;
+   comments?: IComment[];
+   categories?: ICategory[];
 }
 
 export interface IPostCreate {

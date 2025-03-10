@@ -1,4 +1,4 @@
-import { IUser } from "../entities/user";
+import { IUser, IUserCreate } from "../entities/user";
 import { IUserRepository } from "./UserRepository";
 
 export class UserRepositoryInMemory implements IUserRepository {
@@ -11,21 +11,52 @@ export class UserRepositoryInMemory implements IUserRepository {
          salt: "admin",
          createdAt: new Date(),
          updatedAt: new Date(),
-         role: [],
+         role: {
+            id: "admin",
+            name: "Admin",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+         },
+      },
+      {
+         id: "2",
+         name: "Adasdsaasdmin",
+         email: "banana32232@gmail.com",
+         password: "123",
+         salt: "admdasain",
+         createdAt: new Date(),
+         updatedAt: new Date(),
+         role: {
+            id: "user",
+            name: "user",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+         },
       },
    ];
 
-   async create(user: IUser): Promise<void> {
-      this.users.push(user);
+   async create(user: IUserCreate): Promise<void> {
+      this.users.push({
+         ...user,
+         id: "2",
+         createdAt: new Date(),
+         updatedAt: new Date(),
+         salt: "string",
+         role: {
+            id: "dsdfaawsedfsa",
+            name: "Admin",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+         },
+      });
    }
 
    async authenticate(email?: string, password?: string): Promise<IUser> {
-      // Para fins de teste, vamos aceitar qualquer senha para o admin
-      if (email === "admin@admin.com") {
-         return this.users[0];
-      }
+      console.log(this.users);
 
-      const user = this.users.find((u) => u.email === email);
+      const user = this.users.find(
+         (u) => u.email === email && u.password === password
+      );
 
       if (!user) {
          throw new Error("User not found");

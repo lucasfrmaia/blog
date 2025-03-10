@@ -12,7 +12,7 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, Settings, User } from "lucide-react";
+import { LogOut, Settings, User, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "../theme/ThemeToggle";
 import { AuthUser } from "@/utils/types/auth";
@@ -69,13 +69,24 @@ export function UserMenu() {
                <DropdownMenuSeparator />
                <DropdownMenuGroup>
                   <DropdownMenuItem asChild>
-                     <Link href="/profile">
+                     <Link href="/profile" className="w-full cursor-pointer">
                         <User className="mr-2 h-4 w-4" />
                         <span>Perfil</span>
                      </Link>
                   </DropdownMenuItem>
+                  {user?.role === "admin" && (
+                     <DropdownMenuItem asChild>
+                        <Link
+                           href="/dashboard"
+                           className="w-full cursor-pointer"
+                        >
+                           <LayoutDashboard className="mr-2 h-4 w-4" />
+                           <span>Dashboard</span>
+                        </Link>
+                     </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem asChild>
-                     <Link href="/settings">
+                     <Link href="/settings" className="w-full cursor-pointer">
                         <Settings className="mr-2 h-4 w-4" />
                         <span>Configurações</span>
                      </Link>
@@ -83,7 +94,7 @@ export function UserMenu() {
                </DropdownMenuGroup>
                <DropdownMenuSeparator />
                <DropdownMenuItem
-                  className="text-red-600"
+                  className="cursor-pointer"
                   onClick={() => signOut()}
                >
                   <LogOut className="mr-2 h-4 w-4" />

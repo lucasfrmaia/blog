@@ -7,7 +7,6 @@ import { DataTable, Column } from "@/components/shared/DataTable";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { IUser } from "@/services/modules/user/entities/user";
-import { IRole } from "@/services/modules/user/entities/user";
 
 const PAGE_SIZE = 10;
 
@@ -22,8 +21,7 @@ const columns: Column<IUser>[] = [
    },
    {
       header: "Função",
-      accessorKey: (user: IUser) =>
-         user.role?.map((r: IRole) => r.name).join(", ") || "Usuário",
+      accessorKey: (user: IUser) => user.role?.id || "Usuário",
    },
    {
       header: "Membro desde",

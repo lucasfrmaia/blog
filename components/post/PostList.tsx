@@ -11,6 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
+import PostListLoading from "../loadings/PostListLoading";
+import QueryError from "../errors/QueryError";
 
 const PAGE_SIZE = 10;
 
@@ -19,9 +21,9 @@ export function PostList() {
    const { toast } = useToast();
    const queryClient = useQueryClient();
 
-   const { data, isLoading } = useQuery({
-      queryKey: ["posts", page],
-      queryFn: () => apiManager.post.findPerPage(page, PAGE_SIZE),
+   const { data, isLoading, error, refetch } = useQuery({
+      queryKey: ["posts"],
+      queryFn: () => apiManager.post.findAll(),
    });
 
    const { mutate: deletePost } = useMutation({
@@ -42,20 +44,27 @@ export function PostList() {
       },
    });
 
-   const handleDelete = (id: string) => {
-      if (window.confirm("Tem certeza que deseja excluir este post?")) {
-         deletePost(id);
+   const handleDelete = async (id: string) => {
+      try {
+         await deletePost(id);
+         refetch();
+      } catch (error) {
+         toast({
+            title: "Erro ao excluir",
+            description: "Ocorreu um erro ao tentar excluir o post.",
+            variant: "destructive",
+         });
       }
    };
+
+   if (isLoading) return <PostListLoading />;
+
+   if (error) return <QueryError onRetry={() => refetch()} />;
 
    const columns: Column<IPost>[] = [
       {
          header: "Título",
          accessorKey: (post: IPost) => post.title,
-      },
-      {
-         header: "Autor",
-         accessorKey: (post: IPost) => post.author?.name || "Desconhecido",
       },
       {
          header: "Categoria",
@@ -99,18 +108,14 @@ export function PostList() {
       },
    ];
 
-   if (isLoading) {
-      return <div>Carregando...</div>;
-   }
-
    return (
       <DataTable<IPost>
-         data={data?.posts || []}
+         data={data || []}
          columns={columns}
          pagination={{
             page,
             pageSize: PAGE_SIZE,
-            total: data?.total || 0,
+            total: data?.length || 0,
          }}
          onPageChange={setPage}
       />

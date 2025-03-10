@@ -11,7 +11,7 @@ export interface IUser {
    image?: string;
    createdAt: Date;
    updatedAt: Date;
-   role?: IRole[];
+   role?: IRole;
    posts?: IPost[];
    comments?: Comment[];
 }

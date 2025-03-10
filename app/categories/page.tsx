@@ -6,6 +6,7 @@ import Link from "next/link";
 import { apiManager } from "@/services/modules/ApiManager";
 import BaseLayout from "@/components/layout/BaseLayout";
 import { ICategory } from "@/services/modules/category/entities/category";
+import { LoadingCategories } from "@/components/loadings/categories/LoadingCategories";
 
 export default function CategoriesPage() {
    const { data: categories, isLoading } = useQuery<ICategory[]>({
@@ -14,11 +15,7 @@ export default function CategoriesPage() {
    });
 
    if (isLoading) {
-      return (
-         <BaseLayout>
-            <div>Carregando...</div>
-         </BaseLayout>
-      );
+      return <LoadingCategories />;
    }
 
    return (

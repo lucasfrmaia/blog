@@ -9,6 +9,8 @@ import { Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/components/ui/use-toast";
 import { ICategory } from "@/services/modules/category/entities/category";
+import CategoryListLoading from "../loadings/CategoryListLoading";
+import QueryError from "../errors/QueryError";
 
 const PAGE_SIZE = 10;
 
@@ -65,47 +67,45 @@ const columns: Column<ICategory>[] = [
 ];
 
 export function CategoryList() {
-   const [page, setPage] = useState(1);
+   const { data, isLoading, error, refetch } = useQuery({
+      queryKey: ["categories"],
+      queryFn: () => apiManager.category.findAll(),
+   });
+
    const { toast } = useToast();
    const queryClient = useQueryClient();
 
-   const { data, isLoading } = useQuery({
-      queryKey: ["categories", page],
-      queryFn: () => apiManager.category.findPerPage(page, PAGE_SIZE),
-   });
-
-   const { mutate: deleteCategory } = useMutation({
-      mutationFn: (id: string) => apiManager.category.delete(id),
-      onSuccess: () => {
+   const handleDelete = async (id: string) => {
+      try {
+         await apiManager.category.delete(id);
          toast({
-            title: "Categoria excluída com sucesso!",
-            description: "A categoria foi removida do sistema.",
+            title: "Categoria excluída",
+            description: "A categoria foi excluída com sucesso.",
          });
-         queryClient.invalidateQueries({ queryKey: ["categories"] });
-      },
-      onError: () => {
+         refetch();
+      } catch (error) {
          toast({
-            title: "Erro ao excluir categoria",
+            title: "Erro ao excluir",
             description: "Ocorreu um erro ao tentar excluir a categoria.",
             variant: "destructive",
          });
-      },
-   });
+      }
+   };
 
-   if (isLoading) {
-      return <div>Carregando...</div>;
-   }
+   if (isLoading) return <CategoryListLoading />;
+
+   if (error) return <QueryError onRetry={() => refetch()} />;
 
    return (
       <DataTable<ICategory>
-         data={data?.categories || []}
+         data={data || []}
          columns={columns}
          pagination={{
-            page,
+            page: 1,
             pageSize: PAGE_SIZE,
-            total: data?.total || 0,
+            total: data?.length || 0,
          }}
-         onPageChange={setPage}
+         onPageChange={() => {}}
       />
    );
 }

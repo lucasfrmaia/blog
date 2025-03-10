@@ -16,9 +16,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FileText, Mail, User } from "lucide-react";
 import BaseLayout from "@/components/layout/BaseLayout";
 import { redirect } from "next/navigation";
+import { LoadingProfile } from "@/components/loadings/LoadingProfile";
 
 export default function ProfilePage() {
    const { data: session, status } = useSession();
+
+   if (!session) {
+      redirect("/login");
+   }
+
+   console.log(session);
 
    const { data: user, isLoading } = useQuery({
       queryKey: ["user", session?.user?.id],
@@ -29,12 +36,8 @@ export default function ProfilePage() {
       enabled: !!session?.user?.id,
    });
 
-   if (status === "loading" || isLoading) {
-      return null;
-   }
-
-   if (!session) {
-      redirect("/login");
+   if (isLoading) {
+      return <LoadingProfile />;
    }
 
    if (!user) {
@@ -81,8 +84,7 @@ export default function ProfilePage() {
                               Função
                            </span>
                            <p className="capitalize">
-                              {user.role?.map((r) => r.name).join(", ") ||
-                                 "Usuário"}
+                              {user.role?.name || "Usuário"}
                            </p>
                         </div>
                      </div>

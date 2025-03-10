@@ -35,8 +35,8 @@ export default function NaveBar() {
    const { setTheme, theme } = useTheme();
    const pathname = usePathname();
    const { data: session } = useSession();
-   const links = Object.values(NAVEBAR_ROUTES);
    const user = session?.user as AuthUser | undefined;
+   const links = Object.values(NAVEBAR_ROUTES);
 
    return (
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -60,6 +60,19 @@ export default function NaveBar() {
                      {label}
                   </Link>
                ))}
+               {user?.role === "admin" && (
+                  <Link
+                     href="/dashboard"
+                     className={cn(
+                        "transition-colors hover:text-foreground/80",
+                        pathname.startsWith("/dashboard")
+                           ? "text-foreground"
+                           : "text-foreground/60"
+                     )}
+                  >
+                     Dashboard
+                  </Link>
+               )}
             </div>
 
             <div className="ml-auto">
