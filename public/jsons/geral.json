@@ -1,0 +1,115 @@
+{
+   "home": {
+      "hero": {
+         "title": "Bem-vindo ao nosso Blog",
+         "description": "Um espaço dedicado a compartilhar conhecimento e experiências"
+      },
+      "popularCategories": {
+         "title": "Categorias Populares",
+         "description": "Explore os tópicos mais discutidos em nosso blog"
+      },
+      "recentPosts": {
+         "title": "Posts Recentes",
+         "description": "Confira nossas últimas publicações"
+      }
+   },
+   "about": {
+      "hero": {
+         "title": "Sobre Nós",
+         "description": "Conheça nossa história e missão"
+      },
+      "content": {
+         "mission": {
+            "title": "Nossa Missão",
+            "description": "Compartilhar conhecimento e experiências para ajudar pessoas a crescerem profissionalmente"
+         },
+         "values": {
+            "title": "Nossos Valores",
+            "items": [
+               "Qualidade de conteúdo",
+               "Transparência",
+               "Inovação",
+               "Comunidade"
+            ]
+         }
+      }
+   },
+   "contact": {
+      "hero": {
+         "title": "Entre em Contato",
+         "description": "Estamos aqui para ajudar"
+      },
+      "form": {
+         "title": "Envie sua mensagem",
+         "description": "Preencha o formulário abaixo e entraremos em contato em breve",
+         "fields": {
+            "name": "Nome completo",
+            "email": "Seu melhor email",
+            "subject": "Assunto",
+            "message": "Sua mensagem"
+         },
+         "button": "Enviar mensagem"
+      }
+   },
+   "privacyPolicy": {
+      "title": "Política de Privacidade",
+      "lastUpdated": "Última atualização: Janeiro 2024",
+      "sections": [
+         {
+            "title": "Coleta de Dados",
+            "content": "Coletamos apenas as informações necessárias para melhorar sua experiência"
+         },
+         {
+            "title": "Uso de Cookies",
+            "content": "Utilizamos cookies para personalizar sua experiência e análise de uso"
+         },
+         {
+            "title": "Compartilhamento de Dados",
+            "content": "Não compartilhamos seus dados com terceiros sem seu consentimento"
+         }
+      ]
+   },
+   "termsOfUse": {
+      "title": "Termos de Uso",
+      "lastUpdated": "Última atualização: Janeiro 2024",
+      "sections": [
+         {
+            "title": "Aceitação dos Termos",
+            "content": "Ao acessar e usar este site, você concorda com estes termos"
+         },
+         {
+            "title": "Uso do Conteúdo",
+            "content": "Todo o conteúdo é protegido por direitos autorais"
+         },
+         {
+            "title": "Responsabilidades",
+            "content": "Os usuários são responsáveis pelo conteúdo que publicam"
+         }
+      ]
+   },
+   "cookiePolicy": {
+      "title": "Política de Cookies",
+      "lastUpdated": "Última atualização: Janeiro 2024",
+      "sections": [
+         {
+            "title": "O que são Cookies",
+            "content": "Cookies são pequenos arquivos de texto armazenados no seu dispositivo"
+         },
+         {
+            "title": "Como Usamos",
+            "content": "Usamos cookies para melhorar sua experiência de navegação"
+         },
+         {
+            "title": "Seus Direitos",
+            "content": "Você pode controlar e excluir cookies através das configurações do seu navegador"
+         }
+      ]
+   },
+   "errors": {
+      "general": "Algo deu errado!",
+      "tryAgain": "Tentar novamente",
+      "notFound": "Página não encontrada",
+      "loading": "Carregando...",
+      "loadingError": "Erro ao carregar os dados"
+   }
+}

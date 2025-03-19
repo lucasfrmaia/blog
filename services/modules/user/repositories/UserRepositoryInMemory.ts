@@ -2,6 +2,9 @@ import { IUser, IUserCreate } from "../entities/user";
 import { IUserRepository } from "./UserRepository";
 
 export class UserRepositoryInMemory implements IUserRepository {
+   findByRoleId(roleId: string): Promise<IUser[]> {
+      throw new Error("Method not implemented.");
+   }
    private users: IUser[] = [
       {
          id: "1",

@@ -2,24 +2,27 @@ import { ICategoryManager } from "./category/repositories/category-repository";
 import { IPostRepository } from "./post/repositories/PostRepository";
 import { IUserRepository } from "./user/repositories/UserRepository";
 import { ICommentRepository } from "./comment/repositories/CommentRepository";
-import { UserRepositoryPrisma } from "./user/repositories/UserRepositoryPrisma";
+
 import { PostRepositoryPrisma } from "./post/repositories/PostRepositoryPrisma";
 import { CategoryRepositoryPrisma } from "./category/repositories/CategoryRepositoryPrisma";
 import { CommentRepositoryPrisma } from "./comment/repositories/CommentRepositoryPrisma";
-import { PostRepositoryInMemory } from "./post/repositories/PostRepositoryInMemory";
-import { CategoryRepositoryInMemory } from "./category/repositories/CategoryRepositoryInMemory";
 import { UserRepositoryInMemory } from "./user/repositories/UserRepositoryInMemory";
-import { CommentRepositoryInMemory } from "./comment/repositories/CommentRepositoryInMemory";
 import { IRoleRepository } from "./role/repositories/RoleRepository";
+import { RoleRepositoryPrisma } from "./role/repositories/RoleRepositoryPrisma";
+
+import { UserRepositoryPrisma } from "./user/repositories/UserRepositoryPrisma";
+import { CategoryRepositoryInMemory } from "./category/repositories/CategoryRepositoryInMemory";
+import { PostRepositoryInMemory } from "./post/repositories/PostRepositoryInMemory";
+import { CommentRepositoryInMemory } from "./comment/repositories/CommentRepositoryInMemory";
 import { RoleRepositoryInMemory } from "./role/repositories/RoleRepositoryInMemory";
 
 // Singleton para manter os repositórios em memória
 const inMemoryRepositories = {
-   post: new PostRepositoryInMemory(),
-   category: new CategoryRepositoryInMemory(),
+   post: new PostRepositoryPrisma(),
+   category: new CategoryRepositoryPrisma(),
    user: new UserRepositoryInMemory(),
-   comment: new CommentRepositoryInMemory(),
-   role: new RoleRepositoryInMemory(),
+   comment: new CommentRepositoryPrisma(),
+   role: new RoleRepositoryPrisma(),
 };
 
 class ApiManager {

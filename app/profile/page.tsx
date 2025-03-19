@@ -25,8 +25,6 @@ export default function ProfilePage() {
       redirect("/login");
    }
 
-   console.log(session);
-
    const { data: user, isLoading } = useQuery({
       queryKey: ["user", session?.user?.id],
       queryFn: async () => {

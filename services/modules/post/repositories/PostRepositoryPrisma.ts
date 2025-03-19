@@ -92,7 +92,10 @@ export class PostRepositoryPrisma implements IPostRepository {
       return posts as IPost[];
    }
 
-   async findPerPage(page: number, limit: number): Promise<IPost[]> {
+   async findPerPage(
+      page: number,
+      limit: number
+   ): Promise<{ posts: IPost[]; total: number }> {
       const skip = (page - 1) * limit;
 
       const [posts, total] = await Promise.all([
@@ -111,7 +114,10 @@ export class PostRepositoryPrisma implements IPostRepository {
          prisma.post.count(),
       ]);
 
-      return posts as IPost[];
+      return {
+         posts,
+         total,
+      };
    }
 
    async getLastPost(): Promise<IPost | null> {

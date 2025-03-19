@@ -6,12 +6,10 @@ export interface IUserRepository {
    findByEmail(email: string): Promise<IUser | null>;
    findById(id: string): Promise<IUser | null>;
    findAll(): Promise<IUser[]>;
+   findByRoleId(roleId: string): Promise<IUser[]>;
    findPerPage(
       page: number,
       limit: number
-   ): Promise<{
-      users: IUser[];
-      total: number;
-   }>;
+   ): Promise<{ users: IUser[]; total: number }>;
    authenticate(email: string, password: string): Promise<IUser>;
 }

@@ -67,11 +67,11 @@ export default function FormRegister({
 
          router.push(ROUTES_PAGE.login.link);
       } catch (error) {
-         console.error("Erro ao registrar:", error);
+         const message = (error as Error).message;
 
          toast({
             title: "Erro ao fazer login",
-            description: "Ocorreu um erro inesperado",
+            description: `Erro: ${message}`,
             variant: "destructive",
          });
       }

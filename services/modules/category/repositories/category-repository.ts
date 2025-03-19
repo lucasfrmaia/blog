@@ -10,12 +10,10 @@ export interface ICategoryManager {
    findById(id: string): Promise<ICategory | null>;
    findAll(): Promise<ICategory[]>;
    delete(id: string): Promise<void>;
+   findByPostId(postId: string): Promise<ICategory[]>;
    findPopularCategories(limit?: number): Promise<ICategory[]>;
    findPerPage(
       page: number,
       limit: number
-   ): Promise<{
-      categories: ICategory[];
-      total: number;
-   }>;
+   ): Promise<{ categories: ICategory[]; total: number }>;
 }

@@ -13,11 +13,16 @@ import {
    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ICreateCategoryDTO } from "@/services/modules/category/dtos/create-category.dto";
-import { ICategory } from "@/services/modules/category/entities/category";
+import {
+   ICategory,
+   ICategoryCreate,
+} from "@/services/modules/category/entities/category";
 
 const categoryFormSchema = z.object({
    name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
+   description: z
+      .string()
+      .min(3, "A descrição deve ter pelo menos 3 caracteres"),
    color: z
       .string()
       .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Cor inválida"),
@@ -28,7 +33,7 @@ type CategoryFormData = z.infer<typeof categoryFormSchema>;
 interface CategoryFormProps {
    category?: ICategory;
    isSubmitting?: boolean;
-   onSubmit: (data: ICreateCategoryDTO) => Promise<void>;
+   onSubmit: (data: ICategoryCreate) => Promise<void>;
 }
 
 export default function CategoryForm({
@@ -41,6 +46,7 @@ export default function CategoryForm({
       defaultValues: {
          name: category?.name || "",
          color: category?.color || "#000000",
+         description: category?.description || "",
       },
    });
 
@@ -73,6 +79,23 @@ export default function CategoryForm({
 
             <FormField
                control={form.control}
+               name="description"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Nome da Categoria</FormLabel>
+                     <FormControl>
+                        <Input
+                           placeholder="Digite o nome da categoria"
+                           {...field}
+                        />
+                     </FormControl>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+
+            <FormField
+               control={form.control}
                name="color"
                render={({ field }) => (
                   <FormItem>
@@ -85,6 +108,7 @@ export default function CategoryForm({
                               {...field}
                            />
                         </FormControl>
+
                         <FormControl>
                            <Input
                               placeholder="#000000"

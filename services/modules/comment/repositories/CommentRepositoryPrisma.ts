@@ -51,6 +51,23 @@ export class CommentRepositoryPrisma implements ICommentRepository {
       return comments;
    }
 
+   async findByUserId(userId: string): Promise<IComment[]> {
+      const comments = await prisma.comment.findMany({
+         where: {
+            userId,
+         },
+         include: {
+            user: true,
+            post: true,
+         },
+         orderBy: {
+            createdAt: "desc",
+         },
+      });
+
+      return comments;
+   }
+
    async findAll(): Promise<IComment[]> {
       const comments = await prisma.comment.findMany({
          include: {

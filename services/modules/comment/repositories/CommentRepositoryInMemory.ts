@@ -2,6 +2,9 @@ import { IComment, ICommentCreate } from "../entities/comment";
 import { ICommentRepository } from "./CommentRepository";
 
 export class CommentRepositoryInMemory implements ICommentRepository {
+   findByUserId(userId: string): Promise<IComment[]> {
+      throw new Error("Method not implemented.");
+   }
    private comments: IComment[] = [];
 
    async create(comment: ICommentCreate): Promise<void> {

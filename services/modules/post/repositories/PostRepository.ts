@@ -11,9 +11,6 @@ export interface IPostRepository {
    findPerPage(
       page: number,
       limit: number
-   ): Promise<{
-      posts: IPost[];
-      total: number;
-   }>;
+   ): Promise<{ posts: IPost[]; total: number }>;
    getLastPost(): Promise<IPost | null>;
 }

@@ -11,7 +11,21 @@ export class CategoryRepositoryPrisma implements ICategoryManager {
       page: number,
       limit: number
    ): Promise<{ categories: ICategory[]; total: number }> {
-      throw new Error("Method not implemented.");
+      const [categories, total] = await Promise.all([
+         prisma.category.findMany({
+            skip: (page - 1) * limit,
+            take: limit,
+            include: {
+               posts: true,
+            },
+            orderBy: {
+               name: "asc",
+            },
+         }),
+         prisma.category.count(),
+      ]);
+
+      return { categories, total };
    }
 
    async create(data: ICategoryCreate): Promise<void> {
@@ -58,6 +72,23 @@ export class CategoryRepositoryPrisma implements ICategoryManager {
       await prisma.category.delete({
          where: { id },
       });
+   }
+
+   async findByPostId(postId: string): Promise<ICategory[]> {
+      const categories = await prisma.category.findMany({
+         where: {
+            posts: {
+               some: {
+                  id: postId,
+               },
+            },
+         },
+         include: {
+            posts: true,
+         },
+      });
+
+      return categories;
    }
 
    async findPopularCategories(limit: number = 5): Promise<ICategory[]> {

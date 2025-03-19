@@ -7,4 +7,5 @@ export interface ICommentRepository {
    findAll(): Promise<IComment[]>;
    delete(id: string): Promise<void>;
    findByPostId(postId: string): Promise<IComment[]>;
+   findByUserId(userId: string): Promise<IComment[]>;
 }

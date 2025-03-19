@@ -2,6 +2,9 @@ import { IRole } from "../entities/role";
 import { IRoleRepository } from "./RoleRepository";
 
 export class RoleRepositoryInMemory implements IRoleRepository {
+   findByUserId(userId: string): Promise<IRole | null> {
+      throw new Error("Method not implemented.");
+   }
    private roles: IRole[] = [
       {
          id: "1",

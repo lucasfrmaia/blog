@@ -4,46 +4,51 @@ import { IRole } from "../entities/role";
 
 export class RoleRepositoryPrisma implements IRoleRepository {
    async findAll(): Promise<IRole[]> {
-      const roles = await prisma.role.findMany();
-      return roles.map((role: IRole) => ({
-         id: role.id,
-         name: role.name,
-         description: role.description,
-         createdAt: role.createdAt,
-         updatedAt: role.updatedAt,
-      }));
+      const roles = await prisma.role.findMany({
+         include: {
+            users: true,
+         },
+      });
+      return roles;
    }
 
    async findById(id: string): Promise<IRole | null> {
       const role = await prisma.role.findUnique({
          where: { id },
+         include: {
+            users: true,
+         },
       });
 
-      if (!role) return null;
-
-      return {
-         id: role.id,
-         name: role.name,
-         description: role.description,
-         createdAt: role.createdAt,
-         updatedAt: role.updatedAt,
-      };
+      return role;
    }
 
    async findByName(name: string): Promise<IRole | null> {
       const role = await prisma.role.findFirst({
          where: { name },
+         include: {
+            users: true,
+         },
       });
 
-      if (!role) return null;
+      return role;
+   }
 
-      return {
-         id: role.id,
-         name: role.name,
-         description: role.description,
-         createdAt: role.createdAt,
-         updatedAt: role.updatedAt,
-      };
+   async findByUserId(userId: string): Promise<IRole | null> {
+      const role = await prisma.role.findFirst({
+         where: {
+            users: {
+               some: {
+                  id: userId,
+               },
+            },
+         },
+         include: {
+            users: true,
+         },
+      });
+
+      return role;
    }
 
    async findPerPage(
@@ -54,19 +59,16 @@ export class RoleRepositoryPrisma implements IRoleRepository {
          prisma.role.findMany({
             skip: (page - 1) * limit,
             take: limit,
+            include: {
+               users: true,
+            },
+            orderBy: {
+               name: "asc",
+            },
          }),
          prisma.role.count(),
       ]);
 
-      return {
-         roles: roles.map((role: IRole) => ({
-            id: role.id,
-            name: role.name,
-            description: role.description,
-            createdAt: role.createdAt,
-            updatedAt: role.updatedAt,
-         })),
-         total,
-      };
+      return { roles, total };
    }
 }

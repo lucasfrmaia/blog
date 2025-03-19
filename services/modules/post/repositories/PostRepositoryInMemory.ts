@@ -26,6 +26,7 @@ export class PostRepositoryInMemory implements IPostRepository {
                {
                   id: "1",
                   name: "Categoria 1",
+                  description: "Descrição da categoria 1",
                   color: "#000000",
                },
             ],

@@ -4,17 +4,50 @@ import { IUserRepository } from "./UserRepository";
 import { hash, compare, genSalt } from "bcryptjs";
 
 export class UserRepositoryPrisma implements IUserRepository {
-   findById(id: string): Promise<IUser | null> {
-      throw new Error("Method not implemented.");
+   async findById(id: string): Promise<IUser | null> {
+      const user = await prisma.user.findUnique({
+         where: { id },
+         include: {
+            role: true,
+            posts: true,
+            comments: true,
+         },
+      });
+      return user;
    }
-   findAll(): Promise<IUser[]> {
-      throw new Error("Method not implemented.");
+
+   async findAll(): Promise<IUser[]> {
+      const users = await prisma.user.findMany({
+         include: {
+            role: true,
+            posts: true,
+            comments: true,
+         },
+      });
+      return users;
    }
-   findPerPage(
+
+   async findPerPage(
       page: number,
       limit: number
    ): Promise<{ users: IUser[]; total: number }> {
-      throw new Error("Method not implemented.");
+      const [users, total] = await Promise.all([
+         prisma.user.findMany({
+            skip: (page - 1) * limit,
+            take: limit,
+            include: {
+               role: true,
+               posts: true,
+               comments: true,
+            },
+            orderBy: {
+               createdAt: "desc",
+            },
+         }),
+         prisma.user.count(),
+      ]);
+
+      return { users, total };
    }
 
    async create(data: IUserCreate): Promise<void> {
@@ -39,8 +72,6 @@ export class UserRepositoryPrisma implements IUserRepository {
          where: { email },
          include: {
             role: true,
-            posts: true,
-            comments: true,
          },
       });
 
@@ -49,8 +80,9 @@ export class UserRepositoryPrisma implements IUserRepository {
       }
 
       const isValidPassword = await compare(password, user.password);
+
       if (!isValidPassword) {
-         throw new Error("Senha inválida");
+         throw new Error("Senha incorreta");
       }
 
       return user;
@@ -65,17 +97,32 @@ export class UserRepositoryPrisma implements IUserRepository {
             comments: true,
          },
       });
-
       return user;
    }
 
+   async findByRoleId(roleId: string): Promise<IUser[]> {
+      const users = await prisma.user.findMany({
+         where: {
+            roleId,
+         },
+         include: {
+            role: true,
+            posts: true,
+            comments: true,
+         },
+      });
+      return users;
+   }
+
    async update(data: IUserUpdate): Promise<void> {
-      const updateData: any = { ...data };
+      const updateData: any = {
+         name: data.name,
+         email: data.email,
+      };
 
       if (data.password) {
          const salt = await genSalt(10);
-         const hashedPassword = await hash(data.password, salt);
-         updateData.password = hashedPassword;
+         updateData.password = await hash(data.password, salt);
          updateData.salt = salt;
       }
 
