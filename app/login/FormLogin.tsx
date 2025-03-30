@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import { motion } from "framer-motion";
-import { Mail, Lock, Loader2 } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 import {
    Card,
    CardContent,
@@ -40,15 +40,18 @@ type FormProps = z.infer<typeof schema>;
 export default function FormLogin({ children, className }: IPropFormLogin) {
    const router = useRouter();
    const { toast } = useToast();
+   const [isSubmitting, setIsSubmitting] = useState(false);
+   const [showPassword, setShowPassword] = useState(false);
 
    const {
       register,
       handleSubmit,
-      formState: { errors, isSubmitting },
+      formState: { errors, isSubmitting: formIsSubmitting },
    } = useForm<FormProps>({ resolver: zodResolver(schema) });
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
       try {
+         setIsSubmitting(true);
          const response = await signIn("credentials", {
             email: data.email,
             password: data.password,
@@ -76,6 +79,8 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
             description: "Ocorreu um erro inesperado",
             variant: "destructive",
          });
+      } finally {
+         setIsSubmitting(false);
       }
    };
 
@@ -129,13 +134,24 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
                               {...register("password")}
                               disabled={isSubmitting}
                               id="password"
-                              type="password"
+                              type={showPassword ? "text" : "password"}
                               placeholder="Digite sua senha..."
                               className={cn(
-                                 "pl-9",
+                                 "pl-9 pr-9",
                                  errors.password && "border-red-500"
                               )}
                            />
+                           <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-3 text-muted-foreground focus:outline-none"
+                           >
+                              {showPassword ? (
+                                 <EyeOff className="h-4 w-4" />
+                              ) : (
+                                 <Eye className="h-4 w-4" />
+                              )}
+                           </button>
                         </div>
                         {errors.password && (
                            <p className="text-sm text-red-500">

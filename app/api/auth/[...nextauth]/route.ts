@@ -17,8 +17,6 @@ const handler = NextAuth({
                   return null;
                }
 
-               console.log(credentials);
-
                const user = await apiManager.user.authenticate(
                   credentials.email,
                   credentials.password

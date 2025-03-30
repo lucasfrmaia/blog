@@ -45,7 +45,7 @@ export default function CategoriesPage() {
                         }}
                      >
                         <Link
-                           href={`/categories/${category.id}`}
+                           href={`/posts?categories=${category.id}`}
                            className="block"
                         >
                            <div

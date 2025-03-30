@@ -204,28 +204,6 @@ export default function DashboardPage() {
                   </CardContent>
                </Card>
             </motion.div>
-
-            {/* Performance Chart */}
-            <motion.div
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5, delay: 0.8 }}
-            >
-               <Card>
-                  <CardHeader>
-                     <CardTitle>Desempenho</CardTitle>
-                     <CardDescription>
-                        Visualizações e comentários nos últimos 30 dias
-                     </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                     <div className="h-[200px] flex items-center justify-center text-muted-foreground">
-                        <BarChart3 className="h-8 w-8" />
-                        <span className="ml-2">Gráfico de desempenho</span>
-                     </div>
-                  </CardContent>
-               </Card>
-            </motion.div>
          </div>
       </BaseLayout>
    );

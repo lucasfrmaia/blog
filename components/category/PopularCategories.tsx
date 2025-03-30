@@ -51,7 +51,7 @@ export default function PopularCategories() {
                      }}
                   >
                      <Link
-                        href={`/categories/${category.id}`}
+                        href={`/posts?categories=${category.id}`}
                         className="block"
                      >
                         <div

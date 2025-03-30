@@ -15,6 +15,10 @@ export class CategoryRepositoryInMemory implements ICategoryManager {
       }
    }
 
+   findByPostId(postId: string): Promise<ICategory[]> {
+      throw new Error("Method not implemented.");
+   }
+
    async create(category: ICategory): Promise<void> {
       this.categories.push(category);
    }

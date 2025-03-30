@@ -59,7 +59,7 @@ export default function EditUserPage({ params }: EditUserPageProps) {
       defaultValues: {
          name: user?.name || "",
          email: user?.email || "",
-         roleId: user?.role?.[0]?.id || "",
+         roleId: user?.role?.id || "",
       },
    });
 

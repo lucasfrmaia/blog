@@ -1,15 +1,48 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
 import { apiManager } from "@/services/modules/ApiManager";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import PostForm from "@/components/post/form/PostForm";
+import { AuthUser } from "@/utils/types/auth";
 import { BackDashboard } from "@/components/buttons/BackDashboard";
+import { useToast } from "@/components/ui/use-toast";
+import {
+   Form,
+   FormControl,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { ICategory } from "@/services/modules/category/entities/category";
+import {
+   Select,
+   SelectContent,
+   SelectItem,
+   SelectTrigger,
+   SelectValue,
+} from "@/components/ui/select";
+import PostEditor from "@/components/post/editor/PostEditor";
+import { IPost } from "@/services/modules/post/entities/Post";
+
+const formSchema = z.object({
+   title: z.string().min(1, "O título é obrigatório"),
+   description: z.string().min(1, "A descrição é obrigatória"),
+   content: z.string().min(1, "O conteúdo é obrigatório"),
+   coverImage: z.string().min(1, "A imagem de capa é obrigatória"),
+   categories: z.array(z.string()).min(1, "Selecione pelo menos uma categoria"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface EditPostPageProps {
    params: {
@@ -17,46 +50,73 @@ interface EditPostPageProps {
    };
 }
 
+interface Post extends IPost {
+   categories: ICategory[];
+}
+
 export default function EditPostPage({ params }: EditPostPageProps) {
    const router = useRouter();
-   const [isLoading, setIsLoading] = useState(false);
+   const { data: session } = useSession();
+   const { toast } = useToast();
+   const user = session?.user as AuthUser;
+   const [isSubmitting, setIsSubmitting] = useState(false);
 
-   const { data: post } = useQuery({
+   const { data: post } = useQuery<Post | null, Error>({
       queryKey: ["post", params.id],
-      queryFn: () => apiManager.post.findById(params.id),
+      queryFn: async () => {
+         const result = await apiManager.post.findById(params.id);
+         return result as Post | null;
+      },
    });
 
-   const { data: categories } = useQuery({
+   const { data: categories } = useQuery<ICategory[], Error>({
       queryKey: ["categories"],
-      queryFn: () => apiManager.category.findAll(),
+      queryFn: async () => {
+         const result = await apiManager.category.findAll();
+         return result as ICategory[];
+      },
    });
 
-   const handleSubmit = async (formData: FormData) => {
-      if (!post) return;
-      setIsLoading(true);
+   const form = useForm<FormValues>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+         title: post?.title ?? "",
+         description: post?.description ?? "",
+         content: post?.content ?? "",
+         coverImage: post?.img ?? "",
+         categories: post?.categories?.map((cat) => cat.id) ?? [],
+      },
+   });
+
+   const onSubmit = async (data: FormValues) => {
+      if (!user) return;
+      setIsSubmitting(true);
 
       try {
-         const data = {
-            ...post,
-            title: formData.get("title") as string,
-            description: formData.get("description") as string,
-            content: formData.get("content") as string,
-            categories: JSON.parse(formData.get("categories") as string),
-            img: formData.get("coverImage") as string,
-         };
+         await apiManager.post.update({
+            id: params.id,
+            title: data.title,
+            content: data.content,
+            img: data.coverImage,
+            categoryId: data.categories,
+         });
 
-         await apiManager.post.update(data);
-         router.push("/dashboard");
+         toast({
+            title: "Post atualizado",
+            description: "O post foi atualizado com sucesso!",
+         });
+
+         router.push("/dashboard/posts");
       } catch (error) {
-         console.error("Erro ao atualizar post:", error);
+         toast({
+            title: "Erro ao atualizar post",
+            description: "Ocorreu um erro ao atualizar o post.",
+            variant: "destructive",
+         });
       } finally {
-         setIsLoading(false);
+         setIsSubmitting(false);
       }
    };
-
-   if (!post || !categories) {
-      return <div>Carregando...</div>;
-   }
 
    return (
       <div className="container mx-auto px-4 py-8">
@@ -66,22 +126,158 @@ export default function EditPostPage({ params }: EditPostPageProps) {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto"
          >
-            {/* Header */}
             <div className="flex items-center gap-4 mb-8">
                <BackDashboard />
                <div>
                   <h1 className="text-3xl font-bold">Editar Post</h1>
                   <p className="text-muted-foreground">
-                     Edite as informações do seu post
+                     Edite as informações do post
                   </p>
                </div>
             </div>
 
-            <PostForm
-               isLoading={isLoading}
-               defaultValues={post}
-               onSubmit={handleSubmit}
-            />
+            <Form {...form}>
+               <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="space-y-8"
+               >
+                  <FormField
+                     control={form.control}
+                     name="title"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Título</FormLabel>
+                           <FormControl>
+                              <Input
+                                 placeholder="Digite o título do post..."
+                                 {...field}
+                              />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="description"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Descrição</FormLabel>
+                           <FormControl>
+                              <Textarea
+                                 placeholder="Digite uma breve descrição do post..."
+                                 {...field}
+                              />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="coverImage"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Imagem de Capa</FormLabel>
+                           <FormControl>
+                              <Input
+                                 placeholder="URL da imagem de capa..."
+                                 {...field}
+                              />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="categories"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Categorias</FormLabel>
+                           <FormControl>
+                              <Select
+                                 value={field.value[0]}
+                                 onValueChange={(value: string) => {
+                                    if (!field.value.includes(value)) {
+                                       field.onChange([...field.value, value]);
+                                    }
+                                 }}
+                              >
+                                 <SelectTrigger>
+                                    <SelectValue placeholder="Selecione as categorias" />
+                                 </SelectTrigger>
+                                 <SelectContent>
+                                    {categories?.map((category) => (
+                                       <SelectItem
+                                          key={category.id}
+                                          value={category.id}
+                                       >
+                                          {category.name}
+                                       </SelectItem>
+                                    ))}
+                                 </SelectContent>
+                              </Select>
+                           </FormControl>
+                           <div className="flex flex-wrap gap-2 mt-2">
+                              {field.value.map((categoryId) => {
+                                 const category = categories?.find(
+                                    (c) => c.id === categoryId
+                                 );
+                                 return (
+                                    category && (
+                                       <Button
+                                          key={category.id}
+                                          variant="secondary"
+                                          size="sm"
+                                          onClick={() =>
+                                             field.onChange(
+                                                field.value.filter(
+                                                   (id) => id !== category.id
+                                                )
+                                             )
+                                          }
+                                       >
+                                          {category.name} ×
+                                       </Button>
+                                    )
+                                 );
+                              })}
+                           </div>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="content"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Conteúdo</FormLabel>
+                           <FormControl>
+                              <PostEditor
+                                 value={field.value}
+                                 onChange={field.onChange}
+                              />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <Button
+                     type="submit"
+                     className="w-full"
+                     disabled={isSubmitting}
+                  >
+                     {isSubmitting ? "Salvando..." : "Salvar Alterações"}
+                  </Button>
+               </form>
+            </Form>
          </motion.div>
       </div>
    );

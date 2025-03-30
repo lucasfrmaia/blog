@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import NaveBar from "../header/NaveBar";
+import Footer from "../footer/Footer";
 
 interface QueryErrorProps {
    message?: string;
@@ -17,16 +19,18 @@ export default function QueryError({
          animate={{ opacity: 1, y: 0 }}
          className="flex flex-col items-center justify-center p-8 text-center"
       >
+         <NaveBar />
          <div className="mb-4 rounded-full bg-destructive/10 p-3">
             <AlertCircle className="h-6 w-6 text-destructive" />
          </div>
          <h3 className="mb-2 text-xl font-semibold">Ops! Algo deu errado</h3>
-         <p className="mb-4 text-muted-foreground">{message}</p>
+         <p className="text-muted-foreground mb-auto">{message}</p>
          {onRetry && (
             <Button onClick={onRetry} variant="outline">
                Tentar novamente
             </Button>
          )}
+         <Footer />
       </motion.div>
    );
 }
