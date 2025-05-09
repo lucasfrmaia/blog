@@ -1,8 +1,8 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import FormLogin from "./FormLogin";
-import NaveBar from "@/components/header/NaveBar";
-import Footer from "@/components/footer/Footer";
+import Footer from "../_components/footer/Footer";
+import NaveBar from "../_components/header/NaveBar";
 
 type IPropFormLogin = {
    children?: React.ReactNode;

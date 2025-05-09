@@ -1,17 +1,14 @@
 "use client";
 
-import React from "react";
+import CommentSection from "@/app/_components/comment/CommentSection";
+import BaseLayout from "@/app/_components/layout/BaseLayout";
+import { LoadingOnePost } from "@/app/_components/loadings/posts/LoadingOnePost";
+import { Badge } from "@/app/_components/ui/badge";
+import { Card } from "@/app/_components/ui/card";
+import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { Separator } from "@radix-ui/react-dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
-import { apiManager } from "@/services/modules/ApiManager";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, ThumbsUp, Share2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import BaseLayout from "@/components/layout/BaseLayout";
-import CommentSection from "@/components/comment/CommentSection";
-import { LoadingOnePost } from "@/components/loadings/posts/LoadingOnePost";
 
 export default function PostPage({ params }: { params: { id: string } }) {
    const { data: post, isLoading } = useQuery({

@@ -1,28 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "next-auth/react";
+import { Label } from "@radix-ui/react-label";
 import { motion } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Mail, EyeOff, Eye, Link, Loader2, Lock } from "lucide-react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "../_components/ui/button";
 import {
    Card,
-   CardContent,
    CardHeader,
    CardTitle,
    CardDescription,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useToast } from "@/components/ui/use-toast";
+   CardContent,
+} from "../_components/ui/card";
+import { useToast } from "../_components/ui/use-toast";
+import { Input } from "../_components/ui/input";
 
 type IPropFormLogin = {
    children?: React.ReactNode;

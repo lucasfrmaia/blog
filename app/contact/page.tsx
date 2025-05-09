@@ -1,28 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
-   Card,
-   CardContent,
-   CardDescription,
-   CardHeader,
-   CardTitle,
-} from "@/components/ui/card";
-import {
+   Send,
    Mail,
-   MessageSquare,
    Phone,
    MapPin,
-   Send,
+   Link,
    Github,
    Linkedin,
    Twitter,
+   MessageSquare,
 } from "lucide-react";
-import Link from "next/link";
-import BaseLayout from "@/components/layout/BaseLayout";
+import BaseLayout from "../_components/layout/BaseLayout";
+import { Button } from "../_components/ui/button";
+import {
+   Card,
+   CardHeader,
+   CardTitle,
+   CardDescription,
+   CardContent,
+} from "../_components/ui/card";
+import { Textarea } from "../_components/ui/textarea";
+import { Input } from "../_components/ui/input";
 
 export default function ContactPage() {
    return (
@@ -191,7 +191,6 @@ export default function ContactPage() {
                                  <Link
                                     href="https://github.com"
                                     target="_blank"
-                                    rel="noopener noreferrer"
                                  >
                                     <Github className="h-4 w-4" />
                                     <span className="sr-only">GitHub</span>
@@ -201,7 +200,6 @@ export default function ContactPage() {
                                  <Link
                                     href="https://linkedin.com"
                                     target="_blank"
-                                    rel="noopener noreferrer"
                                  >
                                     <Linkedin className="h-4 w-4" />
                                     <span className="sr-only">LinkedIn</span>
@@ -211,7 +209,6 @@ export default function ContactPage() {
                                  <Link
                                     href="https://twitter.com"
                                     target="_blank"
-                                    rel="noopener noreferrer"
                                  >
                                     <Twitter className="h-4 w-4" />
                                     <span className="sr-only">Twitter</span>

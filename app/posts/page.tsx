@@ -1,16 +1,17 @@
 "use client";
 
-import { useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
-import { apiManager } from "@/services/modules/ApiManager";
-import BaseLayout from "@/components/layout/BaseLayout";
-import PostFilters from "@/components/post/PostFilters";
-import PostGrid from "@/components/post/PostGrid";
 import { motion } from "framer-motion";
-import { LoadingPosts } from "@/components/loadings/posts/LoadingPosts";
-import QueryError from "@/components/errors/QueryError";
-import Pagination from "@/components/shared/Pagination";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
+import QueryError from "../_components/errors/QueryError";
+import BaseLayout from "../_components/layout/BaseLayout";
+import { LoadingPosts } from "../_components/loadings/posts/LoadingPosts";
+import PostFilters from "../_components/post/PostFilters";
+import PostGrid from "../_components/post/PostGrid";
+import { Pagination } from "../_components/ui/pagination";
+import { apiManager } from "../api/_services/modules/ApiManager";
 
 const ITEMS_PER_PAGE = 9;
 

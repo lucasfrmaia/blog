@@ -1,38 +1,37 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useQuery } from "@tanstack/react-query";
-import { apiManager } from "@/services/modules/ApiManager";
-import { AuthUser } from "@/utils/types/auth";
-import { BackDashboard } from "@/components/buttons/BackDashboard";
-import { useToast } from "@/components/ui/use-toast";
+import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
+import PostEditor from "@/app/_components/post/editor/PostEditor";
+import { Button } from "@/app/_components/ui/button";
 import {
-   Form,
-   FormControl,
    FormField,
    FormItem,
    FormLabel,
+   FormControl,
    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { ICategory } from "@/services/modules/category/entities/category";
+} from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
+import { Textarea } from "@/app/_components/ui/textarea";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { AuthUser } from "@/utils/types/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
    Select,
-   SelectContent,
-   SelectItem,
    SelectTrigger,
    SelectValue,
-} from "@/components/ui/select";
-import PostEditor from "@/components/post/editor/PostEditor";
-import { IPost } from "@/services/modules/post/entities/Post";
+   SelectContent,
+   SelectItem,
+} from "@radix-ui/react-select";
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import { useForm, Form } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
    title: z.string().min(1, "O título é obrigatório"),

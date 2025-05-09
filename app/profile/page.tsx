@@ -2,7 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import { apiManager } from "@/services/modules/ApiManager";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
@@ -17,6 +16,7 @@ import { FileText, Mail, User } from "lucide-react";
 import BaseLayout from "@/components/layout/BaseLayout";
 import { redirect } from "next/navigation";
 import { LoadingProfile } from "@/components/loadings/LoadingProfile";
+import { apiManager } from "../api/_services/modules/ApiManager";
 
 export default function ProfilePage() {
    const { data: session, status } = useSession();

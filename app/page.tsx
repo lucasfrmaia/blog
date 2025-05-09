@@ -1,9 +1,9 @@
 "use client";
 
-import BaseLayout from "@/components/layout/BaseLayout";
-import Presentation from "@/components/presetation/Presetation";
-import PostSection from "@/components/post-section/PostSection";
-import PopularCategories from "@/components/category/PopularCategories";
+import PopularCategories from "./_components/category/PopularCategories";
+import BaseLayout from "./_components/layout/BaseLayout";
+import PostSection from "./_components/post-section/PostSection";
+import Presentation from "./_components/presetation/Presetation";
 
 export default function Home() {
    return (

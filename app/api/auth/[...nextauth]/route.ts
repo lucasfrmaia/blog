@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { apiManager } from "@/services/modules/ApiManager";
 import { AuthUser } from "@/utils/types/auth";
+import { apiManager } from "../../_services/modules/ApiManager";
 
 const handler = NextAuth({
    providers: [

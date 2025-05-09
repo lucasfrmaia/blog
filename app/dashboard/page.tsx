@@ -2,29 +2,28 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import {
-   Card,
-   CardContent,
-   CardDescription,
-   CardHeader,
-   CardTitle,
-} from "@/components/ui/card";
-import {
-   BarChart3,
-   Eye,
    FileText,
+   Eye,
    MessageSquare,
-   Plus,
    TrendingUp,
+   Link,
+   Plus,
    Users,
 } from "lucide-react";
-import Link from "next/link";
-import { apiManager } from "@/services/modules/ApiManager";
-import BaseLayout from "@/components/layout/BaseLayout";
-import { UserList } from "@/components/user/UserList";
-import { CategoryList } from "@/components/category/CategoryList";
-import { PostList } from "@/components/post/PostList";
+import { CategoryList } from "../_components/category/CategoryList";
+import BaseLayout from "../_components/layout/BaseLayout";
+import { PostList } from "../_components/post/PostList";
+import { Button } from "../_components/ui/button";
+import {
+   Card,
+   CardHeader,
+   CardTitle,
+   CardContent,
+   CardDescription,
+} from "../_components/ui/card";
+import { UserList } from "../_components/user/UserList";
+import { apiManager } from "../api/_services/modules/ApiManager";
 
 export default function DashboardPage() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
@@ -39,10 +38,6 @@ export default function DashboardPage() {
       queryKey: ["categories"],
       queryFn: () => apiManager.category.findAll(),
    });
-
-   if (isLoadingPosts || isLoadingCategories) {
-      return null;
-   }
 
    const totalViews = posts?.reduce((acc, post) => acc + post.views, 0) || 0;
    const totalComments =

@@ -1,8 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import BaseLayout from "@/components/layout/BaseLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import BaseLayout from "../_components/layout/BaseLayout";
+import {
+   Card,
+   CardHeader,
+   CardTitle,
+   CardContent,
+} from "../_components/ui/card";
 
 export default function TermsOfUsePage() {
    return (

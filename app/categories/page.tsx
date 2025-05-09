@@ -3,10 +3,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { apiManager } from "@/services/modules/ApiManager";
-import BaseLayout from "@/components/layout/BaseLayout";
-import { ICategory } from "@/services/modules/category/entities/category";
-import { LoadingCategories } from "@/components/loadings/categories/LoadingCategories";
+import { apiManager } from "../api/_services/modules/ApiManager";
+import { ICategory } from "../api/_services/modules/category/entities/category";
+import BaseLayout from "../_components/layout/BaseLayout";
+import { LoadingCategories } from "../_components/loadings/categories/LoadingCategories";
 
 export default function CategoriesPage() {
    const { data: categories, isLoading } = useQuery<ICategory[]>({

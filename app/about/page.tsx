@@ -2,10 +2,10 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Mail } from "lucide-react";
-import BaseLayout from "@/components/layout/BaseLayout";
+import BaseLayout from "../_components/layout/BaseLayout";
+import { Button } from "../_components/ui/button";
 
 export default function AboutPage() {
    return (

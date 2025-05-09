@@ -1,28 +1,25 @@
 "use client";
 
-import React from "react";
 import { cn } from "@/lib/utils";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Label } from "@radix-ui/react-label";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, Loader2 } from "lucide-react";
+import { User, Mail, Link, Loader2, Lock } from "lucide-react";
+import { useRouter } from "next/router";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "../_components/ui/button";
 import {
    Card,
-   CardContent,
    CardHeader,
    CardTitle,
    CardDescription,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { apiManager } from "@/services/modules/ApiManager";
-import { toast } from "@/components/ui/use-toast";
+   CardContent,
+} from "../_components/ui/card";
+import { toast } from "../_components/ui/use-toast";
+import { apiManager } from "../api/_services/modules/ApiManager";
+import { Input } from "../_components/ui/input";
 
 type IPropFormRegister = {
    children?: React.ReactNode;
@@ -63,6 +60,7 @@ export default function FormRegister({
             name,
             email,
             password,
+            roleId: "User",
          });
 
          router.push(ROUTES_PAGE.login.link);

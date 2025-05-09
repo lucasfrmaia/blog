@@ -1,23 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { apiManager } from "@/services/modules/ApiManager";
-import { Button } from "@/components/ui/button";
+import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
+import { Button } from "@/app/_components/ui/button";
 import {
-   Table,
-   TableBody,
-   TableCell,
-   TableHead,
    TableHeader,
    TableRow,
-} from "@/components/ui/table";
-import { ArrowLeft, Edit2, Plus, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useToast } from "@/components/ui/use-toast";
-import { ICategory } from "@/services/modules/category/entities/category";
-import { BackDashboard } from "@/components/buttons/BackDashboard";
+   TableHead,
+   TableBody,
+   TableCell,
+} from "@/app/_components/ui/table";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { useQuery } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { Link, Plus, Table, Edit2, Trash2 } from "lucide-react";
+import { useState } from "react";
 
 export default function CategoriesPage() {
    const { toast } = useToast();

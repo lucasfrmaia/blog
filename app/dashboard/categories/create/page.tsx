@@ -1,25 +1,24 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import { apiManager } from "@/services/modules/ApiManager";
-import { toast } from "@/components/ui/use-toast";
-import { motion } from "framer-motion";
-import { BackDashboard } from "@/components/buttons/BackDashboard";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
+import { Button } from "@/app/_components/ui/button";
 import {
-   Form,
-   FormControl,
    FormField,
    FormItem,
    FormLabel,
+   FormControl,
    FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
+import { Textarea } from "@/app/_components/ui/textarea";
+import { toast } from "@/app/_components/ui/use-toast";
+import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useForm, Form } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
    name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),

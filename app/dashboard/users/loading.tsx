@@ -1,4 +1,4 @@
-import { LoadingSkeleton } from "@/components/ui/loading";
+import { LoadingSkeleton } from "@/app/_components/ui/loading";
 
 export default function UsersLoading() {
    return (
