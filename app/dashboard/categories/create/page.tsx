@@ -3,6 +3,7 @@
 import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
 import { Button } from "@/app/_components/ui/button";
 import {
+   Form,
    FormField,
    FormItem,
    FormLabel,
@@ -17,8 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useForm, Form } from "react-hook-form";
-import { z } from "zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 const formSchema = z.object({
    name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
@@ -44,7 +45,17 @@ export default function CreateCategoryPage() {
 
    const { mutateAsync: createCategory, isPending } = useMutation({
       mutationFn: async (data: FormValues) => {
-         await apiManager.category.create(data);
+         const response = await fetch("/api/categories/create", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+         });
+
+         if (!response.ok) {
+            throw new Error("Erro ao criar categoria");
+         }
       },
       onSuccess: () => {
          toast({
@@ -61,6 +72,10 @@ export default function CreateCategoryPage() {
          });
       },
    });
+
+   const onSubmit = async (data: FormValues) => {
+      await createCategory(data);
+   };
 
    return (
       <div className="container mx-auto px-4 py-8">
@@ -83,7 +98,7 @@ export default function CreateCategoryPage() {
 
             <Form {...form}>
                <form
-                  onSubmit={form.handleSubmit(createCategory)}
+                  onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-6"
                >
                   <FormField

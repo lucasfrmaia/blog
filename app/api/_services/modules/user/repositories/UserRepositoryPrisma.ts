@@ -2,7 +2,7 @@ import { Prisma, User } from "@prisma/client";
 import { IUser, IUserCreate, IUserUpdate } from "../entities/user";
 import { hash, compare, genSalt } from "bcryptjs";
 import { IUserRepository } from "./UserRepository";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../../../../prisma/lib/prisma";
 
 export class UserRepositoryPrisma implements IUserRepository {
    async findById(id: string): Promise<IUser | null> {

@@ -7,7 +7,7 @@ import { Label } from "@radix-ui/react-label";
 import { motion } from "framer-motion";
 import { Mail, EyeOff, Eye, Link, Loader2, Lock } from "lucide-react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";

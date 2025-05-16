@@ -8,14 +8,15 @@ import {
    TableHead,
    TableBody,
    TableCell,
+   Table,
 } from "@/app/_components/ui/table";
 import { useToast } from "@/app/_components/ui/use-toast";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Link, Plus, Table, Edit2, Trash2 } from "lucide-react";
+import { Edit2, Plus, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
 
 export default function CategoriesPage() {
    const { toast } = useToast();
@@ -23,7 +24,13 @@ export default function CategoriesPage() {
 
    const { data: categories, refetch } = useQuery<ICategory[]>({
       queryKey: ["all_categories"],
-      queryFn: () => apiManager.category.findAll(),
+      queryFn: async () => {
+         const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
    });
 
    const handleDelete = async (id: string) => {
@@ -31,7 +38,14 @@ export default function CategoriesPage() {
 
       try {
          setIsDeleting(true);
-         await apiManager.category.delete(id);
+         const response = await fetch(`/api/categories/${id}`, {
+            method: "DELETE",
+         });
+
+         if (!response.ok) {
+            throw new Error("Erro ao excluir categoria");
+         }
+
          await refetch();
          toast({
             title: "Categoria excluída",

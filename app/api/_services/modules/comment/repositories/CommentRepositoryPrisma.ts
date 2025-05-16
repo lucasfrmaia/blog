@@ -1,4 +1,4 @@
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../../../../prisma/lib/prisma";
 import { IComment, ICommentCreate, ICommentUpdate } from "../entities/comment";
 import { ICommentRepository } from "./CommentRepository";
 

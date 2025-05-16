@@ -1,4 +1,4 @@
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../../../../prisma/lib/prisma";
 import { IPost, IPostCreate, IPostUpdate } from "../entities/Post";
 import { IPostRepository } from "./PostRepository";
 

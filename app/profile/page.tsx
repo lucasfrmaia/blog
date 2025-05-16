@@ -4,19 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+
+import { FileText, Mail, User } from "lucide-react";
+import { redirect } from "next/navigation";
+import { apiManager } from "../api/_services/modules/ApiManager";
+import { LoadingProfile } from "../_components/loadings/LoadingProfile";
+import BaseLayout from "../_components/layout/BaseLayout";
 import {
    Card,
    CardContent,
    CardDescription,
    CardHeader,
    CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { FileText, Mail, User } from "lucide-react";
-import BaseLayout from "@/components/layout/BaseLayout";
-import { redirect } from "next/navigation";
-import { LoadingProfile } from "@/components/loadings/LoadingProfile";
-import { apiManager } from "../api/_services/modules/ApiManager";
+} from "../_components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 
 export default function ProfilePage() {
    const { data: session, status } = useSession();

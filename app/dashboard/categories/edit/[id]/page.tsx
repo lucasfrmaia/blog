@@ -3,6 +3,7 @@
 import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
 import { Button } from "@/app/_components/ui/button";
 import {
+   Form,
    FormField,
    FormItem,
    FormLabel,
@@ -11,16 +12,16 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { toast } from "@/app/_components/ui/use-toast";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router";
-import { useForm, Form } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
    name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
+   description: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
    color: z.string().min(4, "Selecione uma cor válida"),
 });
 
@@ -37,7 +38,13 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
 
    const { data: category, isLoading } = useQuery({
       queryKey: ["category", params.id],
-      queryFn: () => apiManager.category.findById(params.id),
+      queryFn: async () => {
+         const response = await fetch(`/api/categories/${params.id}`);
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categoria");
+         }
+         return response.json();
+      },
    });
 
    const form = useForm<FormValues>({
@@ -50,10 +57,17 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
 
    const { mutateAsync: updateCategory, isPending } = useMutation({
       mutationFn: async (data: FormValues) => {
-         await apiManager.category.update({
-            id: params.id,
-            ...data,
+         const response = await fetch(`/api/categories/${params.id}`, {
+            method: "PATCH",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
          });
+
+         if (!response.ok) {
+            throw new Error("Erro ao atualizar categoria");
+         }
       },
       onSuccess: () => {
          toast({
@@ -70,6 +84,11 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
          });
       },
    });
+
+   // Função que recebe os dados do formulário e chama a mutação
+   const onSubmit = async (data: FormValues) => {
+      await updateCategory(data);
+   };
 
    if (isLoading) {
       return <div>Carregando...</div>;
@@ -100,7 +119,7 @@ export default function EditCategoryPage({ params }: EditCategoryPageProps) {
 
             <Form {...form}>
                <form
-                  onSubmit={form.handleSubmit(updateCategory)}
+                  onSubmit={form.handleSubmit(onSubmit)}
                   className="space-y-6"
                >
                   <FormField

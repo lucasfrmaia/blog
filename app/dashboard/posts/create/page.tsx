@@ -4,6 +4,7 @@ import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
 import PostEditor from "@/app/_components/post/editor/PostEditor";
 import { Button } from "@/app/_components/ui/button";
 import {
+   Form,
    FormField,
    FormItem,
    FormLabel,
@@ -27,9 +28,10 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+
 import { useState } from "react";
-import { useForm, Form } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -62,7 +64,13 @@ export default function CreatePostPage() {
 
    const { data: categories } = useQuery<ICategory[]>({
       queryKey: ["categories"],
-      queryFn: () => apiManager.category.findAll(),
+      queryFn: async () => {
+         const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
    });
 
    const onSubmit = async (data: FormValues) => {
@@ -70,14 +78,24 @@ export default function CreatePostPage() {
       setIsSubmitting(true);
 
       try {
-         await apiManager.post.create({
-            title: data.title,
-            description: data.description,
-            content: data.content,
-            img: data.coverImage,
-            categoryId: data.categories,
-            authorId: user.id,
+         const response = await fetch("/api/posts/create", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+               title: data.title,
+               description: data.description,
+               content: data.content,
+               img: data.coverImage,
+               categoryId: data.categories,
+               authorId: user.id,
+            }),
          });
+
+         if (!response.ok) {
+            throw new Error("Erro ao criar post");
+         }
 
          toast({
             title: "Post criado",

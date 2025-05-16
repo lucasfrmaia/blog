@@ -4,6 +4,7 @@ import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
 import PostEditor from "@/app/_components/post/editor/PostEditor";
 import { Button } from "@/app/_components/ui/button";
 import {
+   Form,
    FormField,
    FormItem,
    FormLabel,
@@ -28,9 +29,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm, Form } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -63,16 +64,22 @@ export default function EditPostPage({ params }: EditPostPageProps) {
    const { data: post } = useQuery<Post | null, Error>({
       queryKey: ["post", params.id],
       queryFn: async () => {
-         const result = await apiManager.post.findById(params.id);
-         return result as Post | null;
+         const response = await fetch(`/api/posts/${params.id}`);
+         if (!response.ok) {
+            throw new Error("Erro ao buscar post");
+         }
+         return response.json();
       },
    });
 
    const { data: categories } = useQuery<ICategory[], Error>({
       queryKey: ["categories"],
       queryFn: async () => {
-         const result = await apiManager.category.findAll();
-         return result as ICategory[];
+         const response = await fetch(`/api/categories`);
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
       },
    });
 
@@ -92,13 +99,22 @@ export default function EditPostPage({ params }: EditPostPageProps) {
       setIsSubmitting(true);
 
       try {
-         await apiManager.post.update({
-            id: params.id,
-            title: data.title,
-            content: data.content,
-            img: data.coverImage,
-            categoryId: data.categories,
+         const response = await fetch(`/api/posts/${params.id}`, {
+            method: "PATCH",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+               title: data.title,
+               content: data.content,
+               img: data.coverImage,
+               categoryId: data.categories,
+            }),
          });
+
+         if (!response.ok) {
+            throw new Error("Erro ao atualizar post");
+         }
 
          toast({
             title: "Post atualizado",

@@ -1,7 +1,7 @@
 import { IRoleRepository } from "./RoleRepository";
 import { IRole, IRoleCreate, IRoleUpdate } from "../entities/role";
 import { Prisma, Role } from "@prisma/client";
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../../../../prisma/lib/prisma";
 
 export class RoleRepositoryPrisma implements IRoleRepository {
    async create(data: IRoleCreate): Promise<IRole> {

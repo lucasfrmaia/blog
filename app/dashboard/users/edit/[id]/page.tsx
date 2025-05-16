@@ -3,6 +3,7 @@
 import { BackDashboard } from "@/app/_components/buttons/BackDashboard";
 import { Button } from "@/app/_components/ui/button";
 import {
+   Form,
    FormField,
    FormItem,
    FormLabel,
@@ -22,8 +23,8 @@ import {
 } from "@radix-ui/react-select";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { useRouter } from "next/router";
-import { useForm, Form } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({

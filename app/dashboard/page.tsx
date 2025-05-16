@@ -2,15 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import {
-   FileText,
-   Eye,
-   MessageSquare,
-   TrendingUp,
-   Link,
-   Plus,
-   Users,
-} from "lucide-react";
+
 import { CategoryList } from "../_components/category/CategoryList";
 import BaseLayout from "../_components/layout/BaseLayout";
 import { PostList } from "../_components/post/PostList";
@@ -24,24 +16,46 @@ import {
 } from "../_components/ui/card";
 import { UserList } from "../_components/user/UserList";
 import { apiManager } from "../api/_services/modules/ApiManager";
+import {
+   Eye,
+   FileText,
+   MessageSquare,
+   Plus,
+   TrendingUp,
+   Users,
+} from "lucide-react";
+import Link from "next/link";
 
 export default function DashboardPage() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
       queryKey: ["posts"],
       queryFn: async () => {
-         const response = await apiManager.post.findAll();
-         return response;
+         const response = await fetch("/api/posts");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar posts");
+         }
+         return response.json();
       },
    });
 
    const { data: categories, isLoading: isLoadingCategories } = useQuery({
       queryKey: ["categories"],
-      queryFn: () => apiManager.category.findAll(),
+      queryFn: async () => {
+         const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
    });
 
-   const totalViews = posts?.reduce((acc, post) => acc + post.views, 0) || 0;
+   const totalViews =
+      posts?.reduce((acc: number, post: any) => acc + post.views, 0) || 0;
    const totalComments =
-      posts?.reduce((acc, post) => acc + (post.comments?.length || 0), 0) || 0;
+      posts?.reduce(
+         (acc: number, post: any) => acc + (post.comments?.length || 0),
+         0
+      ) || 0;
 
    return (
       <BaseLayout>
