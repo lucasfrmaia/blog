@@ -6,15 +6,10 @@ import { ICommentRepository } from "./comment/repositories/CommentRepository";
 import { PostRepositoryPrisma } from "./post/repositories/PostRepositoryPrisma";
 import { CategoryRepositoryPrisma } from "./category/repositories/CategoryRepositoryPrisma";
 import { CommentRepositoryPrisma } from "./comment/repositories/CommentRepositoryPrisma";
-import { UserRepositoryInMemory } from "./user/repositories/UserRepositoryInMemory";
 import { IRoleRepository } from "./role/repositories/RoleRepository";
 import { RoleRepositoryPrisma } from "./role/repositories/RoleRepositoryPrisma";
 
 import { UserRepositoryPrisma } from "./user/repositories/UserRepositoryPrisma";
-import { CategoryRepositoryInMemory } from "./category/repositories/CategoryRepositoryInMemory";
-import { PostRepositoryInMemory } from "./post/repositories/PostRepositoryInMemory";
-import { CommentRepositoryInMemory } from "./comment/repositories/CommentRepositoryInMemory";
-import { RoleRepositoryInMemory } from "./role/repositories/RoleRepositoryInMemory";
 
 // Singleton para manter os repositórios em memória
 const prismaRepository = {
@@ -23,14 +18,6 @@ const prismaRepository = {
    user: new UserRepositoryPrisma(),
    comment: new CommentRepositoryPrisma(),
    role: new RoleRepositoryPrisma(),
-};
-
-const inMemoryRepositories = {
-   post: new PostRepositoryInMemory(),
-   category: new CategoryRepositoryInMemory(),
-   user: new UserRepositoryInMemory(),
-   comment: new CommentRepositoryInMemory(),
-   role: new RoleRepositoryInMemory(),
 };
 
 class ApiManager {

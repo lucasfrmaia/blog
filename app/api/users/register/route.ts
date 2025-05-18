@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { apiManager } from "@/services/modules/ApiManager";
+import { apiManager } from "../../_services/modules/ApiManager";
 
 export async function POST(request: Request) {
    try {
@@ -25,6 +25,7 @@ export async function POST(request: Request) {
          name,
          email,
          password,
+         roleId: 1,
       });
 
       return NextResponse.json(

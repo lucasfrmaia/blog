@@ -15,7 +15,7 @@ import {
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 import TitleSection from "../ui/utils/TitleSection";
 import { cn } from "@/lib/utils";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
 
 interface ICategoryPostsProps {
    children?: React.ReactNode;
@@ -28,12 +28,14 @@ const CategoryPosts: React.FC<ICategoryPostsProps> = ({
    className = "",
    // Outras props aqui
 }) => {
-   const { data: categories, isLoading } = useQuery({
-      queryKey: ["popular_post"],
+   const { data: categories, isLoading } = useQuery<ICategory[]>({
+      queryKey: ["categories"],
       queryFn: async () => {
-         const response = await apiManager.category.findAll();
-
-         return response;
+         const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
       },
    });
 

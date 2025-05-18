@@ -1,7 +1,7 @@
 import { IUser } from "../../user/entities/user";
 
 export interface IRole {
-   id: string;
+   id: number;
    name: string;
    description: string;
    createdAt: Date;
@@ -15,7 +15,7 @@ export interface IRoleCreate {
 }
 
 export interface IRoleUpdate {
-   id: string;
+   id: number;
    name?: string;
    color?: string;
    description?: string;

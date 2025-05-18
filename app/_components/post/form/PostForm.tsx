@@ -38,7 +38,13 @@ export default function PostForm({
 
    const { data: categories } = useQuery<ICategory[]>({
       queryKey: ["categories"],
-      queryFn: () => apiManager.category.findAll(),
+      queryFn: async () => {
+         const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
    });
 
    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

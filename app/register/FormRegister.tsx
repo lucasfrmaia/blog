@@ -3,9 +3,8 @@
 import { cn } from "@/lib/utils";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@radix-ui/react-label";
 import { motion } from "framer-motion";
-import { User, Mail, Link, Loader2, Lock } from "lucide-react";
+import { User, Mail, Loader2, Lock, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
@@ -18,8 +17,10 @@ import {
    CardContent,
 } from "../_components/ui/card";
 import { toast } from "../_components/ui/use-toast";
-import { apiManager } from "../api/_services/modules/ApiManager";
 import { Input } from "../_components/ui/input";
+import { Label } from "../_components/ui/label";
+import Link from "next/link";
+import { useState } from "react";
 
 type IPropFormRegister = {
    children?: React.ReactNode;
@@ -45,6 +46,7 @@ export default function FormRegister({
    className,
 }: IPropFormRegister) {
    const router = useRouter();
+   const [showPassword, setShowPassword] = useState(false);
 
    const {
       register,
@@ -53,17 +55,16 @@ export default function FormRegister({
    } = useForm<FormProps>({ resolver: zodResolver(schema) });
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
-      const { name, email, password } = data;
-
       try {
-         await apiManager.user.create({
-            name,
-            email,
-            password,
-            roleId: "User",
+         await fetch("/api/users/register", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
          });
 
-         router.push(ROUTES_PAGE.login.link);
+         router.push(ROUTES_PAGE.home.link);
       } catch (error) {
          const message = (error as Error).message;
 
@@ -147,13 +148,24 @@ export default function FormRegister({
                               {...register("password")}
                               disabled={isSubmitting}
                               id="password"
-                              type="password"
+                              type={showPassword ? "text" : "password"}
                               placeholder="Digite sua senha..."
                               className={cn(
-                                 "pl-9",
+                                 "pl-9 pr-9",
                                  errors.password && "border-red-500"
                               )}
                            />
+                           <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-3 text-muted-foreground focus:outline-none"
+                           >
+                              {showPassword ? (
+                                 <EyeOff className="h-4 w-4" />
+                              ) : (
+                                 <Eye className="h-4 w-4" />
+                              )}
+                           </button>
                         </div>
                         {errors.password && (
                            <p className="text-sm text-red-500">

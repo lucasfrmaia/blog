@@ -7,7 +7,7 @@ export async function GET() {
       return NextResponse.json(roles);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar funções" },
+         { error: "Erro ao criar função: " + (error as Error)?.message },
          { status: 500 }
       );
    }

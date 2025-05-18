@@ -19,7 +19,6 @@ export default function QueryError({
          animate={{ opacity: 1, y: 0 }}
          className="flex flex-col items-center justify-center p-8 text-center"
       >
-         <NaveBar />
          <div className="mb-4 rounded-full bg-destructive/10 p-3">
             <AlertCircle className="h-6 w-6 text-destructive" />
          </div>
@@ -30,7 +29,6 @@ export default function QueryError({
                Tentar novamente
             </Button>
          )}
-         <Footer />
       </motion.div>
    );
 }

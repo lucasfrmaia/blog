@@ -3,9 +3,9 @@ import { IRole, IRoleCreate, IRoleUpdate } from "../entities/role";
 export interface IRoleRepository {
    create(data: IRoleCreate): Promise<IRole>;
    update(data: IRoleUpdate): Promise<void>;
-   delete(id: string): Promise<void>;
+   delete(id: number): Promise<void>;
    findAll(): Promise<IRole[]>;
-   findById(id: string): Promise<IRole | null>;
+   findById(id: number): Promise<IRole | null>;
    findByName(name: string): Promise<IRole | null>;
    findByUserId(userId: string): Promise<IRole | null>;
    findPerPage(

@@ -3,7 +3,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 
-import { CategoryList } from "../_components/category/CategoryList";
 import BaseLayout from "../_components/layout/BaseLayout";
 import { PostList } from "../_components/post/PostList";
 import { Button } from "../_components/ui/button";
@@ -25,6 +24,7 @@ import {
    Users,
 } from "lucide-react";
 import Link from "next/link";
+import CategoryList from "../_components/category/CategoryList";
 
 export default function DashboardPage() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
@@ -33,17 +33,6 @@ export default function DashboardPage() {
          const response = await fetch("/api/posts");
          if (!response.ok) {
             throw new Error("Erro ao buscar posts");
-         }
-         return response.json();
-      },
-   });
-
-   const { data: categories, isLoading: isLoadingCategories } = useQuery({
-      queryKey: ["categories"],
-      queryFn: async () => {
-         const response = await fetch("/api/categories");
-         if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
          }
          return response.json();
       },

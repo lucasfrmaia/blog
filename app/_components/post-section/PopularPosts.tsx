@@ -15,7 +15,7 @@ import {
 } from "../post-component/PostComponent";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 import TitleSection from "../ui/utils/TitleSection";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 
 interface IPopularPostsProps {
    children?: React.ReactNode;
@@ -28,12 +28,14 @@ const PopularPosts: React.FC<IPopularPostsProps> = ({
    className = "",
    // Outras props aqui
 }) => {
-   const { data: posts, isLoading } = useQuery({
-      queryKey: ["popular_post"],
+   const { data: posts, isLoading } = useQuery<IPost[]>({
+      queryKey: ["popular_posts"],
       queryFn: async () => {
-         const response = await apiManager.post.findPopular(5);
-
-         return response;
+         const response = await fetch("/api/posts/popular");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar posts populares");
+         }
+         return response.json();
       },
    });
 

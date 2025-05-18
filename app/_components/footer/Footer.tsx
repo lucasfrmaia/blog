@@ -6,17 +6,20 @@ import Link from "next/link";
 import { NAVEBAR_ROUTES } from "@/utils/constantes/routes";
 import { useQuery } from "@tanstack/react-query";
 import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
 
 export default function Footer() {
    const links = Object.values(NAVEBAR_ROUTES);
-   const { data: categories, isLoading } = useQuery({
+   const { data: categories, isLoading } = useQuery<ICategory[]>({
       queryKey: ["popular_categories"],
       queryFn: async () => {
-         const response = await apiManager.category.findPopularCategories(5);
-         return response;
+         const response = await fetch("/api/categories/popular");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias populares");
+         }
+         return response.json();
       },
    });
 

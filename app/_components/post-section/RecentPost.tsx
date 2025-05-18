@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 import { useQuery } from "@tanstack/react-query";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 
 type IPropRecentPost = {
    children?: React.ReactNode;
@@ -25,12 +25,14 @@ type IPropRecentPost = {
 };
 
 export default function RecentPost({ children, className }: IPropRecentPost) {
-   const { data: posts, isLoading } = useQuery({
+   const { data: posts, isLoading } = useQuery<IPost[]>({
       queryKey: ["recent_posts"],
       queryFn: async () => {
-         const response = await apiManager.post.findAll();
-
-         return response;
+         const response = await fetch("/api/posts/recent");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar posts recentes");
+         }
+         return response.json();
       },
    });
 

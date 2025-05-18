@@ -4,32 +4,41 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import QueryError from "../_components/errors/QueryError";
 import BaseLayout from "../_components/layout/BaseLayout";
 import { LoadingPosts } from "../_components/loadings/posts/LoadingPosts";
 import PostFilters from "../_components/post/PostFilters";
 import PostGrid from "../_components/post/PostGrid";
-import { Pagination } from "../_components/ui/pagination";
-import { apiManager } from "../api/_services/modules/ApiManager";
+import Pagination from "../_components/shared/Pagination";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 
 const ITEMS_PER_PAGE = 9;
 
-export default function PostsPage() {
+export default function PostsPage({
+   searchParams,
+}: {
+   searchParams: { [key: string]: string | string[] | undefined };
+}) {
    const router = useRouter();
-   const searchParams = useSearchParams();
+   const page = Number(searchParams?.page) || 1;
+   const search = (searchParams?.search as string) || "";
+   const categories = (searchParams?.categories as string)?.split(",") || [];
+   const sortBy = (searchParams?.sortBy as string) || "recent";
 
-   // Obter parâmetros da URL
-   const page = Number(searchParams.get("page")) || 1;
-   const search = searchParams.get("search") || "";
-   const categories =
-      searchParams.get("categories")?.split(",").filter(Boolean) || [];
-   const sortBy = searchParams.get("sortBy") || "recent";
+   const [currentPage, setCurrentPage] = useState(page);
 
    // Queries
-   const { data: allCategories } = useQuery({
+   const { data: categoriesData } = useQuery<ICategory[]>({
       queryKey: ["categories"],
-      queryFn: () => apiManager.category.findAll(),
+      queryFn: async () => {
+         const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
    });
 
    const {
@@ -37,60 +46,22 @@ export default function PostsPage() {
       isLoading,
       error,
       refetch,
-   } = useQuery({
-      queryKey: ["posts", page, search, categories, sortBy],
+   } = useQuery<IPost[]>({
+      queryKey: ["posts"],
       queryFn: async () => {
-         let filteredPosts = await apiManager.post.findAll();
-
-         // Filtrar por busca
-         if (search) {
-            filteredPosts = filteredPosts.filter(
-               (post) =>
-                  post.title.toLowerCase().includes(search.toLowerCase()) ||
-                  post.description.toLowerCase().includes(search.toLowerCase())
-            );
+         const response = await fetch("/api/posts");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar posts");
          }
-
-         // Filtrar por categorias
-         if (categories.length > 0) {
-            filteredPosts = filteredPosts.filter((post) =>
-               post.categories?.some((category) =>
-                  categories.includes(category.id)
-               )
-            );
-         }
-
-         // Ordenar posts
-         switch (sortBy) {
-            case "oldest":
-               filteredPosts.sort(
-                  (a, b) =>
-                     new Date(a.createdAt).getTime() -
-                     new Date(b.createdAt).getTime()
-               );
-               break;
-            case "popular":
-               filteredPosts.sort((a, b) => (b.views || 0) - (a.views || 0));
-               break;
-            default: // recent
-               filteredPosts.sort(
-                  (a, b) =>
-                     new Date(b.createdAt).getTime() -
-                     new Date(a.createdAt).getTime()
-               );
-         }
-
-         return filteredPosts;
+         return response.json();
       },
    });
 
-   // Paginação
-   const totalPosts = posts?.length || 0;
-   const totalPages = Math.ceil(totalPosts / ITEMS_PER_PAGE);
-   const paginatedPosts = posts?.slice(
-      (page - 1) * ITEMS_PER_PAGE,
-      page * ITEMS_PER_PAGE
-   );
+   // Calcular posts paginados
+   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+   const endIndex = startIndex + ITEMS_PER_PAGE;
+   const paginatedPosts = posts?.slice(startIndex, endIndex) || [];
+   const totalPages = Math.ceil((posts?.length || 0) / ITEMS_PER_PAGE);
 
    // Handlers
    const updateURL = useCallback(
@@ -164,7 +135,7 @@ export default function PostsPage() {
                   initialSearch={search}
                   initialCategories={categories}
                   initialSortBy={sortBy}
-                  categories={allCategories}
+                  categories={categoriesData}
                   onApplyFilters={handleApplyFilters}
                   onResetFilters={handleResetFilters}
                />
@@ -174,9 +145,9 @@ export default function PostsPage() {
                      <>
                         <PostGrid posts={paginatedPosts} />
                         {totalPages > 1 && (
-                           <div className="mt-8">
+                           <div className="mt-8 flex justify-center">
                               <Pagination
-                                 currentPage={page}
+                                 currentPage={currentPage}
                                  totalPages={totalPages}
                                  onPageChange={handlePageChange}
                               />

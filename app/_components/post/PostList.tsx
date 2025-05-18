@@ -9,7 +9,6 @@ import Link from "next/link";
 import PostListLoading from "../loadings/PostListLoading";
 import QueryError from "../errors/QueryError";
 import { useToast } from "../ui/use-toast";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
@@ -23,11 +22,26 @@ export function PostList() {
 
    const { data, isLoading, error, refetch } = useQuery({
       queryKey: ["posts"],
-      queryFn: () => apiManager.post.findAll(),
+      queryFn: async () => {
+         const response = await fetch("/api/posts");
+
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+
+         return response.json();
+      },
    });
 
    const { mutate: deletePost } = useMutation({
-      mutationFn: (id: string) => apiManager.post.delete(id),
+      mutationFn: async (id: string) => {
+         const response = await fetch(`/api/posts?id=${id}`);
+
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
       onSuccess: () => {
          toast({
             title: "Post excluído com sucesso!",

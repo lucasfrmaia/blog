@@ -93,7 +93,7 @@ export class UserRepositoryPrisma implements IUserRepository {
       return user as User;
    }
 
-   async findByRoleId(roleId: string): Promise<IUser[]> {
+   async findByRoleId(roleId: number): Promise<IUser[]> {
       const users = await prisma.user.findMany({
          where: { roleId },
          include: { role: true, posts: true, comments: true },

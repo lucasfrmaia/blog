@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Role {
-  id          String   @id @default(uuid())
+  id          Int   @id @default(autoincrement())
   name        String   @unique
   description String
   createdAt   DateTime @default(now())
@@ -28,7 +28,7 @@ model User {
   salt      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  roleId    String
+  roleId    Int
 
   role      Role @relation(fields: [roleId], references: [id])  
   

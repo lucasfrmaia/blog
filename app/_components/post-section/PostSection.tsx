@@ -7,27 +7,34 @@ import { motion } from "framer-motion";
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { Button } from "../ui/button";
 import PostCard from "../post/PostCard";
+import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { IComment } from "@/app/api/_services/modules/comment/entities/comment";
 
 export default function PostSection() {
-   const { data: posts, isLoading } = useQuery({
-      queryKey: ["featured_posts"],
+   const { data: posts, isLoading: isLoadingPosts } = useQuery<IPost[]>({
+      queryKey: ["posts"],
       queryFn: async () => {
-         const response = await apiManager.post.findAll();
-         return response;
+         const response = await fetch("/api/posts");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar posts");
+         }
+         return response.json();
       },
    });
 
-   // Buscar comentários para cada post
-   const { data: comments } = useQuery({
-      queryKey: ["all_comments"],
+   const { data: comments, isLoading: isLoadingComments } = useQuery<
+      IComment[]
+   >({
+      queryKey: ["comments"],
       queryFn: async () => {
-         const response = await apiManager.comment.findAll();
-         return response;
+         const response = await fetch("/api/comments");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar comentários");
+         }
+         return response.json();
       },
-      enabled: !!posts,
    });
 
    return (

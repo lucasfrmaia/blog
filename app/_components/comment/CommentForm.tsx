@@ -1,4 +1,3 @@
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { AuthUser } from "@/utils/types/auth";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
@@ -30,11 +29,22 @@ export function CommentForm({
 
    const onSubmit = async (data: { content: string }) => {
       try {
-         await apiManager.comment.create({
-            content: data.content,
-            postId,
-            userId: user.id,
+         const response = await fetch("/api/comments", {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+               content: data.content,
+               postId,
+               userId: user.id,
+            }),
          });
+
+         if (!response.ok) {
+            throw new Error("Erro ao criar comentário");
+         }
+
          reset();
          onCommentSubmitted();
          toast({

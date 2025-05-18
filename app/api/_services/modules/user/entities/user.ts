@@ -20,7 +20,7 @@ export interface IUserCreate {
    name: string;
    email: string;
    password: string;
-   roleId: string;
+   roleId: number;
 }
 
 export interface IUserUpdate {

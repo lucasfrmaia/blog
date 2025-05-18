@@ -20,7 +20,6 @@ import {
    AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { Button } from "../ui/button";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { IUser } from "@/app/api/_services/modules/user/entities/user";
 import { Column, DataTable } from "../shared/DataTable";
 import { useToast } from "../ui/use-toast";
@@ -34,13 +33,26 @@ export function UserList() {
 
    const { data, isLoading, refetch } = useQuery({
       queryKey: ["users", page],
-      queryFn: () => apiManager.user.findPerPage(page, PAGE_SIZE),
+      queryFn: async () => {
+         const response = await fetch(
+            `/api/users?page=${page}&limit=${PAGE_SIZE}`
+         );
+         if (!response.ok) {
+            throw new Error("Erro ao buscar usuários");
+         }
+         return response.json();
+      },
    });
 
    const handleBanUser = async (user: IUser) => {
       try {
-         // Aqui você implementaria a lógica de banimento
-         console.log("Banindo usuário:", user);
+         const response = await fetch(`/api/users?id=${user.id}`, {
+            method: "DELETE",
+         });
+
+         if (!response.ok) {
+            throw new Error("Erro ao banir usuário");
+         }
 
          toast({
             title: "Usuário banido",
@@ -68,7 +80,7 @@ export function UserList() {
       },
       {
          header: "Função",
-         accessorKey: (user: IUser) => user.role?.id || "Usuário",
+         accessorKey: (user: IUser) => user.role?.name || "Usuário",
       },
       {
          header: "Membro desde",

@@ -27,7 +27,7 @@ export class RoleRepositoryPrisma implements IRoleRepository {
       });
    }
 
-   async delete(id: string): Promise<void> {
+   async delete(id: number): Promise<void> {
       const usersWithRole = await prisma.user.findMany({
          where: { roleId: id },
       });
@@ -50,7 +50,7 @@ export class RoleRepositoryPrisma implements IRoleRepository {
       return roles as Role[];
    }
 
-   async findById(id: string): Promise<IRole | null> {
+   async findById(id: number): Promise<IRole | null> {
       const role = await prisma.role.findUnique({
          where: { id },
          include: {

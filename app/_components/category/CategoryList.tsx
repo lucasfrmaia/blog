@@ -6,11 +6,10 @@ import { Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import CategoryListLoading from "../loadings/CategoryListLoading";
 import QueryError from "../errors/QueryError";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
-import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { Column, DataTable } from "../shared/DataTable";
 
 const PAGE_SIZE = 10;
 
@@ -66,44 +65,28 @@ const columns: Column<ICategory>[] = [
    },
 ];
 
-export function CategoryList() {
-   const { data, isLoading, error, refetch } = useQuery({
+export default function CategoryList() {
+   const { data: categories, isLoading } = useQuery<ICategory[]>({
       queryKey: ["categories"],
-      queryFn: () => apiManager.category.findAll(),
+      queryFn: async () => {
+         const response = await fetch("/api/categories");
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
    });
-
-   const { toast } = useToast();
-   const queryClient = useQueryClient();
-
-   const handleDelete = async (id: string) => {
-      try {
-         await apiManager.category.delete(id);
-         toast({
-            title: "Categoria excluída",
-            description: "A categoria foi excluída com sucesso.",
-         });
-         refetch();
-      } catch (error) {
-         toast({
-            title: "Erro ao excluir",
-            description: "Ocorreu um erro ao tentar excluir a categoria.",
-            variant: "destructive",
-         });
-      }
-   };
 
    if (isLoading) return <CategoryListLoading />;
 
-   if (error) return <QueryError onRetry={() => refetch()} />;
-
    return (
       <DataTable<ICategory>
-         data={data || []}
+         data={categories || []}
          columns={columns}
          pagination={{
             page: 1,
             pageSize: PAGE_SIZE,
-            total: data?.length || 0,
+            total: categories?.length || 0,
          }}
          onPageChange={() => {}}
       />

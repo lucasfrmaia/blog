@@ -1,9 +1,9 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ICategory } from "@/services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Badge } from "../../ui/badge";
+import { Card } from "../../ui/card";
 
 interface PostPreviewProps {
    title: string;

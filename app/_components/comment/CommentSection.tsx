@@ -8,6 +8,7 @@ import { CommentForm } from "./CommentForm";
 import { CommentList } from "./CommentList";
 import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { Card, CardContent } from "../ui/card";
+import { IComment } from "@/app/api/_services/modules/comment/entities/comment";
 
 interface CommentSectionProps {
    postId: string;
@@ -22,9 +23,15 @@ export default function CommentSection({ postId }: CommentSectionProps) {
       isLoading,
       error,
       refetch,
-   } = useQuery({
+   } = useQuery<IComment[]>({
       queryKey: ["comments", postId],
-      queryFn: () => apiManager.comment.findByPostId(postId),
+      queryFn: async () => {
+         const response = await fetch(`/api/comments/post/${postId}`);
+         if (!response.ok) {
+            throw new Error("Erro ao buscar comentários");
+         }
+         return response.json();
+      },
    });
 
    if (isLoading) return <CommentSectionLoading />;

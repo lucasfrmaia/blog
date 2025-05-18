@@ -3,9 +3,8 @@
 import { cn } from "@/lib/utils";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Label } from "@radix-ui/react-label";
 import { motion } from "framer-motion";
-import { Mail, EyeOff, Eye, Link, Loader2, Lock } from "lucide-react";
+import { Mail, EyeOff, Eye, Loader2, Lock } from "lucide-react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -21,6 +20,8 @@ import {
 } from "../_components/ui/card";
 import { useToast } from "../_components/ui/use-toast";
 import { Input } from "../_components/ui/input";
+import { Label } from "../_components/ui/label";
+import Link from "next/link";
 
 type IPropFormLogin = {
    children?: React.ReactNode;

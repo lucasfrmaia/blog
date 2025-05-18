@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthUser } from "@/utils/types/auth";
-import { apiManager } from "../../_services/modules/ApiManager";
 
 const handler = NextAuth({
    providers: [
@@ -17,14 +16,22 @@ const handler = NextAuth({
                   return null;
                }
 
-               const user = await apiManager.user.authenticate(
-                  credentials.email,
-                  credentials.password
-               );
+               const response = await fetch("/api/users/auth", {
+                  method: "POST",
+                  headers: {
+                     "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                     email: credentials.email,
+                     password: credentials.password,
+                  }),
+               });
 
-               if (!user) {
+               if (!response.ok) {
                   return null;
                }
+
+               const user = await response.json();
 
                return {
                   id: user.id,

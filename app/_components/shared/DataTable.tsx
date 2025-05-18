@@ -1,9 +1,10 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Table } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ReactNode } from "react";
 import { Button } from "../ui/button";
 import {
+   Table,
    TableBody,
    TableCell,
    TableHead,
