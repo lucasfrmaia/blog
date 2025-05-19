@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Edit2, Trash2 } from "lucide-react";
+import { Ban, Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import PostListLoading from "../loadings/PostListLoading";
 import QueryError from "../errors/QueryError";
@@ -14,6 +14,17 @@ import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
 import { PostDialog } from "./dialogs/PostDialog";
 import { Badge } from "../ui/badge";
+import {
+   AlertDialog,
+   AlertDialogAction,
+   AlertDialogCancel,
+   AlertDialogContent,
+   AlertDialogDescription,
+   AlertDialogFooter,
+   AlertDialogHeader,
+   AlertDialogTitle,
+   AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 const PAGE_SIZE = 10;
 
@@ -37,10 +48,12 @@ export function PostList() {
 
    const { mutate: deletePost } = useMutation({
       mutationFn: async (id: string) => {
-         const response = await fetch(`/api/posts?id=${id}`);
+         const response = await fetch(`/api/posts/${id}`, {
+            method: "DELETE",
+         });
 
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
+            throw new Error("Erro deletar o post");
          }
          return response.json();
       },
@@ -127,15 +140,36 @@ export function PostList() {
                      <span className="sr-only">Editar post</span>
                   </Button>
                </PostDialog>
-               <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive"
-                  onClick={() => handleDelete(post.id)}
-               >
-                  <Trash2 className="h-4 w-4" />
-                  <span className="sr-only">Excluir post</span>
-               </Button>
+
+               <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                     <Button
+                        size="sm"
+                        variant="ghost"
+                        className="text-destructive hover:text-destructive"
+                     >
+                        <Trash2 className="h-4 w-4" />
+                     </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                     <AlertDialogHeader>
+                        <AlertDialogTitle>Ecluir Post</AlertDialogTitle>
+                        <AlertDialogDescription>
+                           Tem certeza que deseja ecluir o post {post.title}?
+                           Esta ação não pode ser desfeita.
+                        </AlertDialogDescription>
+                     </AlertDialogHeader>
+                     <AlertDialogFooter>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                           onClick={() => handleDelete(post.id)}
+                           className="bg-destructive hover:bg-destructive/90"
+                        >
+                           Excluir
+                        </AlertDialogAction>
+                     </AlertDialogFooter>
+                  </AlertDialogContent>
+               </AlertDialog>
             </div>
          ),
       },
