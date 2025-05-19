@@ -10,11 +10,12 @@ import { useSession, signOut } from "next-auth/react";
 import { AuthUser } from "@/utils/types/auth";
 import { UserMenu } from "./UserMenu";
 
+// ToDo mudar role
 export default function NaveBar() {
-   const { setTheme, theme } = useTheme();
    const pathname = usePathname();
    const { data: session } = useSession();
    const user = session?.user as AuthUser | undefined;
+
    const links = Object.values(NAVEBAR_ROUTES);
 
    return (
@@ -39,12 +40,13 @@ export default function NaveBar() {
                      {label}
                   </Link>
                ))}
-               {user?.role === "admin" && (
+
+               {user?.role === 1 && (
                   <Link
                      href="/dashboard"
                      className={cn(
                         "transition-colors hover:text-foreground/80",
-                        pathname.startsWith("/dashboard")
+                        pathname?.startsWith("/dashboard")
                            ? "text-foreground"
                            : "text-foreground/60"
                      )}

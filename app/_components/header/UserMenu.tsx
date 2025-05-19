@@ -18,6 +18,7 @@ import {
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
+// ToDo mudar role
 export function UserMenu() {
    const { data: session } = useSession();
    const user = session?.user as AuthUser | undefined;
@@ -75,7 +76,7 @@ export function UserMenu() {
                         <span>Perfil</span>
                      </Link>
                   </DropdownMenuItem>
-                  {user?.role === "admin" && (
+                  {user?.role === 1 && (
                      <DropdownMenuItem asChild>
                         <Link
                            href="/dashboard"

@@ -21,6 +21,7 @@ import { Input } from "../_components/ui/input";
 import { Label } from "../_components/ui/label";
 import Link from "next/link";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 type IPropFormRegister = {
    children?: React.ReactNode;
@@ -64,7 +65,13 @@ export default function FormRegister({
             body: JSON.stringify(data),
          });
 
-         router.push(ROUTES_PAGE.home.link);
+         await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+         });
+
+         router.replace(ROUTES_PAGE.home.link);
       } catch (error) {
          const message = (error as Error).message;
 

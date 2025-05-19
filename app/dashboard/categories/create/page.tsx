@@ -62,7 +62,7 @@ export default function CreateCategoryPage() {
             title: "Categoria criada com sucesso!",
             description: "A categoria foi criada e já está disponível.",
          });
-         router.push("/dashboard/categories");
+         router.push("/dashboard");
       },
       onError: () => {
          toast({

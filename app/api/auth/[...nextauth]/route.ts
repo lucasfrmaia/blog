@@ -16,16 +16,19 @@ const handler = NextAuth({
                   return null;
                }
 
-               const response = await fetch("/api/users/auth", {
-                  method: "POST",
-                  headers: {
-                     "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                     email: credentials.email,
-                     password: credentials.password,
-                  }),
-               });
+               const response = await fetch(
+                  "http://localhosT:3000/api/users/auth",
+                  {
+                     method: "POST",
+                     headers: {
+                        "Content-Type": "application/json",
+                     },
+                     body: JSON.stringify({
+                        email: credentials.email,
+                        password: credentials.password,
+                     }),
+                  }
+               );
 
                if (!response.ok) {
                   return null;

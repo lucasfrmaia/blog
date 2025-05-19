@@ -11,7 +11,7 @@ interface RouteParams {
 export async function GET(request: NextRequest, { params }: RouteParams) {
    try {
       const { id } = params;
-      const role = await apiManager.role.findById(id);
+      const role = await apiManager.role.findById(Number(id));
 
       if (!role) {
          return NextResponse.json(
@@ -30,20 +30,32 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // Atualizar função
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export async function PUT(request: NextRequest, { params }: RouteParams) {
    try {
       const { id } = params;
       const body = await request.json();
 
+      // Verificar se os campos obrigatórios estão presentes
+      if (!body.name || !body.description) {
+         return NextResponse.json(
+            { error: "Nome e descrição são campos obrigatórios" },
+            { status: 400 }
+         );
+      }
+
       await apiManager.role.update({
-         id,
-         ...body,
+         id: parseInt(id),
+         name: body.name,
+         description: body.description,
       });
 
-      return NextResponse.json({ message: "Função atualizada com sucesso" });
+      return NextResponse.json(
+         { message: "Role atualizada com sucesso" },
+         { status: 200 }
+      );
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao atualizar função" },
+         { error: "Erro ao atualizar role" },
          { status: 500 }
       );
    }
@@ -53,7 +65,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
    try {
       const { id } = params;
-      await apiManager.role.delete(id);
+      await apiManager.role.delete(Number(id));
 
       return NextResponse.json({ message: "Função excluída com sucesso" });
    } catch (error) {

@@ -14,10 +14,8 @@ export default withAuth(
          return NextResponse.redirect(new URL(ROUTES_PAGE.login.link, req.url));
       }
 
-      if (
-         req.nextUrl.pathname.startsWith("/dashboard") &&
-         token?.role !== "admin"
-      ) {
+      // ToDo mudar role
+      if (req.nextUrl.pathname.startsWith("/dashboard") && token?.role !== 1) {
          return NextResponse.redirect(new URL(ROUTES_PAGE.home.link, req.url));
       }
 

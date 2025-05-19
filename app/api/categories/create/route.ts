@@ -15,6 +15,7 @@ export async function POST(request: NextRequest) {
 
       await apiManager.category.create({
          name: body.name,
+         description: body.description,
          color: body.color,
       });
 

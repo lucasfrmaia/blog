@@ -10,12 +10,17 @@ import { Button } from "../ui/button";
 import { useToast } from "../ui/use-toast";
 import { ICategory } from "@/app/api/_services/modules/category/entities/category";
 import { Column, DataTable } from "../shared/DataTable";
+import { useRouter } from "next/navigation";
 
 const PAGE_SIZE = 10;
 
-const handleDelete = (id: string) => {
+const handleDelete = async (id: string) => {
    if (window.confirm("Tem certeza que deseja excluir esta categoria?")) {
-      // deleteCategory(id);
+      await fetch(`/api/categories/${id}`, {
+         method: "DELETE",
+      });
+
+      window.location.reload();
    }
 };
 
@@ -40,6 +45,11 @@ const columns: Column<ICategory>[] = [
       header: "Posts",
       accessorKey: (category: ICategory) => category.posts?.length || 0,
       className: "text-right",
+   },
+   {
+      header: "Descrição",
+      accessorKey: (category) => category.description,
+      className: "text-center",
    },
    {
       header: "Ações",

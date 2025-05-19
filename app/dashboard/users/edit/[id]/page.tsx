@@ -30,7 +30,7 @@ import { z } from "zod";
 const formSchema = z.object({
    name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
    email: z.string().email("Email inválido"),
-   roleId: z.string().min(1, "Selecione uma função"),
+   roleId: z.number(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -59,7 +59,7 @@ export default function EditUserPage({ params }: EditUserPageProps) {
       defaultValues: {
          name: user?.name || "",
          email: user?.email || "",
-         roleId: user?.role?.id || "",
+         roleId: user?.role?.id || 2,
       },
    });
 
@@ -154,7 +154,7 @@ export default function EditUserPage({ params }: EditUserPageProps) {
                            <FormLabel>Função</FormLabel>
                            <Select
                               onValueChange={field.onChange}
-                              defaultValue={field.value}
+                              defaultValue={String(field.value)}
                            >
                               <FormControl>
                                  <SelectTrigger>
@@ -163,7 +163,10 @@ export default function EditUserPage({ params }: EditUserPageProps) {
                               </FormControl>
                               <SelectContent>
                                  {roles?.map((role) => (
-                                    <SelectItem key={role.id} value={role.id}>
+                                    <SelectItem
+                                       key={role.id}
+                                       value={String(role.id)}
+                                    >
                                        {role.name}
                                     </SelectItem>
                                  ))}

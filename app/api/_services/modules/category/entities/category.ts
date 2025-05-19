@@ -10,6 +10,7 @@ export interface ICategory {
 
 export interface ICategoryCreate {
    name: string;
+   description: string;
    color: string;
 }
 
@@ -17,4 +18,5 @@ export interface ICategoryUpdate {
    id: string;
    name?: string;
    color?: string;
+   description: string;
 }

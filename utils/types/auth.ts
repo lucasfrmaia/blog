@@ -1,10 +1,8 @@
-import { IUser } from "@/services/modules/user/entities/user";
-
 export type AuthUser = {
    id: string;
    name: string;
    email: string;
-   role: string;
+   role: number;
    image?: string | null;
 };
 

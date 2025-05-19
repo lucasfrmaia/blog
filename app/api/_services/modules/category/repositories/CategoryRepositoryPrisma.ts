@@ -32,6 +32,7 @@ export class CategoryRepositoryPrisma implements ICategoryManager {
       await prisma.category.create({
          data: {
             name: data.name,
+            description: data.description,
             color: data.color,
          },
       });
@@ -42,6 +43,7 @@ export class CategoryRepositoryPrisma implements ICategoryManager {
          where: { id: data.id },
          data: {
             name: data.name,
+            description: data.description,
             color: data.color,
          },
       });
