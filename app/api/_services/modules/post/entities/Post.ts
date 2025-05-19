@@ -22,7 +22,7 @@ export interface IPostCreate {
    description: string;
    content: string;
    authorId: string;
-   img?: string;
+   img: string;
    categoryId?: string[];
 }
 

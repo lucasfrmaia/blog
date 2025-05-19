@@ -5,7 +5,6 @@ export async function POST(request: NextRequest) {
    try {
       const body = await request.json();
 
-      // Verificar se os campos obrigatórios estão presentes
       if (!body.title || !body.content || !body.authorId) {
          return NextResponse.json(
             { error: "Título, conteúdo e ID do autor são campos obrigatórios" },
@@ -28,7 +27,7 @@ export async function POST(request: NextRequest) {
       );
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao criar post" },
+         { error: `Erro ao criar post: ${(error as Error).message}` },
          { status: 500 }
       );
    }

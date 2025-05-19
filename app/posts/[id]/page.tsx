@@ -6,15 +6,24 @@ import { LoadingOnePost } from "@/app/_components/loadings/posts/LoadingOnePost"
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
 import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import { Separator } from "@radix-ui/react-dropdown-menu";
 import { useQuery } from "@tanstack/react-query";
 
 export default function PostPage({ params }: { params: { id: string } }) {
-   const { data: post, isLoading } = useQuery({
+   const { data: post, isLoading } = useQuery<IPost>({
       queryKey: ["post", params.id],
-      queryFn: () => apiManager.post.findById(params.id),
+      queryFn: async () => {
+         const response = await fetch(`/api/posts/${params.id}`);
+         if (!response.ok) {
+            throw new Error("Erro ao buscar categorias");
+         }
+         return response.json();
+      },
    });
+
+   console.log(post);
 
    if (!post) {
       return null;

@@ -72,7 +72,13 @@ export function CategoryDialog({
          );
 
          if (!response.ok) {
-            throw new Error("Erro ao salvar categoria");
+            const errorData = await response.json();
+
+            throw new Error(
+               "Erro ao salvar categoria: " +
+                  errorData.message +
+                  errorData.error
+            );
          }
 
          toast({
@@ -88,9 +94,9 @@ export function CategoryDialog({
       } catch (error) {
          toast({
             title: "Erro",
-            description: `Ocorreu um erro ao salvar a categoria: ${
-               (error as Error).message
-            }`,
+            description:
+               "Ocorreu um erro ao salvar a categoria: " +
+               (error as Error).message,
             variant: "destructive",
          });
       }

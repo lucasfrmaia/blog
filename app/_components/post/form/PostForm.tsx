@@ -1,41 +1,51 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 import { ICategory } from "@/app/api/_services/modules/category/entities/category";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
-import { Label } from "../../ui/label";
-import { Textarea } from "../../ui/textarea";
-import { Input } from "../../ui/input";
+import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+   Form,
+   FormField,
+   FormItem,
+   FormLabel,
+   FormControl,
+   FormMessage,
+} from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
+import { Textarea } from "@/app/_components/ui/textarea";
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from "../../ui/select";
-import { Button } from "../../ui/button";
-import PostEditor from "../editor/PostEditor";
-import PostPreview from "../preview/PostPreview";
+} from "@/app/_components/ui/select";
+import { Button } from "@/app/_components/ui/button";
+import { Check, X } from "lucide-react";
+
+const formSchema = z.object({
+   title: z.string().min(1, "O título é obrigatório"),
+   description: z.string().min(1, "A descrição é obrigatória"),
+   content: z.string().min(1, "O conteúdo é obrigatório"),
+   coverImage: z.string().min(1, "A imagem de capa é obrigatória"),
+   categories: z.array(z.string()).min(1, "Selecione pelo menos uma categoria"),
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 interface PostFormProps {
-   className?: string;
    defaultValues?: Partial<IPost>;
-   isLoading?: boolean;
    onSubmit: (formData: FormData) => Promise<void>;
 }
 
-export default function PostForm({
-   defaultValues,
-   isLoading,
-   onSubmit,
-}: PostFormProps) {
-   const [content, setContent] = useState(defaultValues?.content || "");
-   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-      defaultValues?.categories?.map((cat) => cat.id) || []
-   );
+export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
+   const { data: session } = useSession();
+   const user = session?.user;
 
    const { data: categories } = useQuery<ICategory[]>({
       queryKey: ["categories"],
@@ -48,96 +58,171 @@ export default function PostForm({
       },
    });
 
-   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const formData = new FormData(e.currentTarget);
-      formData.set("content", content);
-      formData.set("categories", JSON.stringify(selectedCategories));
+   const form = useForm<FormValues>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+         title: defaultValues?.title ?? "",
+         description: defaultValues?.description ?? "",
+         content: defaultValues?.content ?? "",
+         coverImage: defaultValues?.img ?? "",
+         categories: defaultValues?.categories?.map((cat) => cat.id) ?? [],
+      },
+   });
+
+   const handleSubmit = async (data: FormValues) => {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("description", data.description);
+      formData.append("content", data.content);
+      formData.append("img", data.coverImage);
+      formData.append("authorId", user?.id as string);
+
+      // Adiciona cada categoria como um campo separado
+      data.categories.forEach((categoryId) => {
+         formData.append("categories", categoryId);
+      });
+
       await onSubmit(formData);
    };
 
    return (
-      <Tabs defaultValue="editor" className="w-full">
-         <TabsList className="mb-4">
-            <TabsTrigger value="editor">Editor</TabsTrigger>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-         </TabsList>
-
-         <TabsContent className="overflow-y-auto" value="editor">
-            <form onSubmit={handleSubmit} className="space-y-8">
-               <div className="space-y-2">
-                  <Label htmlFor="title">Título</Label>
-                  <Input
-                     id="title"
-                     name="title"
-                     defaultValue={defaultValues?.title}
-                     required
-                  />
-               </div>
-
-               <div className="space-y-2">
-                  <Label htmlFor="description">Descrição</Label>
-                  <Textarea
-                     id="description"
-                     name="description"
-                     defaultValue={defaultValues?.description}
-                     required
-                  />
-               </div>
-
-               <div className="space-y-2">
-                  <Label htmlFor="coverImage">Imagem de Capa (URL)</Label>
-                  <Input
-                     id="coverImage"
-                     name="coverImage"
-                     type="url"
-                     defaultValue={defaultValues?.img}
-                  />
-               </div>
-
-               <div className="space-y-2">
-                  <Label>Categorias</Label>
-                  <Select
-                     value={selectedCategories[0]}
-                     onValueChange={(value) => setSelectedCategories([value])}
-                  >
-                     <SelectTrigger>
-                        <SelectValue placeholder="Selecione uma categoria" />
-                     </SelectTrigger>
-                     <SelectContent>
-                        {categories?.map((category) => (
-                           <SelectItem key={category.id} value={category.id}>
-                              {category.name}
-                           </SelectItem>
-                        ))}
-                     </SelectContent>
-                  </Select>
-               </div>
-
-               <div className="space-y-2">
-                  <Label>Conteúdo</Label>
-                  <PostEditor value={content} onChange={setContent} />
-               </div>
-
-               <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Salvando..." : "Salvar"}
-               </Button>
-            </form>
-         </TabsContent>
-
-         <TabsContent value="preview">
-            <PostPreview
-               title={defaultValues?.title || ""}
-               description={defaultValues?.description || ""}
-               content={content}
-               coverImage={defaultValues?.img}
-               categories={
-                  categories?.filter((cat) =>
-                     selectedCategories.includes(cat.id)
-                  ) || []
-               }
+      <Form {...form}>
+         <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="p-4 space-y-4"
+         >
+            <FormField
+               control={form.control}
+               name="title"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Título</FormLabel>
+                     <FormControl>
+                        <Input {...field} />
+                     </FormControl>
+                     <FormMessage />
+                  </FormItem>
+               )}
             />
-         </TabsContent>
-      </Tabs>
+
+            <FormField
+               control={form.control}
+               name="description"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Descrição</FormLabel>
+                     <FormControl>
+                        <Textarea {...field} />
+                     </FormControl>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+
+            <FormField
+               control={form.control}
+               name="content"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Conteúdo</FormLabel>
+                     <FormControl>
+                        <Textarea {...field} className="min-h-[200px]" />
+                     </FormControl>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+
+            <FormField
+               control={form.control}
+               name="coverImage"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Imagem de Capa</FormLabel>
+                     <FormControl>
+                        <Input {...field} />
+                     </FormControl>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+
+            <FormField
+               control={form.control}
+               name="categories"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel>Categorias</FormLabel>
+                     <FormControl>
+                        <div className="space-y-2">
+                           <Select
+                              onValueChange={(value) => {
+                                 if (!field.value.includes(value)) {
+                                    field.onChange([...field.value, value]);
+                                 }
+                              }}
+                           >
+                              <SelectTrigger>
+                                 <SelectValue placeholder="Selecione as categorias" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                 {categories?.map((category) => (
+                                    <SelectItem
+                                       key={category.id}
+                                       value={category.id}
+                                       disabled={field.value.includes(
+                                          category.id
+                                       )}
+                                    >
+                                       {category.name}
+                                    </SelectItem>
+                                 ))}
+                              </SelectContent>
+                           </Select>
+
+                           <div className="flex flex-wrap gap-2">
+                              {field.value.map((categoryId) => {
+                                 const category = categories?.find(
+                                    (c) => c.id === categoryId
+                                 );
+                                 return (
+                                    category && (
+                                       <div
+                                          key={category.id}
+                                          className="flex items-center gap-1 bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
+                                       >
+                                          <span>{category.name}</span>
+                                          <Button
+                                             type="button"
+                                             variant="ghost"
+                                             size="icon"
+                                             className="h-4 w-4 p-0"
+                                             onClick={() =>
+                                                field.onChange(
+                                                   field.value.filter(
+                                                      (id) => id !== category.id
+                                                   )
+                                                )
+                                             }
+                                          >
+                                             <X className="h-3 w-3" />
+                                          </Button>
+                                       </div>
+                                    )
+                                 );
+                              })}
+                           </div>
+                        </div>
+                     </FormControl>
+                     <FormMessage />
+                  </FormItem>
+               )}
+            />
+
+            <Button type="submit" className="w-full">
+               {defaultValues ? "Atualizar" : "Criar"} Post
+            </Button>
+         </form>
+      </Form>
    );
 }
