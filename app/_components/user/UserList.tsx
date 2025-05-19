@@ -23,6 +23,7 @@ import { Button } from "../ui/button";
 import { IUser } from "@/app/api/_services/modules/user/entities/user";
 import { Column, DataTable } from "../shared/DataTable";
 import { useToast } from "../ui/use-toast";
+import { UserDialog } from "./dialogs/UserDialog";
 
 const PAGE_SIZE = 10;
 
@@ -98,11 +99,12 @@ export function UserList() {
          header: "Ações",
          accessorKey: (user: IUser) => (
             <div className="flex items-center gap-2 justify-end">
-               <Button asChild size="sm" variant="ghost">
-                  <Link href={`/dashboard/users/edit/${user.id}`}>
+               <UserDialog user={user} mode="edit">
+                  <Button size="sm" variant="ghost">
                      <Edit className="h-4 w-4" />
-                  </Link>
-               </Button>
+                  </Button>
+               </UserDialog>
+
                <AlertDialog>
                   <AlertDialogTrigger asChild>
                      <Button

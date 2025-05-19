@@ -12,6 +12,7 @@ import { useToast } from "../ui/use-toast";
 import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
+import { PostDialog } from "./dialogs/PostDialog";
 
 const PAGE_SIZE = 10;
 
@@ -102,12 +103,12 @@ export function PostList() {
          header: "Ações",
          accessorKey: (post: IPost) => (
             <div className="flex items-center gap-2">
-               <Button variant="ghost" size="icon" asChild>
-                  <Link href={`/dashboard/posts/edit/${post.id}`}>
+               <PostDialog post={post} mode="edit">
+                  <Button variant="ghost" size="icon">
                      <Edit2 className="h-4 w-4" />
                      <span className="sr-only">Editar post</span>
-                  </Link>
-               </Button>
+                  </Button>
+               </PostDialog>
                <Button
                   variant="ghost"
                   size="icon"

@@ -21,6 +21,7 @@ import PostEditor from "../editor/PostEditor";
 import PostPreview from "../preview/PostPreview";
 
 interface PostFormProps {
+   className?: string;
    defaultValues?: Partial<IPost>;
    isLoading?: boolean;
    onSubmit: (formData: FormData) => Promise<void>;
@@ -62,7 +63,7 @@ export default function PostForm({
             <TabsTrigger value="preview">Preview</TabsTrigger>
          </TabsList>
 
-         <TabsContent value="editor">
+         <TabsContent className="overflow-y-auto" value="editor">
             <form onSubmit={handleSubmit} className="space-y-8">
                <div className="space-y-2">
                   <Label htmlFor="title">Título</Label>

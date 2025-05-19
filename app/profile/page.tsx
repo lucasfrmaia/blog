@@ -21,16 +21,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 
 export default function ProfilePage() {
    const { data: session } = useSession();
-   const user = session?.user as AuthUser;
-
-   if (!session) {
-      redirect("/login");
-   }
+   const user = session?.user as AuthUser | undefined;
 
    const { data: userData, isLoading } = useQuery({
       queryKey: ["user", user?.id],
       queryFn: async () => {
-         const response = await fetch(`/api/users/${user?.id}`);
+         const response = await fetch(`/api/users?id=${user?.id}`);
          if (!response.ok) {
             throw new Error("Erro ao buscar dados do usuário");
          }

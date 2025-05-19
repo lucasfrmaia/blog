@@ -25,6 +25,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import CategoryList from "../_components/category/CategoryList";
+import { CategoryDialog } from "../_components/category/dialogs/CategoryDialog";
+import { PostDialog } from "../_components/post/dialogs/PostDialog";
 
 export default function DashboardPage() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
@@ -139,12 +141,12 @@ export default function DashboardPage() {
                            Gerencie os posts do blog
                         </CardDescription>
                      </div>
-                     <Button asChild>
-                        <Link href="/dashboard/posts/create">
+                     <PostDialog mode="create">
+                        <Button>
                            <Plus className="mr-2 h-4 w-4" />
                            Novo Post
-                        </Link>
-                     </Button>
+                        </Button>
+                     </PostDialog>
                   </CardHeader>
                   <CardContent>
                      <PostList />
@@ -167,12 +169,12 @@ export default function DashboardPage() {
                            Gerencie as categorias do blog
                         </CardDescription>
                      </div>
-                     <Button asChild>
-                        <Link href="/dashboard/categories/create">
+                     <CategoryDialog mode="create">
+                        <Button>
                            <Plus className="mr-2 h-4 w-4" />
                            Nova Categoria
-                        </Link>
-                     </Button>
+                        </Button>
+                     </CategoryDialog>
                   </CardHeader>
                   <CardContent>
                      <CategoryList />
