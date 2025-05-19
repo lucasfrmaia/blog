@@ -23,7 +23,7 @@ export interface IPostCreate {
    content: string;
    authorId: string;
    img: string;
-   categoryId?: string[];
+   categories: string[];
 }
 
 export interface IPostUpdate {
@@ -31,5 +31,5 @@ export interface IPostUpdate {
    title?: string;
    content?: string;
    img?: string;
-   categoryId?: string[];
+   categories?: string[];
 }

@@ -4,22 +4,26 @@ import { IPostRepository } from "./PostRepository";
 
 export class PostRepositoryPrisma implements IPostRepository {
    async create(data: IPostCreate): Promise<void> {
-      const { categoryId, ...postData } = data;
+      const { categories, ...postData } = data;
       await prisma.post.create({
          data: {
             ...postData,
-            ...(categoryId && { categoryId }),
+            categories: {
+               connect: categories.map((id) => ({ id })),
+            },
          },
       });
    }
 
    async update(data: IPostUpdate): Promise<void> {
-      const { categoryId, ...postData } = data;
+      const { categories, ...postData } = data;
       await prisma.post.update({
          where: { id: data.id },
          data: {
             ...postData,
-            ...(categoryId && { categoryId }),
+            categories: {
+               connect: categories?.map((id) => ({ id })),
+            },
          },
       });
    }
@@ -30,7 +34,7 @@ export class PostRepositoryPrisma implements IPostRepository {
          include: {
             author: true,
             comments: true,
-            category: true,
+            categories: true,
          },
       });
 
@@ -43,7 +47,7 @@ export class PostRepositoryPrisma implements IPostRepository {
          include: {
             author: true,
             comments: true,
-            category: true,
+            categories: true,
          },
          orderBy: {
             createdAt: "desc",
@@ -62,12 +66,12 @@ export class PostRepositoryPrisma implements IPostRepository {
    async findByCategory(categoryId: string): Promise<IPost[]> {
       const posts = await prisma.post.findMany({
          where: {
-            category: {},
+            categories: {},
          },
          include: {
             author: true,
             comments: true,
-            category: true,
+            categories: true,
          },
       });
 
@@ -80,7 +84,7 @@ export class PostRepositoryPrisma implements IPostRepository {
          include: {
             author: true,
             comments: true,
-            category: true,
+            categories: true,
          },
          orderBy: {
             comments: {
@@ -105,7 +109,7 @@ export class PostRepositoryPrisma implements IPostRepository {
             include: {
                author: true,
                comments: true,
-               category: true,
+               categories: true,
             },
             orderBy: {
                createdAt: "desc",
@@ -125,7 +129,7 @@ export class PostRepositoryPrisma implements IPostRepository {
          include: {
             author: true,
             comments: true,
-            category: true,
+            categories: true,
          },
          orderBy: {
             createdAt: "desc",

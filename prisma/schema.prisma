@@ -57,7 +57,7 @@ model Post {
   authorId    String
   author      User      @relation(fields: [authorId], references: [id])
 
-  category    Category[]
+  categories    Category[]
   comments    Comment[]
 }
 

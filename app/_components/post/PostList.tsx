@@ -13,6 +13,7 @@ import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
 import { PostDialog } from "./dialogs/PostDialog";
+import { Badge } from "../ui/badge";
 
 const PAGE_SIZE = 10;
 
@@ -83,9 +84,26 @@ export function PostList() {
       },
       {
          header: "Categoria",
-         accessorKey: (post: IPost) =>
-            post.categories?.map((cat) => cat.name).join(", ") ||
-            "Sem categoria",
+         accessorKey: (post: IPost) => {
+            return (
+               <div className="flex gap-x-2 text-primary">
+                  {post.categories?.length !== 0 ? (
+                     post?.categories?.map((category) => {
+                        return (
+                           <Badge
+                              style={{ backgroundColor: category.color }}
+                              className={`text-primary`}
+                           >
+                              {category.name}
+                           </Badge>
+                        );
+                     })
+                  ) : (
+                     <span>Sem Categoria</span>
+                  )}
+               </div>
+            );
+         },
       },
       {
          header: "Visualizações",

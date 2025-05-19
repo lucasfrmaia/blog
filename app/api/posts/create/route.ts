@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
          content: body.content,
          authorId: body.authorId,
          img: body.img,
-         categoryId: body.categoryId,
+         categories: body.categories,
       });
 
       return NextResponse.json(
