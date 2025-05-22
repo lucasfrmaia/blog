@@ -5,6 +5,8 @@ export interface ICategory {
    name: string;
    color: string;
    description: string;
+   createdAt: Date;
+   updatedAt: Date;
    posts?: Post[];
 }
 

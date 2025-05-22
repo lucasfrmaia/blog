@@ -23,8 +23,6 @@ export default function PostPage({ params }: { params: { id: string } }) {
       },
    });
 
-   console.log(post);
-
    if (!post) {
       return null;
    }

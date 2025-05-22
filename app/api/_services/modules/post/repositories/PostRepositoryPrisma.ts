@@ -1,6 +1,7 @@
 import { prisma } from "../../../../../../prisma/lib/prisma";
 import { IPost, IPostCreate, IPostUpdate } from "../entities/Post";
-import { IPostRepository } from "./PostRepository";
+import { IPostRepository, IPostFilters } from "./PostRepository";
+import { Prisma } from "@prisma/client";
 
 export class PostRepositoryPrisma implements IPostRepository {
    async create(data: IPostCreate): Promise<void> {
@@ -16,13 +17,13 @@ export class PostRepositoryPrisma implements IPostRepository {
    }
 
    async update(data: IPostUpdate): Promise<void> {
-      const { categories, ...postData } = data;
+      const { id, categories, ...postData } = data;
       await prisma.post.update({
-         where: { id: data.id },
+         where: { id },
          data: {
             ...postData,
             categories: {
-               connect: categories?.map((id) => ({ id })),
+               set: categories?.map((id) => ({ id })) || [],
             },
          },
       });
@@ -41,9 +42,8 @@ export class PostRepositoryPrisma implements IPostRepository {
       return post as IPost | null;
    }
 
-   async findAll(limit?: number): Promise<IPost[]> {
+   async findAll(): Promise<IPost[]> {
       const posts = await prisma.post.findMany({
-         take: limit,
          include: {
             author: true,
             comments: true,
@@ -66,7 +66,11 @@ export class PostRepositoryPrisma implements IPostRepository {
    async findByCategory(categoryId: string): Promise<IPost[]> {
       const posts = await prisma.post.findMany({
          where: {
-            categories: {},
+            categories: {
+               some: {
+                  id: categoryId,
+               },
+            },
          },
          include: {
             author: true,
@@ -87,9 +91,7 @@ export class PostRepositoryPrisma implements IPostRepository {
             categories: true,
          },
          orderBy: {
-            comments: {
-               _count: "desc",
-            },
+            views: "desc",
          },
       });
 
@@ -98,28 +100,69 @@ export class PostRepositoryPrisma implements IPostRepository {
 
    async findPerPage(
       page: number,
-      limit: number
+      limit: number,
+      filters?: IPostFilters
    ): Promise<{ posts: IPost[]; total: number }> {
       const skip = (page - 1) * limit;
+
+      const where = {
+         AND: [
+            filters?.search
+               ? {
+                    OR: [
+                       {
+                          title: {
+                             contains: filters.search,
+                             mode: "insensitive",
+                          },
+                       },
+                       {
+                          description: {
+                             contains: filters.search,
+                             mode: "insensitive",
+                          },
+                       },
+                    ],
+                 }
+               : {},
+            filters?.categories && filters.categories.length > 0
+               ? {
+                    categories: {
+                       some: {
+                          id: {
+                             in: filters.categories,
+                          },
+                       },
+                    },
+                 }
+               : {},
+         ],
+      };
+
+      const orderBy: Prisma.PostOrderByWithRelationInput =
+         filters?.sortBy === "oldest"
+            ? { createdAt: "asc" }
+            : filters?.sortBy === "popular"
+            ? { views: "desc" }
+            : { createdAt: "desc" };
 
       const [posts, total] = await Promise.all([
          prisma.post.findMany({
             skip,
             take: limit,
+            where,
+            orderBy,
             include: {
                author: true,
                comments: true,
                categories: true,
             },
-            orderBy: {
-               createdAt: "desc",
-            },
          }),
-         prisma.post.count(),
+         prisma.post.count({ where }),
       ]);
 
       return {
-         posts,
+         posts: posts as IPost[],
          total,
       };
    }

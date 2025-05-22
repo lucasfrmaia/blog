@@ -87,7 +87,7 @@ export default function Footer() {
                <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Categorias</h3>
                   <ul className="space-y-2">
-                     {categories?.map((category) => (
+                     {categories?.slice(0, 3)?.map((category) => (
                         <li key={`footer-${category.id}`}>
                            <Link
                               href={`/category/${category.id}`}

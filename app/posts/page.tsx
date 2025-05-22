@@ -30,7 +30,7 @@ export default function PostsPage({
    const [currentPage, setCurrentPage] = useState(page);
 
    // Queries
-   const { data: categoriesData } = useQuery<ICategory[]>({
+   let { data: categoriesData } = useQuery<ICategory[]>({
       queryKey: ["categories"],
       queryFn: async () => {
          const response = await fetch("/api/categories");
@@ -135,7 +135,6 @@ export default function PostsPage({
                   initialSearch={search}
                   initialCategories={categories}
                   initialSortBy={sortBy}
-                  categories={categoriesData}
                   onApplyFilters={handleApplyFilters}
                   onResetFilters={handleResetFilters}
                />

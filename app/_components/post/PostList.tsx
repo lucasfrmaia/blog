@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Ban, Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import PostListLoading from "../loadings/PostListLoading";
 import QueryError from "../errors/QueryError";
 import { useToast } from "../ui/use-toast";
@@ -25,21 +26,35 @@ import {
    AlertDialogTitle,
    AlertDialogTrigger,
 } from "../ui/alert-dialog";
-
-const PAGE_SIZE = 10;
+import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
+import PostFilters from "./PostFilters";
 
 export function PostList() {
-   const [page, setPage] = useState(1);
+   const router = useRouter();
+   const searchParams = useSearchParams();
    const { toast } = useToast();
    const queryClient = useQueryClient();
 
+   const page = Number(searchParams?.get("page")) || 1;
+   const search = searchParams?.get("search") || "";
+   const categories = searchParams?.get("categories")?.split(",") || [];
+   const sortBy = searchParams?.get("sortBy") || "recent";
+
    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ["posts"],
+      queryKey: ["posts", page, search, categories, sortBy],
       queryFn: async () => {
-         const response = await fetch("/api/posts");
+         const params = new URLSearchParams({
+            page: page.toString(),
+            limit: ITENS_PER_PAGE.toString(),
+            search,
+            categories: categories.join(","),
+            sortBy,
+         });
+
+         const response = await fetch(`/api/posts/page?${params}`);
 
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
+            throw new Error("Erro ao buscar posts");
          }
 
          return response.json();
@@ -86,6 +101,29 @@ export function PostList() {
       }
    };
 
+   const handleApplyFilters = (filters: {
+      search: string;
+      categories: string[];
+      sortBy: string;
+   }) => {
+      const params = new URLSearchParams(searchParams?.toString() || "");
+      params.set("page", "1");
+      params.set("search", filters.search);
+      params.set("categories", filters.categories.join(","));
+      params.set("sortBy", filters.sortBy);
+      router.push(`?${params.toString()}`);
+   };
+
+   const handleResetFilters = () => {
+      router.push("");
+   };
+
+   const handlePageChange = (newPage: number) => {
+      const params = new URLSearchParams(searchParams?.toString() || "");
+      params.set("page", newPage.toString());
+      router.push(`?${params.toString()}`);
+   };
+
    if (isLoading) return <PostListLoading />;
 
    if (error) return <QueryError onRetry={() => refetch()} />;
@@ -104,6 +142,7 @@ export function PostList() {
                      post?.categories?.map((category) => {
                         return (
                            <Badge
+                              key={category.id}
                               style={{ backgroundColor: category.color }}
                               className={`text-primary`}
                            >
@@ -134,38 +173,34 @@ export function PostList() {
          header: "Ações",
          accessorKey: (post: IPost) => (
             <div className="flex items-center gap-2">
-               <PostDialog post={post} mode="edit">
+               <PostDialog mode="edit" post={post}>
                   <Button variant="ghost" size="icon">
                      <Edit2 className="h-4 w-4" />
-                     <span className="sr-only">Editar post</span>
                   </Button>
                </PostDialog>
-
                <AlertDialog>
                   <AlertDialogTrigger asChild>
-                     <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-destructive hover:text-destructive"
-                     >
+                     <Button variant="ghost" size="icon">
                         <Trash2 className="h-4 w-4" />
                      </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                      <AlertDialogHeader>
-                        <AlertDialogTitle>Ecluir Post</AlertDialogTitle>
+                        <AlertDialogTitle>
+                           Tem certeza que deseja excluir este post?
+                        </AlertDialogTitle>
                         <AlertDialogDescription>
-                           Tem certeza que deseja ecluir o post {post.title}?
-                           Esta ação não pode ser desfeita.
+                           Esta ação não pode ser desfeita. Isso excluirá
+                           permanentemente o post e removerá os dados do
+                           servidor.
                         </AlertDialogDescription>
                      </AlertDialogHeader>
                      <AlertDialogFooter>
                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
                         <AlertDialogAction
                            onClick={() => handleDelete(post.id)}
-                           className="bg-destructive hover:bg-destructive/90"
                         >
-                           Excluir
+                           Continuar
                         </AlertDialogAction>
                      </AlertDialogFooter>
                   </AlertDialogContent>
@@ -176,15 +211,24 @@ export function PostList() {
    ];
 
    return (
-      <DataTable<IPost>
-         data={data || []}
-         columns={columns}
-         pagination={{
-            page,
-            pageSize: PAGE_SIZE,
-            total: data?.length || 0,
-         }}
-         onPageChange={setPage}
-      />
+      <div className="space-y-4">
+         <PostFilters
+            initialSearch={search}
+            initialCategories={categories}
+            initialSortBy={sortBy}
+            onApplyFilters={handleApplyFilters}
+            onResetFilters={handleResetFilters}
+         />
+         <DataTable<IPost>
+            data={data?.posts || []}
+            columns={columns}
+            pagination={{
+               page,
+               pageSize: ITENS_PER_PAGE,
+               total: data?.total || 0,
+            }}
+            onPageChange={handlePageChange}
+         />
+      </div>
    );
 }

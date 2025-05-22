@@ -1,5 +1,11 @@
 import { IPost, IPostCreate, IPostUpdate } from "../entities/Post";
 
+export interface IPostFilters {
+   search?: string;
+   categories?: string[];
+   sortBy?: string;
+}
+
 export interface IPostRepository {
    create(data: IPostCreate): Promise<void>;
    update(data: IPostUpdate): Promise<void>;
@@ -10,7 +16,8 @@ export interface IPostRepository {
    findPopular(limit?: number): Promise<IPost[]>;
    findPerPage(
       page: number,
-      limit: number
+      limit: number,
+      filters?: IPostFilters
    ): Promise<{ posts: IPost[]; total: number }>;
    getLastPost(): Promise<IPost | null>;
 }
