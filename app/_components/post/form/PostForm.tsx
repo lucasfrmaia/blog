@@ -2,12 +2,20 @@
 
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import {
+   IPost,
+   IPostCreate,
+} from "@/app/api/_services/modules/post/entities/Post";
 import { ICategory } from "@/app/api/_services/modules/category/entities/category";
 import { useSession } from "next-auth/react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
 import {
    Form,
    FormField,
@@ -32,7 +40,7 @@ const formSchema = z.object({
    title: z.string().min(1, "O título é obrigatório"),
    description: z.string().min(1, "A descrição é obrigatória"),
    content: z.string().min(1, "O conteúdo é obrigatório"),
-   coverImage: z.string().min(1, "A imagem de capa é obrigatória"),
+   img: z.string().min(1, "A imagem de capa é obrigatória"),
    categories: z.array(z.string()).min(1, "Selecione pelo menos uma categoria"),
 });
 
@@ -40,7 +48,7 @@ type FormValues = z.infer<typeof formSchema>;
 
 interface PostFormProps {
    defaultValues?: Partial<IPost>;
-   onSubmit: (formData: FormData) => Promise<void>;
+   onSubmit: (data: IPostCreate) => Promise<void>;
 }
 
 export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
@@ -64,25 +72,20 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
          title: defaultValues?.title ?? "",
          description: defaultValues?.description ?? "",
          content: defaultValues?.content ?? "",
-         coverImage: defaultValues?.img ?? "",
+         img: defaultValues?.img ?? "",
          categories: defaultValues?.categories?.map((cat) => cat.id) ?? [],
       },
    });
 
    const handleSubmit = async (data: FormValues) => {
-      const formData = new FormData();
-      formData.append("title", data.title);
-      formData.append("description", data.description);
-      formData.append("content", data.content);
-      formData.append("img", data.coverImage);
-      formData.append("authorId", user?.id as string);
+      if (!user?.id) return;
 
-      // Adiciona cada categoria como um campo separado
-      data.categories.forEach((categoryId) => {
-         formData.append("categories", categoryId);
-      });
+      const postData: IPostCreate = {
+         ...data,
+         authorId: user.id,
+      };
 
-      await onSubmit(formData);
+      await onSubmit(postData);
    };
 
    return (
@@ -126,7 +129,23 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                   <FormItem>
                      <FormLabel>Conteúdo</FormLabel>
                      <FormControl>
-                        <Textarea {...field} className="min-h-[200px]" />
+                        <div className="min-h-[200px]">
+                           <ReactQuill
+                              theme="snow"
+                              value={field.value}
+                              onChange={field.onChange}
+                              className="h-[150px]"
+                              modules={{
+                                 toolbar: [
+                                    [{ header: [1, 2, 3, false] }],
+                                    ["bold", "italic", "underline", "strike"],
+                                    [{ list: "ordered" }, { list: "bullet" }],
+                                    ["link", "image"],
+                                    ["clean"],
+                                 ],
+                              }}
+                           />
+                        </div>
                      </FormControl>
                      <FormMessage />
                   </FormItem>
@@ -135,7 +154,7 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
 
             <FormField
                control={form.control}
-               name="coverImage"
+               name="img"
                render={({ field }) => (
                   <FormItem>
                      <FormLabel>Imagem de Capa</FormLabel>

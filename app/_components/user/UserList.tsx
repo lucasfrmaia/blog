@@ -33,13 +33,13 @@ export function UserList() {
    const { toast } = useToast();
    const queryClient = useQueryClient();
 
-   const page = Number(searchParams?.get("page")) || 1;
+   const [currentPage, setCurrentPage] = useState(1);
 
    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ["users", page],
+      queryKey: ["users", currentPage],
       queryFn: async () => {
          const params = new URLSearchParams({
-            page: page.toString(),
+            page: currentPage.toString(),
             limit: ITENS_PER_PAGE.toString(),
          });
 
@@ -88,9 +88,7 @@ export function UserList() {
    };
 
    const handlePageChange = (newPage: number) => {
-      const params = new URLSearchParams(searchParams?.toString() || "");
-      params.set("page", newPage.toString());
-      router.push(`?${params.toString()}`);
+      setCurrentPage(newPage);
    };
 
    if (isLoading) return <UserListLoading />;
@@ -172,7 +170,7 @@ export function UserList() {
          data={data?.users || []}
          columns={columns}
          pagination={{
-            page,
+            page: currentPage,
             pageSize: ITENS_PER_PAGE,
             total: data?.total || 0,
          }}

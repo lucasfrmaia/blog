@@ -27,28 +27,19 @@ import {
    AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
-import PostFilters from "./PostFilters";
 
 export function PostList() {
-   const router = useRouter();
-   const searchParams = useSearchParams();
    const { toast } = useToast();
-   const queryClient = useQueryClient();
 
-   const page = Number(searchParams?.get("page")) || 1;
-   const search = searchParams?.get("search") || "";
-   const categories = searchParams?.get("categories")?.split(",") || [];
-   const sortBy = searchParams?.get("sortBy") || "recent";
+   const queryClient = useQueryClient();
+   const [currentPage, setCurrentPage] = useState(1);
 
    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ["posts", page, search, categories, sortBy],
+      queryKey: ["posts", currentPage],
       queryFn: async () => {
          const params = new URLSearchParams({
-            page: page.toString(),
+            page: currentPage.toString(),
             limit: ITENS_PER_PAGE.toString(),
-            search,
-            categories: categories.join(","),
-            sortBy,
          });
 
          const response = await fetch(`/api/posts/page?${params}`);
@@ -96,7 +87,9 @@ export function PostList() {
       refetch();
    };
 
-   const handlePageChange = (newPage: number) => {};
+   const handlePageChange = (newPage: number) => {
+      setCurrentPage(newPage);
+   };
 
    if (isLoading) return <PostListLoading />;
 
@@ -151,7 +144,7 @@ export function PostList() {
          header: "Ações",
          accessorKey: (post: IPost) => (
             <div className="flex items-center gap-2">
-               <PostDialog mode="edit" post={post}>
+               <PostDialog currentPage={currentPage} mode="edit" post={post}>
                   <Button variant="ghost" size="icon">
                      <Edit2 className="h-4 w-4" />
                   </Button>
@@ -159,7 +152,7 @@ export function PostList() {
                <AlertDialog>
                   <AlertDialogTrigger asChild>
                      <Button variant="ghost" size="icon">
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                      </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -194,7 +187,7 @@ export function PostList() {
             data={data?.posts || []}
             columns={columns}
             pagination={{
-               page,
+               page: currentPage,
                pageSize: ITENS_PER_PAGE,
                total: data?.total || 0,
             }}

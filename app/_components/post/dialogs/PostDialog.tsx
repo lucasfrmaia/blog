@@ -8,53 +8,43 @@ import {
    DialogTitle,
    DialogTrigger,
 } from "@/app/_components/ui/dialog";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import {
+   IPost,
+   IPostCreate,
+} from "@/app/api/_services/modules/post/entities/Post";
 import { useState } from "react";
 import { useToast } from "@/app/_components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import PostForm from "../form/PostForm";
+import { QueryObserverResult, useQueryClient } from "@tanstack/react-query";
 
 interface PostDialogProps {
    mode: "create" | "edit";
    post?: IPost;
    children?: React.ReactNode;
+   currentPage: number;
 }
 
-function formDataToObject(
-   formData: FormData
-): Record<string, string | string[]> {
-   const obj: Record<string, string | string[]> = {};
-
-   for (const [key, value] of formData.entries()) {
-      if (key in obj) {
-         const existing = obj[key];
-         if (Array.isArray(existing)) {
-            existing.push(value.toString());
-         } else {
-            obj[key] = [existing, value.toString()];
-         }
-      } else {
-         obj[key] = value.toString();
-      }
-   }
-
-   return obj;
-}
-
-export function PostDialog({ mode, post, children }: PostDialogProps) {
+export function PostDialog({
+   mode,
+   post,
+   children,
+   currentPage,
+}: PostDialogProps) {
+   const queryClient = useQueryClient();
    const [open, setOpen] = useState(false);
    const { toast } = useToast();
-   const router = useRouter();
 
-   const handleSubmit = async (formData: FormData) => {
-      const formDataObject = formDataToObject(formData);
-
+   const handleSubmit = async (data: IPostCreate) => {
       try {
          const response = await fetch(
             mode === "create" ? "/api/posts/create" : `/api/posts/${post?.id}`,
             {
                method: mode === "create" ? "POST" : "PATCH",
-               body: JSON.stringify(formDataObject),
+               headers: {
+                  "Content-Type": "application/json",
+               },
+               body: JSON.stringify(data),
             }
          );
 
@@ -70,8 +60,9 @@ export function PostDialog({ mode, post, children }: PostDialogProps) {
             } com sucesso!`,
          });
 
+         queryClient.refetchQueries({ queryKey: ["posts", currentPage] });
+
          setOpen(false);
-         router.refresh();
       } catch (error) {
          toast({
             title: "Erro",

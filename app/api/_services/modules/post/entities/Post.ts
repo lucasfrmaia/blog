@@ -7,13 +7,12 @@ export interface IPost {
    title: string;
    description: string;
    content: string;
+   img: string;
+   views: number;
    createdAt: Date;
    updatedAt: Date;
    authorId: string;
-   views: number;
-   img?: string;
    author?: IUser;
-   comments?: IComment[];
    categories?: ICategory[];
 }
 
@@ -21,8 +20,8 @@ export interface IPostCreate {
    title: string;
    description: string;
    content: string;
-   authorId: string;
    img: string;
+   authorId: string;
    categories: string[];
 }
 

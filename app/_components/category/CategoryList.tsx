@@ -33,13 +33,13 @@ export default function CategoryList() {
    const { toast } = useToast();
    const queryClient = useQueryClient();
 
-   const page = Number(searchParams?.get("page")) || 1;
+   const [currentPage, setCurrentPage] = useState(1);
 
    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ["categories", page],
+      queryKey: ["categories", currentPage],
       queryFn: async () => {
          const params = new URLSearchParams({
-            page: page.toString(),
+            page: currentPage.toString(),
             limit: ITENS_PER_PAGE.toString(),
          });
 
@@ -90,9 +90,7 @@ export default function CategoryList() {
    };
 
    const handlePageChange = (newPage: number) => {
-      const params = new URLSearchParams(searchParams?.toString() || "");
-      params.set("page", newPage.toString());
-      router.push(`?${params.toString()}`);
+      setCurrentPage(newPage);
    };
 
    if (isLoading) return <CategoryListLoading />;
@@ -177,7 +175,7 @@ export default function CategoryList() {
          data={data?.categories || []}
          columns={columns}
          pagination={{
-            page,
+            page: currentPage,
             pageSize: ITENS_PER_PAGE,
             total: data?.total || 0,
          }}
