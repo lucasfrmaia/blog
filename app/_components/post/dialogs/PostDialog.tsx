@@ -59,9 +59,8 @@ export function PostDialog({ mode, post, children }: PostDialogProps) {
          );
 
          if (!response.ok) {
-            const errorData = await response.json();
-
-            throw new Error("Erro ao salvar Post: " + errorData.error);
+            const error = await response.json();
+            throw new Error(error?.message || "Erro Desconhecido");
          }
 
          toast({

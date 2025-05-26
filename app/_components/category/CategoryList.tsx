@@ -46,7 +46,8 @@ export default function CategoryList() {
          const response = await fetch(`/api/categories/page?${params}`);
 
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
+            const error = await response.json();
+            throw new Error(error?.message || "Erro Desconhecido");
          }
 
          return response.json();
@@ -60,7 +61,8 @@ export default function CategoryList() {
          });
 
          if (!response.ok) {
-            throw new Error("Erro ao deletar categoria");
+            const error = await response.json();
+            throw new Error(error?.message || "Erro Desconhecido");
          }
          return response.json();
       },
@@ -71,26 +73,20 @@ export default function CategoryList() {
          });
          queryClient.invalidateQueries({ queryKey: ["categories"] });
       },
-      onError: () => {
+      onError: (error) => {
          toast({
             title: "Erro ao excluir categoria",
-            description: "Ocorreu um erro ao tentar excluir a categoria.",
+            description:
+               "Ocorreu um erro ao tentar excluir a categoria: " +
+               error.message,
             variant: "destructive",
          });
       },
    });
 
    const handleDelete = async (id: string) => {
-      try {
-         await deleteCategory(id);
-         refetch();
-      } catch (error) {
-         toast({
-            title: "Erro ao excluir",
-            description: "Ocorreu um erro ao tentar excluir a categoria.",
-            variant: "destructive",
-         });
-      }
+      deleteCategory(id);
+      refetch();
    };
 
    const handlePageChange = (newPage: number) => {
@@ -104,6 +100,10 @@ export default function CategoryList() {
    if (error) return <QueryError onRetry={() => refetch()} />;
 
    const columns: Column<ICategory>[] = [
+      {
+         header: "ID",
+         accessorKey: (category: ICategory) => category.id,
+      },
       {
          header: "Nome",
          accessorKey: (category: ICategory) => category.name,
@@ -143,7 +143,7 @@ export default function CategoryList() {
                <AlertDialog>
                   <AlertDialogTrigger asChild>
                      <Button variant="ghost" size="icon">
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                      </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>

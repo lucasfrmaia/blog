@@ -55,12 +55,13 @@ export function UserList() {
 
    const { mutate: deleteUser } = useMutation({
       mutationFn: async (id: string) => {
-         const response = await fetch(`/api/users/${id}`, {
+         const response = await fetch(`/api/users?id=${id}`, {
             method: "DELETE",
          });
 
          if (!response.ok) {
-            throw new Error("Erro ao deletar usuário");
+            const error = await response.json();
+            throw new Error(error.message || "Erro Desconhecido");
          }
          return response.json();
       },
@@ -71,26 +72,19 @@ export function UserList() {
          });
          queryClient.invalidateQueries({ queryKey: ["users"] });
       },
-      onError: () => {
+      onError: (error) => {
          toast({
             title: "Erro ao excluir usuário",
-            description: "Ocorreu um erro ao tentar excluir o usuário.",
+            description:
+               "Ocorreu um erro ao tentar excluir o usuário: " + error.message,
             variant: "destructive",
          });
       },
    });
 
    const handleDelete = async (id: string) => {
-      try {
-         await deleteUser(id);
-         refetch();
-      } catch (error) {
-         toast({
-            title: "Erro ao excluir",
-            description: "Ocorreu um erro ao tentar excluir o usuário.",
-            variant: "destructive",
-         });
-      }
+      deleteUser(id);
+      refetch();
    };
 
    const handlePageChange = (newPage: number) => {
@@ -104,6 +98,10 @@ export function UserList() {
    if (error) return <QueryError onRetry={() => refetch()} />;
 
    const columns: Column<IUser>[] = [
+      {
+         header: "ID",
+         accessorKey: (user: IUser) => user.id,
+      },
       {
          header: "Nome",
          accessorKey: (user: IUser) => user.name,
@@ -140,7 +138,7 @@ export function UserList() {
                <AlertDialog>
                   <AlertDialogTrigger asChild>
                      <Button variant="ghost" size="icon">
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                      </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>

@@ -54,7 +54,8 @@ export function PostList() {
          const response = await fetch(`/api/posts/page?${params}`);
 
          if (!response.ok) {
-            throw new Error("Erro ao buscar posts");
+            const error = await response.json();
+            throw new Error(error?.message || "Erro Desconhecido");
          }
 
          return response.json();
@@ -68,7 +69,8 @@ export function PostList() {
          });
 
          if (!response.ok) {
-            throw new Error("Erro deletar o post");
+            const error = await response.json();
+            throw new Error(error?.message || "Erro Desconhecido");
          }
          return response.json();
       },
@@ -79,56 +81,32 @@ export function PostList() {
          });
          queryClient.invalidateQueries({ queryKey: ["posts"] });
       },
-      onError: () => {
+      onError: (error) => {
          toast({
             title: "Erro ao excluir post",
-            description: "Ocorreu um erro ao tentar excluir o post.",
+            description:
+               "Ocorreu um erro ao tentar excluir o post: " + error.message,
             variant: "destructive",
          });
       },
    });
 
    const handleDelete = async (id: string) => {
-      try {
-         await deletePost(id);
-         refetch();
-      } catch (error) {
-         toast({
-            title: "Erro ao excluir",
-            description: "Ocorreu um erro ao tentar excluir o post.",
-            variant: "destructive",
-         });
-      }
+      deletePost(id);
+      refetch();
    };
 
-   const handleApplyFilters = (filters: {
-      search: string;
-      categories: string[];
-      sortBy: string;
-   }) => {
-      const params = new URLSearchParams(searchParams?.toString() || "");
-      params.set("page", "1");
-      params.set("search", filters.search);
-      params.set("categories", filters.categories.join(","));
-      params.set("sortBy", filters.sortBy);
-      router.push(`?${params.toString()}`);
-   };
-
-   const handleResetFilters = () => {
-      router.push("");
-   };
-
-   const handlePageChange = (newPage: number) => {
-      const params = new URLSearchParams(searchParams?.toString() || "");
-      params.set("page", newPage.toString());
-      router.push(`?${params.toString()}`);
-   };
+   const handlePageChange = (newPage: number) => {};
 
    if (isLoading) return <PostListLoading />;
 
    if (error) return <QueryError onRetry={() => refetch()} />;
 
    const columns: Column<IPost>[] = [
+      {
+         header: "ID",
+         accessorKey: (post: IPost) => post.id,
+      },
       {
          header: "Título",
          accessorKey: (post: IPost) => post.title,
@@ -212,13 +190,6 @@ export function PostList() {
 
    return (
       <div className="space-y-4">
-         <PostFilters
-            initialSearch={search}
-            initialCategories={categories}
-            initialSortBy={sortBy}
-            onApplyFilters={handleApplyFilters}
-            onResetFilters={handleResetFilters}
-         />
          <DataTable<IPost>
             data={data?.posts || []}
             columns={columns}

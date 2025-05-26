@@ -1,4 +1,4 @@
-import { Post } from "@prisma/client";
+import { IPost } from "../../post/entities/Post";
 
 export interface ICategory {
    id: string;
@@ -7,7 +7,7 @@ export interface ICategory {
    description: string;
    createdAt: Date;
    updatedAt: Date;
-   posts?: Post[];
+   posts?: IPost[];
 }
 
 export interface ICategoryCreate {
