@@ -39,18 +39,16 @@ type FormProps = z.infer<typeof schema>;
 export default function FormLogin({ children, className }: IPropFormLogin) {
    const router = useRouter();
    const { toast } = useToast();
-   const [isSubmitting, setIsSubmitting] = useState(false);
    const [showPassword, setShowPassword] = useState(false);
 
    const {
       register,
       handleSubmit,
-      formState: { errors, isSubmitting: formIsSubmitting },
+      formState: { errors, isSubmitting },
    } = useForm<FormProps>({ resolver: zodResolver(schema) });
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
       try {
-         setIsSubmitting(true);
          const response = await signIn("credentials", {
             email: data.email,
             password: data.password,
@@ -78,8 +76,6 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
             description: "Ocorreu um erro inesperado",
             variant: "destructive",
          });
-      } finally {
-         setIsSubmitting(false);
       }
    };
 

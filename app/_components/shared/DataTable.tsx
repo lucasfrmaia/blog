@@ -90,7 +90,10 @@ export function DataTable<T>({
                {data.map((item, rowIndex) => (
                   <TableRow key={rowIndex}>
                      {columns.map((column, colIndex) => (
-                        <TableCell key={colIndex} className={column.className}>
+                        <TableCell
+                           key={colIndex + column.header}
+                           className={`${column.className}`}
+                        >
                            {column.accessorKey(item)}
                         </TableCell>
                      ))}

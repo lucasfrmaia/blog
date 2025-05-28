@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
@@ -10,11 +11,24 @@ import BaseLayout from "../_components/layout/BaseLayout";
 import { LoadingPosts } from "../_components/loadings/posts/LoadingPosts";
 import PostFilters from "../_components/post/PostFilters";
 import PostGrid from "../_components/post/PostGrid";
-import Pagination from "../_components/shared/Pagination";
 import { ICategory } from "@/app/api/_services/modules/category/entities/category";
 import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
+import {
+   Pagination,
+   PaginationContent,
+   PaginationEllipsis,
+   PaginationItem,
+   PaginationLink,
+   PaginationNext,
+   PaginationPrevious,
+} from "@/app/_components/ui/pagination";
+import { Button } from "@/app/_components/ui/button";
 
-const ITEMS_PER_PAGE = 9;
+interface PostsResponse {
+   posts: IPost[];
+   total: number;
+}
 
 export default function PostsPage({
    searchParams,
@@ -24,13 +38,12 @@ export default function PostsPage({
    const router = useRouter();
    const page = Number(searchParams?.page) || 1;
    const search = (searchParams?.search as string) || "";
-   const categories = (searchParams?.categories as string)?.split(",") || [];
+   const categories =
+      (searchParams?.categories as string)?.split(",").filter(Boolean) || [];
    const sortBy = (searchParams?.sortBy as string) || "recent";
 
-   const [currentPage, setCurrentPage] = useState(page);
-
    // Queries
-   let { data: categoriesData } = useQuery<ICategory[]>({
+   const { data: categoriesData } = useQuery<ICategory[]>({
       queryKey: ["categories"],
       queryFn: async () => {
          const response = await fetch("/api/categories");
@@ -42,14 +55,22 @@ export default function PostsPage({
    });
 
    const {
-      data: posts,
+      data: postsData,
       isLoading,
       error,
       refetch,
-   } = useQuery<IPost[]>({
-      queryKey: ["posts"],
+   } = useQuery<PostsResponse>({
+      queryKey: ["posts", page, search, categories, sortBy],
       queryFn: async () => {
-         const response = await fetch("/api/posts");
+         const params = new URLSearchParams({
+            page: String(page),
+            limit: String(ITENS_PER_PAGE),
+            ...(search && { search }),
+            ...(categories.length > 0 && { categories: categories.join(",") }),
+            ...(sortBy && { sortBy }),
+         });
+
+         const response = await fetch(`/api/posts/page?${params}`);
          if (!response.ok) {
             throw new Error("Erro ao buscar posts");
          }
@@ -57,11 +78,7 @@ export default function PostsPage({
       },
    });
 
-   // Calcular posts paginados
-   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-   const endIndex = startIndex + ITEMS_PER_PAGE;
-   const paginatedPosts = posts?.slice(startIndex, endIndex) || [];
-   const totalPages = Math.ceil((posts?.length || 0) / ITEMS_PER_PAGE);
+   const totalPages = Math.ceil((postsData?.total || 0) / ITENS_PER_PAGE);
 
    // Handlers
    const updateURL = useCallback(
@@ -104,8 +121,10 @@ export default function PostsPage({
       router.push("/posts");
    };
 
-   const handlePageChange = (newPage: number) => {
-      updateURL({ page: String(newPage) });
+   const getPageUrl = (pageNumber: number) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("page", String(pageNumber));
+      return `/posts?${params.toString()}`;
    };
 
    if (isLoading) {
@@ -139,17 +158,91 @@ export default function PostsPage({
                   onResetFilters={handleResetFilters}
                />
 
-               <div className="mt-8">
-                  {paginatedPosts?.length ? (
+               <div className="mt-10">
+                  {postsData?.posts?.length ? (
                      <>
-                        <PostGrid posts={paginatedPosts} />
+                        <PostGrid posts={postsData.posts} />
                         {totalPages > 1 && (
                            <div className="mt-8 flex justify-center">
-                              <Pagination
-                                 currentPage={currentPage}
-                                 totalPages={totalPages}
-                                 onPageChange={handlePageChange}
-                              />
+                              <Pagination>
+                                 <PaginationContent>
+                                    <PaginationItem>
+                                       <Link
+                                          href={getPageUrl(
+                                             Math.max(1, page - 1)
+                                          )}
+                                       >
+                                          <Button
+                                             variant="outline"
+                                             disabled={page === 1}
+                                          >
+                                             <PaginationPrevious />
+                                          </Button>
+                                       </Link>
+                                    </PaginationItem>
+
+                                    {Array.from(
+                                       { length: totalPages },
+                                       (_, i) => i + 1
+                                    ).map((pageNumber) => {
+                                       // Mostrar primeira página, última página, página atual e uma página antes e depois da atual
+                                       if (
+                                          pageNumber === 1 ||
+                                          pageNumber === totalPages ||
+                                          (pageNumber >= page - 1 &&
+                                             pageNumber <= page + 1)
+                                       ) {
+                                          return (
+                                             <PaginationItem key={pageNumber}>
+                                                <Link
+                                                   href={getPageUrl(pageNumber)}
+                                                >
+                                                   <Button
+                                                      variant={
+                                                         pageNumber === page
+                                                            ? "default"
+                                                            : "outline"
+                                                      }
+                                                   >
+                                                      {pageNumber}
+                                                   </Button>
+                                                </Link>
+                                             </PaginationItem>
+                                          );
+                                       }
+
+                                       // Mostrar reticências depois da primeira página e antes da última
+                                       if (
+                                          (pageNumber === 2 && page > 3) ||
+                                          (pageNumber === totalPages - 1 &&
+                                             page < totalPages - 2)
+                                       ) {
+                                          return (
+                                             <PaginationItem key={pageNumber}>
+                                                <PaginationEllipsis />
+                                             </PaginationItem>
+                                          );
+                                       }
+
+                                       return null;
+                                    })}
+
+                                    <PaginationItem>
+                                       <Link
+                                          href={getPageUrl(
+                                             Math.min(totalPages, page + 1)
+                                          )}
+                                       >
+                                          <Button
+                                             variant="outline"
+                                             disabled={page >= totalPages}
+                                          >
+                                             <PaginationNext />
+                                          </Button>
+                                       </Link>
+                                    </PaginationItem>
+                                 </PaginationContent>
+                              </Pagination>
                            </div>
                         )}
                      </>

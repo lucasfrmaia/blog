@@ -126,26 +126,24 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                control={form.control}
                name="content"
                render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-[550px]">
                      <FormLabel>Conteúdo</FormLabel>
                      <FormControl>
-                        <div className="min-h-[200px]">
-                           <ReactQuill
-                              theme="snow"
-                              value={field.value}
-                              onChange={field.onChange}
-                              className="h-[150px]"
-                              modules={{
-                                 toolbar: [
-                                    [{ header: [1, 2, 3, false] }],
-                                    ["bold", "italic", "underline", "strike"],
-                                    [{ list: "ordered" }, { list: "bullet" }],
-                                    ["link", "image"],
-                                    ["clean"],
-                                 ],
-                              }}
-                           />
-                        </div>
+                        <ReactQuill
+                           theme="snow"
+                           value={field.value}
+                           onChange={field.onChange}
+                           className="h-[450px]"
+                           modules={{
+                              toolbar: [
+                                 [{ header: [1, 2, 3, false] }],
+                                 ["bold", "italic", "underline", "strike"],
+                                 [{ list: "ordered" }, { list: "bullet" }],
+                                 ["link", "image"],
+                                 ["clean"],
+                              ],
+                           }}
+                        />
                      </FormControl>
                      <FormMessage />
                   </FormItem>

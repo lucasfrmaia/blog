@@ -133,7 +133,11 @@ export default function CategoryList() {
          header: "Ações",
          accessorKey: (category: ICategory) => (
             <div className="flex items-center gap-2">
-               <CategoryDialog mode="edit" category={category}>
+               <CategoryDialog
+                  currentPage={currentPage}
+                  mode="edit"
+                  category={category}
+               >
                   <Button variant="ghost" size="icon">
                      <Edit2 className="h-4 w-4" />
                   </Button>

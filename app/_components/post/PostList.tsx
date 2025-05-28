@@ -28,11 +28,14 @@ import {
 } from "../ui/alert-dialog";
 import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
 
-export function PostList() {
-   const { toast } = useToast();
+interface IPostList {
+   currentPage: number;
+   setCurrentPage: (number: number) => void;
+}
 
+export function PostList({ currentPage, setCurrentPage }: IPostList) {
+   const { toast } = useToast();
    const queryClient = useQueryClient();
-   const [currentPage, setCurrentPage] = useState(1);
 
    const { data, isLoading, error, refetch } = useQuery({
       queryKey: ["posts", currentPage],
@@ -70,7 +73,7 @@ export function PostList() {
             title: "Post excluído com sucesso!",
             description: "O post foi removido do sistema.",
          });
-         queryClient.invalidateQueries({ queryKey: ["posts"] });
+         refetch();
       },
       onError: (error) => {
          toast({
@@ -84,7 +87,6 @@ export function PostList() {
 
    const handleDelete = async (id: string) => {
       deletePost(id);
-      refetch();
    };
 
    const handlePageChange = (newPage: number) => {
@@ -108,7 +110,7 @@ export function PostList() {
          header: "Categoria",
          accessorKey: (post: IPost) => {
             return (
-               <div className="flex gap-x-2 text-primary">
+               <div className="flex flex-wrap w-56 gap-2 text-primary">
                   {post.categories?.length !== 0 ? (
                      post?.categories?.map((category) => {
                         return (

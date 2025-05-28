@@ -22,7 +22,7 @@ interface PostDialogProps {
    mode: "create" | "edit";
    post?: IPost;
    children?: React.ReactNode;
-   currentPage: number;
+   currentPage?: number;
 }
 
 export function PostDialog({
@@ -53,14 +53,15 @@ export function PostDialog({
             throw new Error(error?.message || "Erro Desconhecido");
          }
 
+         queryClient.refetchQueries({ queryKey: ["posts", currentPage] });
+         queryClient.refetchQueries({ queryKey: ["posts"] });
+
          toast({
             title: mode === "create" ? "Post criado" : "Post atualizado",
             description: `O post foi ${
                mode === "create" ? "criado" : "atualizado"
             } com sucesso!`,
          });
-
-         queryClient.refetchQueries({ queryKey: ["posts", currentPage] });
 
          setOpen(false);
       } catch (error) {
@@ -83,16 +84,14 @@ export function PostDialog({
                </Button>
             )}
          </DialogTrigger>
-         <DialogContent className="max-w-4xl max-h-[90vh]">
+         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
                <DialogTitle>
                   {mode === "create" ? "Criar Novo Post" : "Editar Post"}
                </DialogTitle>
             </DialogHeader>
 
-            <div className="overflow-y-auto">
-               <PostForm defaultValues={post} onSubmit={handleSubmit} />
-            </div>
+            <PostForm defaultValues={post} onSubmit={handleSubmit} />
          </DialogContent>
       </Dialog>
    );

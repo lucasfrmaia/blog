@@ -58,7 +58,7 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json({ message: "Post excluído com sucesso" });
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao excluir post" },
+         { error: "Erro ao excluir post: " + (error as Error).message },
          { status: 500 }
       );
    }

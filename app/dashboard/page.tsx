@@ -27,8 +27,11 @@ import Link from "next/link";
 import CategoryList from "../_components/category/CategoryList";
 import { CategoryDialog } from "../_components/category/dialogs/CategoryDialog";
 import { PostDialog } from "../_components/post/dialogs/PostDialog";
+import { useState } from "react";
 
 export default function DashboardPage() {
+   const [currentPagePost, setCurrentPagePost] = useState(1);
+
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
       queryKey: ["posts"],
       queryFn: async () => {
@@ -47,6 +50,13 @@ export default function DashboardPage() {
          (acc: number, post: any) => acc + (post.comments?.length || 0),
          0
       ) || 0;
+   const engagement =
+      posts && posts.length > 0
+         ? `${(
+              ((totalViews + totalComments) / (posts.length * 100)) *
+              100
+           ).toFixed(1)}%`
+         : "0%";
 
    return (
       <BaseLayout>
@@ -110,15 +120,7 @@ export default function DashboardPage() {
                      <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                     <div className="text-2xl font-bold">
-                        {posts && posts.length > 0
-                           ? `${(
-                                ((totalViews + totalComments) /
-                                   (posts.length * 100)) *
-                                100
-                             ).toFixed(1)}%`
-                           : "0%"}
-                     </div>
+                     <div className="text-2xl font-bold">{engagement}</div>
                      <p className="text-xs text-muted-foreground">
                         Média por post
                      </p>
@@ -141,7 +143,7 @@ export default function DashboardPage() {
                            Gerencie os posts do blog
                         </CardDescription>
                      </div>
-                     <PostDialog mode="create">
+                     <PostDialog currentPage={currentPagePost} mode="create">
                         <Button>
                            <Plus className="mr-2 h-4 w-4" />
                            Novo Post
@@ -149,7 +151,10 @@ export default function DashboardPage() {
                      </PostDialog>
                   </CardHeader>
                   <CardContent>
-                     <PostList />
+                     <PostList
+                        currentPage={currentPagePost}
+                        setCurrentPage={setCurrentPagePost}
+                     />
                   </CardContent>
                </Card>
             </motion.div>

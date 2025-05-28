@@ -29,7 +29,7 @@ export function CommentForm({
 
    const onSubmit = async (data: { content: string }) => {
       try {
-         const response = await fetch("/api/comments", {
+         const response = await fetch("/api/comments/create", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
@@ -42,7 +42,8 @@ export function CommentForm({
          });
 
          if (!response.ok) {
-            throw new Error("Erro ao criar comentário");
+            const error = await response.json();
+            throw new Error(error?.message || "Erro Desconhecido");
          }
 
          reset();
@@ -54,7 +55,9 @@ export function CommentForm({
       } catch (error) {
          toast({
             title: "Erro ao comentar",
-            description: "Ocorreu um erro ao tentar publicar seu comentário.",
+            description:
+               "Ocorreu um erro ao tentar publicar seu comentário: " +
+               (error as Error).message,
             variant: "destructive",
          });
       }

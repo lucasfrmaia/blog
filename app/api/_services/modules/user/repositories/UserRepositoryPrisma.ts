@@ -68,7 +68,7 @@ export class UserRepositoryPrisma implements IUserRepository {
 
    async authenticate(email: string, password: string): Promise<IUser> {
       const user = await prisma.user.findUnique({
-         where: { email },
+         where: { email: email },
          include: { role: true },
       });
 
