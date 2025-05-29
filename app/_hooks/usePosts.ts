@@ -51,26 +51,47 @@ export function usePosts({
       },
    });
 
-   const updateURL = useCallback(
-      (params: Record<string, string | string[]>) => {
-         const newParams = new URLSearchParams(searchParams.toString());
+   const buildSearchParams = (
+      currentParams: { [key: string]: string | string[] | undefined },
+      overrides: Record<string, string | string[]>
+   ): URLSearchParams => {
+      const newParams = new URLSearchParams();
 
-         Object.entries(params).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-               if (value.length > 0) {
-                  newParams.set(key, value.join(","));
-               } else {
-                  newParams.delete(key);
-               }
-            } else if (value) {
-               newParams.set(key, value);
+      // Adiciona todos os valores atuais
+      Object.entries(currentParams).forEach(([key, value]) => {
+         if (Array.isArray(value)) {
+            if (value.length > 0) {
+               newParams.set(key, value.join(","));
+            }
+         } else if (value !== undefined) {
+            newParams.set(key, value);
+         }
+      });
+
+      // Aplica substituições
+      Object.entries(overrides).forEach(([key, value]) => {
+         if (Array.isArray(value)) {
+            if (value.length > 0) {
+               newParams.set(key, value.join(","));
             } else {
                newParams.delete(key);
             }
-         });
+         } else if (value) {
+            newParams.set(key, value);
+         } else {
+            newParams.delete(key);
+         }
+      });
 
-         // Manter os filtros ao mudar de página
-         if (!Object.keys(params).includes("page")) {
+      return newParams;
+   };
+
+   const updateURL = useCallback(
+      (params: Record<string, string | string[]>) => {
+         const newParams = buildSearchParams(searchParams, params);
+
+         // Se não estiver atualizando "page", resetar para 1
+         if (!("page" in params)) {
             newParams.set("page", "1");
          }
 
@@ -78,6 +99,13 @@ export function usePosts({
       },
       [router, searchParams]
    );
+
+   const getPageUrl = (pageNumber: number) => {
+      const newParams = buildSearchParams(searchParams, {
+         page: String(pageNumber),
+      });
+      return `/posts?${newParams.toString()}`;
+   };
 
    const handleApplyFilters = (filters: {
       search: string;
@@ -89,12 +117,6 @@ export function usePosts({
 
    const handleResetFilters = () => {
       router.push("/posts");
-   };
-
-   const getPageUrl = (pageNumber: number) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("page", String(pageNumber));
-      return `/posts?${params.toString()}`;
    };
 
    return {

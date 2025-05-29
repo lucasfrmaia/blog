@@ -39,7 +39,7 @@ export default function PostFilters({
       useState<string[]>(initialCategories);
    const [sortBy, setSortBy] = useState(initialSortBy);
 
-   const { data: categories } = useQuery<ICategory[]>({
+   const { data: categories, isLoading } = useQuery<ICategory[]>({
       queryKey: ["categories"],
       queryFn: async () => {
          const response = await fetch("/api/categories");
@@ -91,13 +91,14 @@ export default function PostFilters({
          <div className="flex flex-wrap gap-4">
             <div className="flex-1">
                <Input
+                  disabled={isLoading}
                   placeholder="Pesquisar posts..."
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                />
             </div>
             <Select value={sortBy} onValueChange={setSortBy}>
-               <SelectTrigger className="w-[180px]">
+               <SelectTrigger disabled={isLoading} className="w-[180px]">
                   <SelectValue placeholder="Ordenar por" />
                </SelectTrigger>
                <SelectContent>
