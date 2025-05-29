@@ -24,7 +24,7 @@ import {
    AlertDialogTitle,
    AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
+import { ITENS_PER_PAGE_TABLE } from "@/utils/constantes/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CategoryBadge } from "./CategoryBadge";
 
@@ -41,7 +41,7 @@ export default function CategoryList() {
       queryFn: async () => {
          const params = new URLSearchParams({
             page: currentPage.toString(),
-            limit: ITENS_PER_PAGE.toString(),
+            limit: ITENS_PER_PAGE_TABLE.toString(),
          });
 
          const response = await fetch(`/api/categories/page?${params}`);
@@ -175,7 +175,7 @@ export default function CategoryList() {
          columns={columns}
          pagination={{
             page: currentPage,
-            pageSize: ITENS_PER_PAGE,
+            pageSize: ITENS_PER_PAGE_TABLE,
             total: data?.total || 0,
          }}
          onPageChange={handlePageChange}

@@ -30,6 +30,7 @@ export default function PostGrid({ posts }: PostGridProps) {
                   categories={post.categories}
                   views={post.views}
                   commentsCount={post?.comments?.length || 0}
+                  publishedAt={post.createdAt}
                />
             </motion.div>
          ))}

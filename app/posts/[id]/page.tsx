@@ -3,7 +3,7 @@
 import { CategoryBadge } from "@/app/_components/category/CategoryBadge";
 import CommentSection from "@/app/_components/comment/CommentSection";
 import BaseLayout from "@/app/_components/layout/BaseLayout";
-import { LoadingOnePost } from "@/app/_components/loadings/posts/LoadingOnePost";
+import { LoadingOnePostSkeleton } from "@/app/_components/loadings/posts/LoadingOnePost";
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
@@ -25,12 +25,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
       },
    });
 
-   if (!post) {
-      return null;
+   if (isLoading) {
+      return <LoadingOnePostSkeleton />;
    }
 
-   if (isLoading) {
-      return <LoadingOnePost />;
+   if (!post) {
+      return <p>Post Não Encontrado</p>;
    }
 
    return (

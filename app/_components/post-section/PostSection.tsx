@@ -16,22 +16,9 @@ export default function PostSection() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery<IPost[]>({
       queryKey: ["posts"],
       queryFn: async () => {
-         const response = await fetch("/api/posts");
+         const response = await fetch("/api/posts/popular");
          if (!response.ok) {
             throw new Error("Erro ao buscar posts");
-         }
-         return response.json();
-      },
-   });
-
-   const { data: comments, isLoading: isLoadingComments } = useQuery<
-      IComment[]
-   >({
-      queryKey: ["comments"],
-      queryFn: async () => {
-         const response = await fetch("/api/comments");
-         if (!response.ok) {
-            throw new Error("Erro ao buscar comentários");
          }
          return response.json();
       },
@@ -57,10 +44,6 @@ export default function PostSection() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                {posts?.map((post, index) => {
-                  const postComments = comments?.filter(
-                     (comment) => comment.postId === post.id
-                  );
-
                   return (
                      <motion.div
                         key={post.id}
@@ -79,9 +62,10 @@ export default function PostSection() {
                            readTime={`${Math.ceil(
                               post.description.length / 1000
                            )} min de leitura`}
-                           category={"Geral"}
+                           categories={post.categories}
+                           publishedAt={post.createdAt}
                            views={post.views}
-                           commentsCount={postComments?.length || 0}
+                           commentsCount={post.comments?.length || 0}
                         />
                      </motion.div>
                   );

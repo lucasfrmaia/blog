@@ -24,7 +24,7 @@ import {
    AlertDialogTitle,
    AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
+import { ITENS_PER_PAGE_TABLE } from "@/utils/constantes/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export function UserList() {
@@ -40,7 +40,7 @@ export function UserList() {
       queryFn: async () => {
          const params = new URLSearchParams({
             page: currentPage.toString(),
-            limit: ITENS_PER_PAGE.toString(),
+            limit: ITENS_PER_PAGE_TABLE.toString(),
          });
 
          const response = await fetch(`/api/users/page?${params}`);
@@ -128,7 +128,7 @@ export function UserList() {
          header: "Ações",
          accessorKey: (user: IUser) => (
             <div className="flex items-center gap-2">
-               <UserDialog mode="edit" user={user}>
+               <UserDialog user={user}>
                   <Button variant="ghost" size="icon">
                      <Edit2 className="h-4 w-4" />
                   </Button>
@@ -171,7 +171,7 @@ export function UserList() {
          columns={columns}
          pagination={{
             page: currentPage,
-            pageSize: ITENS_PER_PAGE,
+            pageSize: ITENS_PER_PAGE_TABLE,
             total: data?.total || 0,
          }}
          onPageChange={handlePageChange}

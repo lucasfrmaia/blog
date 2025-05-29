@@ -7,7 +7,6 @@ import { ptBR } from "date-fns/locale";
 import { Ban, Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import PostListLoading from "../loadings/PostListLoading";
 import QueryError from "../errors/QueryError";
 import { useToast } from "../ui/use-toast";
 import { IPost } from "@/app/api/_services/modules/post/entities/Post";
@@ -26,8 +25,9 @@ import {
    AlertDialogTitle,
    AlertDialogTrigger,
 } from "../ui/alert-dialog";
-import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
+import { ITENS_PER_PAGE_TABLE } from "@/utils/constantes/constants";
 import { CategoryBadge } from "../category/CategoryBadge";
+import { LoadingDataTable } from "../loadings/PostListLoading";
 
 interface IPostList {
    currentPage: number;
@@ -41,9 +41,10 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
    const { data, isLoading, error, refetch } = useQuery({
       queryKey: ["posts", currentPage],
       queryFn: async () => {
+         await new Promise((resolve) => setTimeout(resolve, 0.1 * 1000));
          const params = new URLSearchParams({
             page: currentPage.toString(),
-            limit: ITENS_PER_PAGE.toString(),
+            limit: ITENS_PER_PAGE_TABLE.toString(),
          });
 
          const response = await fetch(`/api/posts/page?${params}`);
@@ -94,7 +95,7 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
       setCurrentPage(newPage);
    };
 
-   if (isLoading) return <PostListLoading />;
+   if (isLoading) return <LoadingDataTable />;
 
    if (error) return <QueryError onRetry={() => refetch()} />;
 
@@ -183,7 +184,7 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
             columns={columns}
             pagination={{
                page: currentPage,
-               pageSize: ITENS_PER_PAGE,
+               pageSize: ITENS_PER_PAGE_TABLE,
                total: data?.total || 0,
             }}
             onPageChange={handlePageChange}

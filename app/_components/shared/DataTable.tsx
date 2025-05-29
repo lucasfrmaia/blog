@@ -43,35 +43,35 @@ export function DataTable<T>({
    const end = Math.min(start + pageSize - 1, total);
 
    const getPageNumbers = () => {
-      const delta = 1;
-      const range = [];
-      const rangeWithDots = [];
+      const totalPages = Math.ceil(total / pageSize);
+      const pageNumbers: (number | string)[] = [];
 
-      rangeWithDots.push(1);
+      // Sempre mostra a primeira página
+      pageNumbers.push(1);
 
-      if (page > 2) {
-         rangeWithDots.push("...");
+      // Adiciona "..." se a página atual estiver além da página 3
+      if (page > 3) {
+         pageNumbers.push("...");
       }
 
-      for (
-         let i = Math.max(2, page - delta);
-         i <= Math.min(totalPages - 1, page + delta);
-         i++
-      ) {
-         range.push(i);
+      // Adiciona até 3 páginas ao redor da atual (ex: 2, 3, 4 se page = 3)
+      for (let i = page - 1; i <= page + 1; i++) {
+         if (i > 1 && i < totalPages) {
+            pageNumbers.push(i);
+         }
       }
 
-      rangeWithDots.push(...range);
-
-      if (page < totalPages - 1) {
-         rangeWithDots.push("...");
+      // Adiciona "..." se estiver distante do fim
+      if (page < totalPages - 2) {
+         pageNumbers.push("...");
       }
 
+      // Sempre mostra a última página (se não for a primeira)
       if (totalPages > 1) {
-         rangeWithDots.push(totalPages);
+         pageNumbers.push(totalPages);
       }
 
-      return rangeWithDots;
+      return pageNumbers;
    };
 
    return (
