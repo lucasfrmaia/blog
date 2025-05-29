@@ -26,6 +26,7 @@ import {
 } from "../ui/alert-dialog";
 import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
 import { useRouter, useSearchParams } from "next/navigation";
+import { CategoryBadge } from "./CategoryBadge";
 
 export default function CategoryList() {
    const router = useRouter();
@@ -109,13 +110,7 @@ export default function CategoryList() {
       {
          header: "Cor",
          accessorKey: (category: ICategory) => (
-            <div className="flex items-center gap-2">
-               <div
-                  className="w-4 h-4 rounded-full"
-                  style={{ backgroundColor: category.color }}
-               />
-               <span>{category.color}</span>
-            </div>
+            <CategoryBadge category={category} />
          ),
       },
       {

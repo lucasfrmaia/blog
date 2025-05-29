@@ -1,14 +1,16 @@
 "use client";
 
+import { CategoryBadge } from "@/app/_components/category/CategoryBadge";
 import CommentSection from "@/app/_components/comment/CommentSection";
 import BaseLayout from "@/app/_components/layout/BaseLayout";
 import { LoadingOnePost } from "@/app/_components/loadings/posts/LoadingOnePost";
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
+import { Separator } from "@/app/_components/ui/separator";
 import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { IPost } from "@/app/api/_services/modules/post/entities/Post";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
-import { Separator } from "@radix-ui/react-dropdown-menu";
+
 import { useQuery } from "@tanstack/react-query";
 
 export default function PostPage({ params }: { params: { id: string } }) {
@@ -68,16 +70,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
                <div className="flex flex-wrap gap-2 mb-8">
                   {post.categories?.map((category) => (
-                     <Badge
-                        key={category.id}
-                        variant="secondary"
-                        style={{
-                           backgroundColor: category.color,
-                           color: "white",
-                        }}
-                     >
-                        {category.name}
-                     </Badge>
+                     <CategoryBadge category={category} />
                   ))}
                </div>
 
@@ -88,7 +81,7 @@ export default function PostPage({ params }: { params: { id: string } }) {
                </Card>
 
                <div
-                  className="prose dark:prose-invert max-w-none mb-8"
+                  className="prose dark:prose-invert max-w-none mb-14"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                />
 

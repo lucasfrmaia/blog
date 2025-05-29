@@ -14,6 +14,7 @@ export interface IPost {
    authorId: string;
    author?: IUser;
    categories?: ICategory[];
+   comments?: IComment[];
 }
 
 export interface IPostCreate {

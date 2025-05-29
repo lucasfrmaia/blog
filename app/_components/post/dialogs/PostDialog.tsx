@@ -53,8 +53,8 @@ export function PostDialog({
             throw new Error(error?.message || "Erro Desconhecido");
          }
 
-         queryClient.refetchQueries({ queryKey: ["posts", currentPage] });
-         queryClient.refetchQueries({ queryKey: ["posts"] });
+         await queryClient.refetchQueries({ queryKey: ["posts", currentPage] });
+         await queryClient.refetchQueries({ queryKey: ["posts"] });
 
          toast({
             title: mode === "create" ? "Post criado" : "Post atualizado",

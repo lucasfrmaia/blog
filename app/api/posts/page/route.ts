@@ -36,7 +36,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(result);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar posts paginados" },
+         {
+            error:
+               "Erro ao buscar posts paginados: " + (error as Error).message,
+         },
          { status: 500 }
       );
    }

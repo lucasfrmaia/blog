@@ -76,16 +76,11 @@ export function CategoryDialog({
 
          if (!response.ok) {
             const errorData = await response.json();
-
-            throw new Error(
-               "Erro ao salvar categoria: " +
-                  errorData.message +
-                  errorData.error
-            );
+            throw new Error(errorData.message + errorData.error);
          }
 
          queryClient.invalidateQueries({
-            queryKey: ["categories", currentPage],
+            queryKey: ["categories"],
          });
 
          toast({

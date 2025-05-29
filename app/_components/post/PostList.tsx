@@ -27,6 +27,7 @@ import {
    AlertDialogTrigger,
 } from "../ui/alert-dialog";
 import { ITENS_PER_PAGE } from "@/utils/constantes/constants";
+import { CategoryBadge } from "../category/CategoryBadge";
 
 interface IPostList {
    currentPage: number;
@@ -113,15 +114,7 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
                <div className="flex flex-wrap w-56 gap-2 text-primary">
                   {post.categories?.length !== 0 ? (
                      post?.categories?.map((category) => {
-                        return (
-                           <Badge
-                              key={category.id}
-                              style={{ backgroundColor: category.color }}
-                              className={`text-primary`}
-                           >
-                              {category.name}
-                           </Badge>
-                        );
+                        return <CategoryBadge category={category} />;
                      })
                   ) : (
                      <span>Sem Categoria</span>

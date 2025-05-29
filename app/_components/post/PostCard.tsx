@@ -4,6 +4,8 @@ import Link from "next/link";
 import { Clock, MessageSquare, Eye } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader } from "../ui/card";
+import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { CategoryBadge } from "../category/CategoryBadge";
 
 interface PostCardProps {
    id: string;
@@ -11,7 +13,7 @@ interface PostCardProps {
    excerpt: string;
    coverImage: string;
    readTime: string;
-   category: string;
+   categories?: ICategory[];
    views?: number;
    commentsCount?: number;
 }
@@ -22,7 +24,7 @@ export default function PostCard({
    excerpt,
    coverImage,
    readTime,
-   category,
+   categories = [],
    views = 0,
    commentsCount = 0,
 }: PostCardProps) {
@@ -35,12 +37,14 @@ export default function PostCard({
                   alt={title}
                   className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
                />
-               <Badge
-                  variant="secondary"
-                  className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
-               >
-                  {category}
-               </Badge>
+               {categories.slice(0, 2).map((category) => {
+                  return (
+                     <CategoryBadge
+                        className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm"
+                        category={category}
+                     />
+                  );
+               })}
             </div>
             <CardHeader className="border-b bg-card">
                <h3 className="text-xl font-semibold line-clamp-2 group-hover:text-primary transition-colors">

@@ -113,13 +113,11 @@ export class PostRepositoryPrisma implements IPostRepository {
                        {
                           title: {
                              contains: filters.search,
-                             mode: "insensitive",
                           },
                        },
                        {
                           description: {
                              contains: filters.search,
-                             mode: "insensitive",
                           },
                        },
                     ],
