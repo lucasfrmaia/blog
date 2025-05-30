@@ -8,6 +8,8 @@ export interface IComment {
    updatedAt: Date;
    userId: string;
    postId: string;
+   parent_id?: string;
+   replies?: IComment[];
    user?: IUser;
    post?: IPost;
 }
