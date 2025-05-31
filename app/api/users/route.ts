@@ -40,16 +40,10 @@ export async function GET(request: NextRequest) {
       const page = searchParams.get("page");
       const limit = searchParams.get("limit");
       const email = searchParams.get("email");
-      const id = searchParams.get("id");
       const roleId = searchParams.get("roleId");
 
       if (email) {
          const user = await apiManager.user.findByEmail(email);
-         return NextResponse.json(user);
-      }
-
-      if (id) {
-         const user = await apiManager.user.findById(id);
          return NextResponse.json(user);
       }
 

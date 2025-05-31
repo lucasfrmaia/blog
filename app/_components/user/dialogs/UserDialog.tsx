@@ -71,6 +71,7 @@ export function UserDialog({ user, children }: UserDialogProps) {
    });
 
    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+      console.log(data);
       try {
          const response = await fetch(`/api/users/${user?.id}`, {
             method: "PATCH",
@@ -81,7 +82,8 @@ export function UserDialog({ user, children }: UserDialogProps) {
          });
 
          if (!response.ok) {
-            throw new Error("Erro ao atualizar usuário");
+            const errorData = await response.json();
+            throw new Error(errorData.message + errorData.error);
          }
 
          toast({

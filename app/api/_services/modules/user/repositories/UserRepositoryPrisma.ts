@@ -101,18 +101,17 @@ export class UserRepositoryPrisma implements IUserRepository {
       return users as User[];
    }
 
-   async update(data: IUserUpdate): Promise<void> {
-      const updateData: IUserUpdate = {
-         id: data.id,
-      };
-
-      if (data.name) updateData.name = data.name;
-      if (data.email) updateData.email = data.email;
-
-      if (typeof data.password === "string") {
-         const salt = await genSalt(10);
-         updateData.password = await hash(data.password, salt);
-      }
+   async update(userPayload: IUserUpdate): Promise<void> {
+      await prisma.user.update({
+         where: { id: userPayload.id },
+         data: {
+            email: userPayload.email,
+            name: userPayload.name,
+            role: {
+               connect: { id: userPayload.role },
+            },
+         },
+      });
    }
 
    async delete(id: string): Promise<void> {
