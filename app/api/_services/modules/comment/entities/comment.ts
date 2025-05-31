@@ -8,7 +8,7 @@ export interface IComment {
    updatedAt: Date;
    userId: string;
    postId: string;
-   parent_id?: string;
+   parent_id: string | null;
    replies?: IComment[];
    user?: IUser;
    post?: IPost;
@@ -18,6 +18,7 @@ export interface ICommentCreate {
    content: string;
    userId: string;
    postId: string;
+   parent_id?: string;
 }
 
 export interface ICommentUpdate {

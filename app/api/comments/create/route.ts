@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
          content: body.content,
          userId: body.userId,
          postId: body.postId,
+         parent_id: body?.parent_id,
       });
 
       return NextResponse.json(

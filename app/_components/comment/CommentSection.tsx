@@ -60,7 +60,11 @@ export default function CommentSection({ postId }: CommentSectionProps) {
             </Card>
          )}
 
-         <CommentList comments={comments || []} />
+         <CommentList
+            postId={postId}
+            onReplySubmitted={() => {}}
+            comments={comments || []}
+         />
       </div>
    );
 }
