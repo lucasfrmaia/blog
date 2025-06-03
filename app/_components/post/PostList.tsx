@@ -56,6 +56,7 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
 
          return response.json();
       },
+      placeholderData: (previousData) => previousData,
    });
 
    const { mutate: deletePost } = useMutation({

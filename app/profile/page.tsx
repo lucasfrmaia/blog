@@ -1,5 +1,3 @@
-"use client";
-
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { format } from "date-fns";
@@ -18,30 +16,16 @@ import {
    CardTitle,
 } from "../_components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
+import { getServerSession } from "next-auth";
+import { IUser } from "../api/_services/modules/user/entities/user";
+import { NextAuthOptions } from "../api/auth/auth-options";
 
-export default function ProfilePage() {
-   const { data: session } = useSession();
-   const user = session?.user as AuthUser | undefined;
-
-   const { data: userData, isLoading } = useQuery({
-      queryKey: ["user", user?.id],
-      queryFn: async () => {
-         const response = await fetch(`/api/users?id=${user?.id}`);
-         if (!response.ok) {
-            throw new Error("Erro ao buscar dados do usuário");
-         }
-         return response.json();
-      },
-      enabled: !!user?.id,
-   });
-
-   if (isLoading) {
-      return <LoadingProfile />;
-   }
-
-   if (!userData) {
-      return <div>Usuário não encontrado</div>;
-   }
+export default async function ProfilePage() {
+   const session = await getServerSession(NextAuthOptions);
+   const response = await fetch(
+      `${process.env.API_URL}/users/${session?.user?.id}`
+   );
+   const userData = (await response.json()) as IUser;
 
    return (
       <BaseLayout>
@@ -49,16 +33,16 @@ export default function ProfilePage() {
             <Card>
                <CardHeader className="flex flex-row items-center gap-4">
                   <Avatar className="h-16 w-16">
-                     <AvatarImage src={userData.image} alt={userData.name} />
+                     <AvatarImage src={userData?.image} alt={userData?.name} />
                      <AvatarFallback>
                         <User className="h-8 w-8" />
                      </AvatarFallback>
                   </Avatar>
                   <div>
-                     <CardTitle>{userData.name}</CardTitle>
+                     <CardTitle>{userData?.name}</CardTitle>
                      <CardDescription className="flex items-center gap-2">
                         <Mail className="h-4 w-4" />
-                        {userData.email}
+                        {userData?.email}
                      </CardDescription>
                   </div>
                </CardHeader>
@@ -71,11 +55,9 @@ export default function ProfilePage() {
                               Membro desde
                            </span>
                            <p>
-                              {format(
-                                 new Date(userData.createdAt),
-                                 "dd 'de' MMMM 'de' yyyy",
-                                 { locale: ptBR }
-                              )}
+                              {new Date(
+                                 userData?.createdAt
+                              ).toLocaleDateString()}
                            </p>
                         </div>
                         <div>
@@ -83,7 +65,7 @@ export default function ProfilePage() {
                               Função
                            </span>
                            <p className="capitalize">
-                              {userData.role?.name || "Usuário"}
+                              {userData?.role?.name || "Usuário"}
                            </p>
                         </div>
                      </div>
@@ -97,7 +79,7 @@ export default function ProfilePage() {
                         <div className="flex items-center gap-2">
                            <FileText className="h-4 w-4 text-muted-foreground" />
                            <span>
-                              {userData.posts?.length || 0} posts publicados
+                              {userData?.posts?.length || 0} posts publicados
                            </span>
                         </div>
                      </div>

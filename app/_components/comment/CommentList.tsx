@@ -5,8 +5,18 @@ import { Card, CardContent } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { useState } from "react";
-import { CommentReplyForm } from "./CommentReplyForm";
-import { ThumbsDown, ThumbsUp } from "lucide-react";
+import {
+   ThumbsDown,
+   ThumbsUp,
+   ChevronDown,
+   ChevronUp,
+   OptionIcon,
+   EllipsisVertical,
+} from "lucide-react";
+import { CommentForm } from "./CommentForm";
+import { useSession } from "next-auth/react";
+import { ROUTES_PAGE } from "@/utils/constantes/routes";
+import { useRouter } from "next/navigation";
 
 interface CommentListProps {
    postId: string;
@@ -19,7 +29,21 @@ export function CommentList({
    onReplySubmitted,
    postId,
 }: CommentListProps) {
-   const [replyTo, setReplyTo] = useState<string | null>(null);
+   const { data: session } = useSession();
+   const router = useRouter();
+   const [replyTo, replyTof] = useState<string | null>(null);
+   const [expandedComments, setExpandedComments] = useState<
+      Record<string, boolean>
+   >({});
+
+   const setReplyTo = (id: string | null) => {
+      if (!session) {
+         router.replace(ROUTES_PAGE.login.link);
+         return;
+      }
+
+      replyTof(id);
+   };
 
    const topLevelComments = comments.filter((c) => !c.parent_id);
    const repliesMap = comments.reduce<Record<string, IComment[]>>(
@@ -33,34 +57,87 @@ export function CommentList({
       {}
    );
 
+   const toggleReplies = (commentId: string) => {
+      setExpandedComments((prev) => ({
+         ...prev,
+         [commentId]: !prev[commentId],
+      }));
+   };
+
    return (
       <div className="space-y-4">
-         {topLevelComments.map((comment) => (
-            <div key={comment.id}>
-               <CommentCard
-                  comment={comment}
-                  onReply={() => setReplyTo(comment.id)}
-               />
-               {replyTo === comment.id && (
-                  <div className="ml-12 mt-2">
-                     <CommentReplyForm
-                        postId={postId}
-                        parentId={comment.id}
-                        onCancel={() => setReplyTo(null)}
-                        onSubmitted={() => {
-                           setReplyTo(null);
-                           onReplySubmitted();
-                        }}
-                     />
-                  </div>
-               )}
-               {(repliesMap[comment.id] || []).map((reply) => (
-                  <div key={reply.id} className="ml-12 mt-2">
-                     <CommentCard comment={reply} isReply />
-                  </div>
-               ))}
-            </div>
-         ))}
+         {topLevelComments.map((comment) => {
+            const replies = repliesMap[comment.id] || [];
+            const hasReplies = replies.length > 0;
+            const isExpanded = expandedComments[comment.id];
+
+            return (
+               <div key={comment.id}>
+                  <CommentCard
+                     comment={comment}
+                     onReply={() => setReplyTo(comment.id)}
+                  />
+                  {replyTo === comment.id && (
+                     <div className="ml-12 mt-2">
+                        <CommentForm
+                           postId={postId}
+                           parentId={comment.id}
+                           replyToUser={comment.user?.name}
+                           onCancel={() => setReplyTo(null)}
+                           onCommentSubmitted={() => {
+                              setReplyTo(null);
+                              onReplySubmitted();
+                           }}
+                        />
+                     </div>
+                  )}
+                  {hasReplies && (
+                     <div className="ml-12 mt-2">
+                        <Button
+                           variant="ghost"
+                           className="flex items-center gap-2 text-sm text-muted-foreground"
+                           onClick={() => toggleReplies(comment.id)}
+                        >
+                           {isExpanded ? (
+                              <ChevronUp className="h-4 w-4" />
+                           ) : (
+                              <ChevronDown className="h-4 w-4" />
+                           )}
+                           {isExpanded ? "Ocultar" : "Ver"} {replies.length}{" "}
+                           {replies.length === 1 ? "resposta" : "respostas"}
+                        </Button>
+                     </div>
+                  )}
+                  {isExpanded && hasReplies && (
+                     <div className="ml-12 space-y-2 mt-2">
+                        {replies.map((reply) => (
+                           <div key={reply.id}>
+                              <CommentCard
+                                 comment={reply}
+                                 isReply
+                                 onReply={() => setReplyTo(reply.id)}
+                              />
+                              {replyTo === reply.id && (
+                                 <div className="ml-12 mt-2">
+                                    <CommentForm
+                                       postId={postId}
+                                       parentId={comment.id}
+                                       replyToUser={reply.user?.name}
+                                       onCancel={() => setReplyTo(null)}
+                                       onCommentSubmitted={() => {
+                                          setReplyTo(null);
+                                          onReplySubmitted();
+                                       }}
+                                    />
+                                 </div>
+                              )}
+                           </div>
+                        ))}
+                     </div>
+                  )}
+               </div>
+            );
+         })}
       </div>
    );
 }
@@ -116,7 +193,7 @@ function CommentCard({
             <div className="flex items-start space-x-4">
                <Avatar>
                   <AvatarImage
-                     src="/placeholder-avatar.jpg"
+                     src={comment.user?.image || "/placeholder-avatar.jpg"}
                      alt={comment.user?.name || ""}
                   />
                   <AvatarFallback>
@@ -129,13 +206,17 @@ function CommentCard({
                </Avatar>
                <div className="flex-1">
                   <div className="flex items-center justify-between">
-                     <p className="font-medium">{comment.user?.name}</p>
-                     <p className="text-sm text-muted-foreground">
-                        {formatDistanceToNow(new Date(comment.createdAt), {
-                           addSuffix: true,
-                           locale: ptBR,
-                        })}
-                     </p>
+                     <div className="flex items-center gap-x-2">
+                        <p className="font-medium">{comment.user?.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                           {formatDistanceToNow(new Date(comment.createdAt), {
+                              addSuffix: true,
+                              locale: ptBR,
+                           })}
+                        </p>
+                     </div>
+
+                     <EllipsisVertical />
                   </div>
                   <p className="mt-2">{comment.content}</p>
                   <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">

@@ -3,10 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import CommentSectionLoading from "../loadings/CommentSectionLoading";
 import QueryError from "../errors/QueryError";
-import { AuthUser } from "@/utils/types/auth";
 import { CommentForm } from "./CommentForm";
 import { CommentList } from "./CommentList";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { Card, CardContent } from "../ui/card";
 import { IComment } from "@/app/api/_services/modules/comment/entities/comment";
 
@@ -16,7 +14,6 @@ interface CommentSectionProps {
 
 export default function CommentSection({ postId }: CommentSectionProps) {
    const { data: session } = useSession();
-   const user = session?.user as AuthUser | undefined;
 
    const {
       data: comments,
@@ -44,12 +41,8 @@ export default function CommentSection({ postId }: CommentSectionProps) {
             Comentários ({comments?.length || 0})
          </h2>
 
-         {user ? (
-            <CommentForm
-               postId={postId}
-               user={user}
-               onCommentSubmitted={refetch}
-            />
+         {session ? (
+            <CommentForm postId={postId} onCommentSubmitted={refetch} />
          ) : (
             <Card>
                <CardContent className="p-6">
@@ -62,8 +55,8 @@ export default function CommentSection({ postId }: CommentSectionProps) {
 
          <CommentList
             postId={postId}
-            onReplySubmitted={() => {}}
             comments={comments || []}
+            onReplySubmitted={refetch}
          />
       </div>
    );

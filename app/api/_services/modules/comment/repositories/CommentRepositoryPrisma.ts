@@ -28,7 +28,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          where: { id },
          include: {
             user: true,
-            post: true,
+            replies: true,
          },
       });
 
@@ -43,9 +43,14 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          include: {
             user: true,
             post: true,
+            replies: {
+               orderBy: {
+                  createdAt: "asc",
+               },
+            },
          },
          orderBy: {
-            createdAt: "desc",
+            createdAt: "asc",
          },
       });
 
