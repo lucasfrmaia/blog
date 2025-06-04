@@ -10,13 +10,23 @@ import {
    ThumbsUp,
    ChevronDown,
    ChevronUp,
-   OptionIcon,
-   EllipsisVertical,
+   MoreVertical,
+   TreesIcon,
+   Trash2Icon,
 } from "lucide-react";
 import { CommentForm } from "./CommentForm";
 import { useSession } from "next-auth/react";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
 import { useRouter } from "next/navigation";
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { useToast } from "../ui/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
+import { ADMIN_ROLE_ID } from "@/utils/constantes/constants";
 
 interface CommentListProps {
    postId: string;
@@ -74,6 +84,7 @@ export function CommentList({
             return (
                <div key={comment.id}>
                   <CommentCard
+                     postId={postId}
                      comment={comment}
                      onReply={() => setReplyTo(comment.id)}
                   />
@@ -113,6 +124,7 @@ export function CommentList({
                         {replies.map((reply) => (
                            <div key={reply.id}>
                               <CommentCard
+                                 postId={postId}
                                  comment={reply}
                                  isReply
                                  onReply={() => setReplyTo(reply.id)}
@@ -146,16 +158,52 @@ function CommentCard({
    comment,
    onReply,
    isReply = false,
+   postId,
 }: {
    comment: IComment;
    onReply?: () => void;
    isReply?: boolean;
+   postId: string;
 }) {
+   const queryClient = useQueryClient();
+   const { data: session } = useSession();
+   console.log(session);
+   const { toast } = useToast();
    const [likes, setLikes] = useState(0);
    const [dislikes, setDislikes] = useState(0);
    const [isLikeOrDeslike, setLikeOrDeslike] = useState<
       "like" | "deslike" | null
    >(null);
+
+   const handleDelete = async () => {
+      try {
+         const response = await fetch(`/api/comments/${comment.id}`, {
+            method: "DELETE",
+         });
+
+         if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Erro ao deletar comentário");
+         }
+
+         toast({
+            title: "Comentário deletado",
+            description: "O comentário foi deletado com sucesso",
+         });
+
+         queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+      } catch (error) {
+         toast({
+            title: "Erro ao deletar comentário",
+            description: (error as Error).message,
+            variant: "destructive",
+         });
+      }
+   };
+
+   const canDeleteComment =
+      session?.user?.id === comment.user?.id ||
+      session?.user?.role === ADMIN_ROLE_ID;
 
    const handleLike = (typeLike: "like" | "deslike") => {
       if (!isLikeOrDeslike) {
@@ -216,7 +264,25 @@ function CommentCard({
                         </p>
                      </div>
 
-                     <EllipsisVertical />
+                     {canDeleteComment && (
+                        <DropdownMenu>
+                           <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                 <MoreVertical className="h-4 w-4" />
+                              </Button>
+                           </DropdownMenuTrigger>
+                           <DropdownMenuContent align="end">
+                              <DropdownMenuItem
+                                 className="text-primary"
+                                 onClick={handleDelete}
+                              >
+                                 <span className="flex items-center gap-x-2 text-primary">
+                                    <Trash2Icon className="w-6 h-6" /> Deletar
+                                 </span>
+                              </DropdownMenuItem>
+                           </DropdownMenuContent>
+                        </DropdownMenu>
+                     )}
                   </div>
                   <p className="mt-2">{comment.content}</p>
                   <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">

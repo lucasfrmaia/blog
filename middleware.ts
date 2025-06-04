@@ -1,6 +1,7 @@
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 import { PROTECTED_ROUTES, ROUTES_PAGE } from "./utils/constantes/routes";
+import { ADMIN_ROLE_ID } from "./utils/constantes/constants";
 
 export default withAuth(
    function middleware(req) {
@@ -15,7 +16,10 @@ export default withAuth(
       }
 
       // ToDo mudar role
-      if (req.nextUrl.pathname.startsWith("/dashboard") && token?.role !== 1) {
+      if (
+         req.nextUrl.pathname.startsWith("/dashboard") &&
+         token?.role !== ADMIN_ROLE_ID
+      ) {
          return NextResponse.redirect(new URL(ROUTES_PAGE.home.link, req.url));
       }
 

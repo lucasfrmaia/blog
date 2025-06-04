@@ -53,7 +53,7 @@ export const NextAuthOptions = {
    callbacks: {
       async jwt({ token, user }) {
          if (user) {
-            token.role = user.role;
+            token.role = user.role as number;
          }
 
          if (user?.id) {
@@ -64,7 +64,7 @@ export const NextAuthOptions = {
       },
       async session({ session, token }) {
          if (session.user) {
-            session.user.role = token.role as string;
+            session.user.role = token.role as number;
             session.user.id = token.sub as string;
          }
 

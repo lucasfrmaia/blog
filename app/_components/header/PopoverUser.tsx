@@ -27,12 +27,12 @@ const settings = [
    {
       label: "Meus Comentários",
       Icon: FaCommentAlt,
-      href: "#",
+      href: "/profile?tab=comments",
    },
    {
       label: "Configurações",
       Icon: CiSettings,
-      href: "#",
+      href: "/profile?tab=password",
    },
 ];
 

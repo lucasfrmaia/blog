@@ -1,5 +1,8 @@
 import { apiManager } from "@/app/api/_services/modules/ApiManager";
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { NextAuthOptions } from "../../auth/auth-options";
+import { ADMIN_ROLE_ID } from "@/utils/constantes/constants";
 
 interface RouteParams {
    params: {
@@ -52,15 +55,50 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 }
 
 // Excluir comentário
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+   request: Request,
+   { params }: { params: { id: string } }
+) {
    try {
-      const { id } = params;
-      await apiManager.comment.delete(id);
+      const session = await getServerSession(NextAuthOptions);
 
-      return NextResponse.json({ message: "Comentário excluído com sucesso" });
-   } catch (error) {
+      if (!session) {
+         return NextResponse.json(
+            { message: "Não autorizado" },
+            { status: 401 }
+         );
+      }
+
+      const comment = await apiManager.comment.findById(params.id);
+
+      if (!comment) {
+         return NextResponse.json(
+            { message: "Comentário não encontrado" },
+            { status: 404 }
+         );
+      }
+
+      // Verifica se o usuário é o dono do comentário ou é admin
+      if (
+         comment.user?.id !== session.user?.id &&
+         session.user?.role !== ADMIN_ROLE_ID
+      ) {
+         return NextResponse.json(
+            { message: "Não autorizado" },
+            { status: 403 }
+         );
+      }
+
+      await apiManager.comment.delete(params.id);
+
       return NextResponse.json(
-         { error: "Erro ao excluir comentário" },
+         { message: "Comentário deletado com sucesso" },
+         { status: 200 }
+      );
+   } catch (error) {
+      console.error("Erro ao deletar comentário:", error);
+      return NextResponse.json(
+         { message: "Erro ao deletar comentário" },
          { status: 500 }
       );
    }

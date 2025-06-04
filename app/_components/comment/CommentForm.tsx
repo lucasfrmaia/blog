@@ -46,7 +46,7 @@ export function CommentForm({
       if (replyToUser && !content) {
          setValue("content", `@${replyToUser} `);
       }
-   }, [replyToUser, setValue, content]);
+   }, []);
 
    const onSubmit = async (data: { content: string }) => {
       try {
