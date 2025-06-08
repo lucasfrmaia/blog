@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { format } from "date-fns";
@@ -26,27 +28,37 @@ import {
    TabsTrigger,
 } from "../_components/ui/tabs";
 import { Button } from "../_components/ui/button";
-import { Input } from "../_components/ui/input";
-import { Label } from "../_components/ui/label";
+import { ResetPasswordForm } from "./ResetPasswordForm";
 
-export default async function ProfilePage({
+export default function ProfilePage({
    searchParams,
 }: {
    searchParams: { tab?: string };
 }) {
-   const session = await getServerSession(NextAuthOptions);
-   const response = await fetch(
-      `${process.env.API_URL}/users/${session?.user?.id}`
-   );
-   const userData = (await response.json()) as IUser;
+   const { data: session } = useSession();
+
+   const { data: userData, isLoading } = useQuery({
+      queryKey: ["profile", session?.user.id],
+      queryFn: async () => {
+         const response = await fetch(
+            `${process.env.API_URL}/users/${session?.user?.id}`
+         );
+
+         return (await response.json()) as IUser;
+      },
+   });
+
+   if (isLoading) {
+      return <LoadingProfile />;
+   }
 
    const defaultTab = searchParams.tab || "comments";
 
    return (
       <BaseLayout>
-         <div className="container mx-auto px-4 py-8">
-            <Card className="mb-8">
-               <CardHeader className="flex flex-row items-center gap-4">
+         <div className="container mx-auto px-4 py-8 flex flex-col items-center">
+            <Card className="mb-8 w-full max-w-[1000px]">
+               <CardHeader className="flex w-full flex-row items-center gap-4">
                   <Avatar className="h-16 w-16">
                      <AvatarImage src={userData?.image} alt={userData?.name} />
                      <AvatarFallback>
@@ -61,34 +73,35 @@ export default async function ProfilePage({
                      </CardDescription>
                   </div>
                </CardHeader>
-               <CardContent>
-                  <div>
-                     <h3 className="text-lg font-semibold mb-2">Informações</h3>
-                     <div className="grid gap-4">
-                        <div>
-                           <span className="text-sm text-muted-foreground">
-                              Membro desde
-                           </span>
-                           <p>
-                              {new Date(
-                                 userData?.createdAt
-                              ).toLocaleDateString()}
-                           </p>
-                        </div>
-                        <div>
-                           <span className="text-sm text-muted-foreground">
-                              Função
-                           </span>
-                           <p className="capitalize">
-                              {userData?.role?.name || "Usuário"}
-                           </p>
-                        </div>
+               <CardContent className="w-full">
+                  <h3 className="text-lg font-semibold mb-2">Informações</h3>
+                  <div className="grid gap-4">
+                     <div>
+                        <span className="text-sm text-muted-foreground">
+                           Membro desde
+                        </span>
+                        <p>
+                           {new Date(
+                              userData?.createdAt || ""
+                           ).toLocaleDateString()}
+                        </p>
+                     </div>
+                     <div>
+                        <span className="text-sm text-muted-foreground">
+                           Função
+                        </span>
+                        <p className="capitalize">
+                           {userData?.role?.name || "Usuário"}
+                        </p>
                      </div>
                   </div>
                </CardContent>
             </Card>
 
-            <Tabs defaultValue={defaultTab} className="space-y-4">
+            <Tabs
+               defaultValue={defaultTab}
+               className="space-y-4 w-full max-w-[1000px]"
+            >
                <TabsList>
                   <TabsTrigger value="comments">Meus Comentários</TabsTrigger>
                   <TabsTrigger value="password">Alterar Senha</TabsTrigger>
@@ -146,37 +159,7 @@ export default async function ProfilePage({
                         </CardDescription>
                      </CardHeader>
                      <CardContent>
-                        <form className="space-y-4">
-                           <div className="space-y-2">
-                              <Label htmlFor="current-password">
-                                 Senha Atual
-                              </Label>
-                              <Input
-                                 id="current-password"
-                                 type="password"
-                                 placeholder="Digite sua senha atual"
-                              />
-                           </div>
-                           <div className="space-y-2">
-                              <Label htmlFor="new-password">Nova Senha</Label>
-                              <Input
-                                 id="new-password"
-                                 type="password"
-                                 placeholder="Digite sua nova senha"
-                              />
-                           </div>
-                           <div className="space-y-2">
-                              <Label htmlFor="confirm-password">
-                                 Confirmar Nova Senha
-                              </Label>
-                              <Input
-                                 id="confirm-password"
-                                 type="password"
-                                 placeholder="Confirme sua nova senha"
-                              />
-                           </div>
-                           <Button type="submit">Alterar Senha</Button>
-                        </form>
+                        <ResetPasswordForm />
                      </CardContent>
                   </Card>
                </TabsContent>

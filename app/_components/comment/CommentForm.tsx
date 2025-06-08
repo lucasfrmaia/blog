@@ -17,9 +17,9 @@ interface CommentFormProps {
 
 export function CommentForm({
    postId,
-   onCommentSubmitted,
    parentId,
    replyToUser,
+   onCommentSubmitted,
    onCancel,
 }: CommentFormProps) {
    const { data: session } = useSession();

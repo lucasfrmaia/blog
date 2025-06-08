@@ -105,11 +105,9 @@ export class UserRepositoryPrisma implements IUserRepository {
       await prisma.user.update({
          where: { id: userPayload.id },
          data: {
-            email: userPayload.email,
-            name: userPayload.name,
-            role: {
-               connect: { id: userPayload.role },
-            },
+            email: userPayload?.email,
+            name: userPayload?.name,
+            password: userPayload?.password,
          },
       });
    }

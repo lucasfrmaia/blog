@@ -33,22 +33,49 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 }
 
 // Atualizar comentário
-export async function PATCH(request: NextRequest, { params }: RouteParams) {
+export async function PATCH(
+   req: Request,
+   { params }: { params: { commentId: string } }
+) {
    try {
-      const { id } = params;
-      const body = await request.json();
+      const session = await getServerSession(NextAuthOptions);
 
-      await apiManager.comment.update({
-         id,
-         ...body,
+      if (!session?.user) {
+         return NextResponse.json(
+            { message: "Não autorizado" },
+            { status: 401 }
+         );
+      }
+
+      const { content } = await req.json();
+      const { commentId } = params;
+
+      const comment = await apiManager.comment.findById(commentId);
+
+      if (!comment) {
+         return NextResponse.json(
+            { message: "Comentário não encontrado" },
+            { status: 404 }
+         );
+      }
+
+      if (comment.userId !== session.user.id) {
+         return NextResponse.json(
+            { message: "Você não tem permissão para editar este comentário" },
+            { status: 403 }
+         );
+      }
+
+      const updatedComment = await apiManager.comment.update({
+         id: commentId,
+         content: content,
       });
 
-      return NextResponse.json({
-         message: "Comentário atualizado com sucesso",
-      });
+      return NextResponse.json(updatedComment);
    } catch (error) {
+      console.error("Erro ao editar comentário:", error);
       return NextResponse.json(
-         { error: "Erro ao atualizar comentário" },
+         { message: "Erro ao editar comentário" },
          { status: 500 }
       );
    }

@@ -13,6 +13,7 @@ import {
    MoreVertical,
    TreesIcon,
    Trash2Icon,
+   Edit2Icon,
 } from "lucide-react";
 import { CommentForm } from "./CommentForm";
 import { useSession } from "next-auth/react";
@@ -167,7 +168,6 @@ function CommentCard({
 }) {
    const queryClient = useQueryClient();
    const { data: session } = useSession();
-   console.log(session);
    const { toast } = useToast();
    const [likes, setLikes] = useState(0);
    const [dislikes, setDislikes] = useState(0);
@@ -201,9 +201,13 @@ function CommentCard({
       }
    };
 
+   const handleEdit = async () => {};
+
    const canDeleteComment =
       session?.user?.id === comment.user?.id ||
       session?.user?.role === ADMIN_ROLE_ID;
+
+   const canEditComment = session?.user?.id === comment.user?.id;
 
    const handleLike = (typeLike: "like" | "deslike") => {
       if (!isLikeOrDeslike) {
@@ -272,6 +276,17 @@ function CommentCard({
                               </Button>
                            </DropdownMenuTrigger>
                            <DropdownMenuContent align="end">
+                              {canEditComment && (
+                                 <DropdownMenuItem
+                                    className="text-primary"
+                                    onClick={handleEdit}
+                                 >
+                                    <span className="flex items-center gap-x-2 text-primary">
+                                       <Edit2Icon className="w-6 h-6" /> Editar
+                                    </span>
+                                 </DropdownMenuItem>
+                              )}
+
                               <DropdownMenuItem
                                  className="text-primary"
                                  onClick={handleDelete}
