@@ -1,4 +1,3 @@
-import { AuthUser } from "@/utils/types/auth";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
@@ -11,6 +10,9 @@ interface CommentFormProps {
    postId: string;
    parentId?: string;
    replyToUser?: string;
+   commentId?: string;
+   initialContent?: string;
+   isEditing?: boolean;
    onCommentSubmitted: () => void;
    onCancel?: () => void;
 }
@@ -19,6 +21,9 @@ export function CommentForm({
    postId,
    parentId,
    replyToUser,
+   commentId,
+   initialContent = "",
+   isEditing = false,
    onCommentSubmitted,
    onCancel,
 }: CommentFormProps) {
@@ -26,7 +31,8 @@ export function CommentForm({
    const user = session?.user;
 
    const { toast } = useToast();
-   const [isExpanded, setIsExpanded] = useState(false);
+   const [isExpanded, setIsExpanded] = useState(isEditing || !!initialContent);
+
    const {
       register,
       handleSubmit,
@@ -36,7 +42,7 @@ export function CommentForm({
       formState: { isSubmitting },
    } = useForm({
       defaultValues: {
-         content: "",
+         content: initialContent || "",
       },
    });
 
@@ -50,16 +56,22 @@ export function CommentForm({
 
    const onSubmit = async (data: { content: string }) => {
       try {
-         const response = await fetch("/api/comments/create", {
-            method: "POST",
+         const url = commentId
+            ? `/api/comments/${commentId}`
+            : "/api/comments/create";
+
+         const method = commentId ? "PATCH" : "POST";
+
+         const response = await fetch(url, {
+            method,
             headers: {
                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                content: data.content,
+               userId: session?.user.id,
+               parentId: parentId,
                postId,
-               userId: user?.id,
-               parent_id: parentId,
             }),
          });
 
@@ -72,19 +84,25 @@ export function CommentForm({
          setIsExpanded(false);
          onCommentSubmitted();
          if (onCancel) onCancel();
+
          toast({
-            title: parentId ? "Resposta adicionada" : "Comentário adicionado",
-            description: parentId
+            title: commentId
+               ? "Comentário atualizado"
+               : parentId
+               ? "Resposta adicionada"
+               : "Comentário adicionado",
+            description: commentId
+               ? "Seu comentário foi editado com sucesso."
+               : parentId
                ? "Sua resposta foi publicada com sucesso."
                : "Seu comentário foi publicado com sucesso.",
          });
       } catch (error) {
          toast({
-            title: parentId ? "Erro ao responder" : "Erro ao comentar",
+            title: commentId ? "Erro ao editar" : "Erro ao comentar",
             description:
-               `Ocorreu um erro ao tentar publicar ${
-                  parentId ? "sua resposta" : "seu comentário"
-               }: ` + (error as Error).message,
+               `Ocorreu um erro: ${(error as Error).message}` ||
+               "Erro desconhecido",
             variant: "destructive",
          });
       }
@@ -113,7 +131,9 @@ export function CommentForm({
                <div className="relative">
                   <Textarea
                      placeholder={
-                        parentId
+                        isEditing
+                           ? "Edite seu comentário..."
+                           : parentId
                            ? "Adicione uma resposta..."
                            : "Adicione um comentário..."
                      }
@@ -146,6 +166,8 @@ export function CommentForm({
                      >
                         {isSubmitting
                            ? "Enviando..."
+                           : commentId
+                           ? "Salvar"
                            : parentId
                            ? "Responder"
                            : "Comentar"}
