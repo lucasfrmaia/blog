@@ -15,7 +15,7 @@ import {
 } from "../post-component/PostComponent";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 import TitleSection from "../ui/utils/TitleSection";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { IPost } from "@/app/api/_services/entities/Post";
 
 interface IPopularPostsProps {
    children?: React.ReactNode;

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import bcrypt from "bcryptjs";
 import { NextAuthOptions } from "../auth-options";
-import { apiManager } from "../../_services/modules/ApiManager";
+import { apiManager } from "../../_services/ApiManager";
 
 export async function POST(req: Request) {
    try {

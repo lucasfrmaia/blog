@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import PostCard from "./PostCard";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { IPost } from "@/app/api/_services/entities/Post";
 
 interface PostGridProps {
    posts: IPost[];

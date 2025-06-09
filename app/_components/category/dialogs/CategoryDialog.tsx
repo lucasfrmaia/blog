@@ -8,7 +8,7 @@ import {
    DialogTitle,
    DialogTrigger,
 } from "@/app/_components/ui/dialog";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

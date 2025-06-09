@@ -4,7 +4,7 @@ import { Clock, MessageSquare, Eye, CalendarDays } from "lucide-react";
 
 import { Badge } from "../ui/badge";
 import { Card, CardContent, CardHeader } from "../ui/card";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 import { CategoryBadge } from "../category/CategoryBadge";
 
 interface PostCardProps {

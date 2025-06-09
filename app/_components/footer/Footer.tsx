@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Facebook, Twitter, Instagram, Linkedin, Send } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 
 export default function Footer() {
    const links = Object.values(NAVEBAR_ROUTES);

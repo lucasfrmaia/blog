@@ -7,8 +7,8 @@ import { LoadingOnePostSkeleton } from "@/app/_components/loadings/posts/Loading
 import { Badge } from "@/app/_components/ui/badge";
 import { Card } from "@/app/_components/ui/card";
 import { Separator } from "@/app/_components/ui/separator";
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { apiManager } from "@/app/api/_services/ApiManager";
+import { IPost } from "@/app/api/_services/entities/Post";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 
 import { useQuery } from "@tanstack/react-query";

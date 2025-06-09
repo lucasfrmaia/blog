@@ -2,11 +2,8 @@
 
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-   IPost,
-   IPostCreate,
-} from "@/app/api/_services/modules/post/entities/Post";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { IPost, IPostCreate } from "@/app/api/_services/entities/Post";
+import { ICategory } from "@/app/api/_services/entities/category";
 import { useSession } from "next-auth/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

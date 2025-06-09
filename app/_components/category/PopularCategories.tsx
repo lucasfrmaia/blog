@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 
 export default function PopularCategories() {
    const { data: categories, isLoading } = useQuery<ICategory[]>({

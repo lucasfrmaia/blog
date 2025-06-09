@@ -15,7 +15,7 @@ import {
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 import TitleSection from "../ui/utils/TitleSection";
 import { cn } from "@/lib/utils";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 
 interface ICategoryPostsProps {
    children?: React.ReactNode;

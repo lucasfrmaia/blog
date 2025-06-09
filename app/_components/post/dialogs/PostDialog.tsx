@@ -8,10 +8,7 @@ import {
    DialogTitle,
    DialogTrigger,
 } from "@/app/_components/ui/dialog";
-import {
-   IPost,
-   IPostCreate,
-} from "@/app/api/_services/modules/post/entities/Post";
+import { IPost, IPostCreate } from "@/app/api/_services/entities/Post";
 import { useState } from "react";
 import { useToast } from "@/app/_components/ui/use-toast";
 import { useRouter } from "next/navigation";

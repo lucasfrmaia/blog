@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 import { Loader2 } from "lucide-react";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import {

@@ -8,7 +8,7 @@ import { Edit2, Trash2 } from "lucide-react";
 import UserListLoading from "../loadings/UserListLoading";
 import QueryError from "../errors/QueryError";
 import { useToast } from "../ui/use-toast";
-import { IUser } from "@/app/api/_services/modules/user/entities/user";
+import { IUser } from "@/app/api/_services/entities/user";
 import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
 import { UserDialog } from "./dialogs/UserDialog";

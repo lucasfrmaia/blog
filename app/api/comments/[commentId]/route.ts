@@ -1,4 +1,4 @@
-import { apiManager } from "@/app/api/_services/modules/ApiManager";
+import { apiManager } from "@/app/api/_services/ApiManager";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { NextAuthOptions } from "../../auth/auth-options";

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { IPost } from "@/app/api/_services/entities/Post";
 
 export function PostContainer({
    children,

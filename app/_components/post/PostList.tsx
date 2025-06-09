@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import QueryError from "../errors/QueryError";
 import { useToast } from "../ui/use-toast";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { IPost } from "@/app/api/_services/entities/Post";
 import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
 import { PostDialog } from "./dialogs/PostDialog";

@@ -6,7 +6,7 @@ import { z } from "zod";
 import {
    ICategory,
    ICategoryCreate,
-} from "@/app/api/_services/modules/category/entities/category";
+} from "@/app/api/_services/entities/category";
 import { Button } from "../ui/button";
 import {
    FormField,

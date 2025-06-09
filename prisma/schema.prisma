@@ -11,6 +11,11 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+enum PostStatus {
+  ACTTIVE
+  DELETED
+}
+
 model Role {
   id          Int   @id @default(autoincrement())
   name        String   @unique
@@ -34,6 +39,8 @@ model User {
   
   posts     Post[]
   comments  Comment[]
+  favorites Post[] @relation("favorites")
+  likePost LikePost[]
 }
 
 model Category {
@@ -57,10 +64,22 @@ model Post {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   authorId    String
+  status      PostStatus
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
+  User User[] @relation("favorites")
   categories    Category[] 
   comments    Comment[]
+  LikePost LikePost[]
+}
+
+model LikePost {
+   id         Int @id @default(autoincrement())
+   postId     String
+   userId     String
+
+   post      Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+   user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -72,11 +91,10 @@ model Comment {
   parent_id String? // Torna o campo opcional
   userId            String
   postId            String
-
-  parent   Comment?  @relation("CommentToReplies", fields: [parent_id], references: [id], onDelete: Cascade)
-
+  edited            Boolean @default(false)
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentToReplies", fields: [parent_id], references: [id], onDelete: Cascade)
   replies  Comment[] @relation("CommentToReplies")
 }
 

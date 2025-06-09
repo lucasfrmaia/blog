@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiManager } from "../../_services/modules/ApiManager";
+import { apiManager } from "../../_services/ApiManager";
 
 export async function POST(request: NextRequest) {
    try {

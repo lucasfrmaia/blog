@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
 import { useQuery } from "@tanstack/react-query";
-import { IPost } from "@/app/api/_services/modules/post/entities/Post";
+import { IPost } from "@/app/api/_services/entities/Post";
 
 type IPropRecentPost = {
    children?: React.ReactNode;

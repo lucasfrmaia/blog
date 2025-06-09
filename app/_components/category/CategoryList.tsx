@@ -8,7 +8,7 @@ import { Edit2, Trash2 } from "lucide-react";
 import CategoryListLoading from "../loadings/CategoryListLoading";
 import QueryError from "../errors/QueryError";
 import { useToast } from "../ui/use-toast";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 import { Column, DataTable } from "../shared/DataTable";
 import { Button } from "../ui/button";
 import { CategoryDialog } from "./dialogs/CategoryDialog";

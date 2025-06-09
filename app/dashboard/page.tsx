@@ -14,7 +14,7 @@ import {
    CardDescription,
 } from "../_components/ui/card";
 import { UserList } from "../_components/user/UserList";
-import { apiManager } from "../api/_services/modules/ApiManager";
+import { apiManager } from "../api/_services/ApiManager";
 import {
    Eye,
    FileText,

@@ -3,10 +3,7 @@
 import { Form, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {
-   IUser,
-   IUserUpdate,
-} from "@/app/api/_services/modules/user/entities/user";
+import { IUser, IUserUpdate } from "@/app/api/_services/entities/user";
 import { Button } from "../ui/button";
 import {
    FormField,

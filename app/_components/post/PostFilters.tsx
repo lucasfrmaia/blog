@@ -11,7 +11,7 @@ import {
    SelectTrigger,
    SelectValue,
 } from "../ui/select";
-import { ICategory } from "@/app/api/_services/modules/category/entities/category";
+import { ICategory } from "@/app/api/_services/entities/category";
 import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
 

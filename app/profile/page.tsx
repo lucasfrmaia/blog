@@ -19,7 +19,7 @@ import {
 } from "../_components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
 import { getServerSession } from "next-auth";
-import { IUser } from "../api/_services/modules/user/entities/user";
+import { IUser } from "../api/_services/entities/user";
 import { NextAuthOptions } from "../api/auth/auth-options";
 import {
    Tabs,

@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { apiManager } from "../../_services/modules/ApiManager";
+import { apiManager } from "../../_services/ApiManager";
 
 interface RouteParams {
    params: {

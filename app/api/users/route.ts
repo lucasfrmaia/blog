@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { apiManager } from "../_services/modules/ApiManager";
-import {
-   IUserCreate,
-   IUserUpdate,
-} from "../_services/modules/user/entities/user";
+import { apiManager } from "../_services/ApiManager";
+import { IUserCreate, IUserUpdate } from "../_services/entities/user";
 
 export async function POST(request: NextRequest) {
    try {
