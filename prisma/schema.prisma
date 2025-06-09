@@ -11,11 +11,6 @@ datasource db {
   url      = "file:./dev.db"
 }
 
-enum PostStatus {
-  ACTTIVE
-  DELETED
-}
-
 model Role {
   id          Int   @id @default(autoincrement())
   name        String   @unique
@@ -31,6 +26,7 @@ model User {
   email     String   @unique
   password  String
   salt      String
+  avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   roleId    Int
@@ -64,7 +60,7 @@ model Post {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   authorId    String
-  status      PostStatus
+  status      String @default("Ativo")
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   User User[] @relation("favorites")
@@ -88,13 +84,13 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  parent_id String? // Torna o campo opcional
+  parentId String? // Torna o campo opcional
   userId            String
   postId            String
   edited            Boolean @default(false)
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  parent   Comment?  @relation("CommentToReplies", fields: [parent_id], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentToReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies  Comment[] @relation("CommentToReplies")
 }
 

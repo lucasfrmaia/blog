@@ -1,4 +1,3 @@
-import { IComment } from "@/app/api/_services/modules/comment/entities/comment";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -7,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { ROUTES_PAGE } from "@/utils/constantes/routes";
 import { useRouter } from "next/navigation";
 import { CommentCard } from "./CommentCard";
+import { IComment } from "@/app/api/_services/entities/comment";
 
 interface CommentListProps {
    postId: string;
@@ -35,12 +35,12 @@ export function CommentList({
       replyTof(id);
    };
 
-   const topLevelComments = comments.filter((c) => !c.parent_id);
+   const topLevelComments = comments.filter((c) => !c.parentId);
    const repliesMap = comments.reduce<Record<string, IComment[]>>(
       (acc, comment) => {
-         if (comment.parent_id) {
-            acc[comment.parent_id] = acc[comment.parent_id] || [];
-            acc[comment.parent_id].push(comment);
+         if (comment.parentId) {
+            acc[comment.parentId] = acc[comment.parentId] || [];
+            acc[comment.parentId].push(comment);
          }
          return acc;
       },

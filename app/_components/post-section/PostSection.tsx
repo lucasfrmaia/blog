@@ -2,15 +2,12 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import { motion } from "framer-motion";
-
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Button } from "../ui/button";
 import PostCard from "../post/PostCard";
 import { IPost } from "@/app/api/_services/entities/Post";
-import { IComment } from "@/app/api/_services/modules/comment/entities/comment";
 
 export default function PostSection() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery<IPost[]>({

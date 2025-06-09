@@ -10,7 +10,7 @@ export type IComment = Comment & {
 
 export type ICommentCreate = Pick<
    Comment,
-   "content" | "userId" | "postId" | "parent_id"
+   "content" | "userId" | "postId" | "parentId"
 >;
 
 export type ICommentUpdate = Partial<Pick<Comment, "content">> &

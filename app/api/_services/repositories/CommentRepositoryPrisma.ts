@@ -9,7 +9,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             content: data.content,
             userId: data.userId,
             postId: data.postId,
-            parent_id: data.parent_id,
+            parentId: data.parentId,
          },
       });
    }

@@ -4,9 +4,9 @@ import {
    ICategoryCreate,
    ICategoryUpdate,
 } from "../entities/category";
-import { ICategoryManager } from "../interfaces/CategoryRepository";
+import { ICategoryRepository } from "../interfaces/CategoryRepository";
 
-export class CategoryRepositoryPrisma implements ICategoryManager {
+export class CategoryRepositoryPrisma implements ICategoryRepository {
    async findPerPage(
       page: number,
       limit: number

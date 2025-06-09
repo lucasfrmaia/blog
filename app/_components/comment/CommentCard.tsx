@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
    ThumbsUp,
    ThumbsDown,
@@ -21,8 +21,8 @@ import {
 import { Card, CardContent } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { CommentForm } from "./CommentForm";
-import { IComment } from "@/app/api/_services/modules/comment/entities/comment";
 import { ADMIN_ROLE_ID } from "@/utils/constantes/constants";
+import { IComment } from "@/app/api/_services/entities/comment";
 
 interface CommentCardProps {
    comment: IComment;
@@ -124,7 +124,8 @@ export function CommentCard({
             <div className="flex items-start space-x-4">
                <Avatar>
                   <AvatarImage
-                     src={comment.user?.image || "/placeholder.jpg"}
+                     // ToDo Arrumar o avatar profile
+                     src={comment.user?.id || "/placeholder.jpg"}
                      alt={comment.user?.name || ""}
                   />
                   <AvatarFallback>

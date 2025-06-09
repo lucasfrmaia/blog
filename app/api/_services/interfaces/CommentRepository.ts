@@ -1,4 +1,4 @@
-import { IComment, ICommentCreate, ICommentUpdate } from "../entities/comment";
+import { ICommentCreate, ICommentUpdate, IComment } from "../entities/comment";
 
 export interface ICommentRepository {
    create(data: ICommentCreate): Promise<void>;
