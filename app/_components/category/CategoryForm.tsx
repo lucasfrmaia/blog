@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { Form, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { Form, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 
-import { Loader2 } from "lucide-react";
-import { ICategory } from "@/app/api/_services/entities/category";
-import { Button } from "../ui/button";
-import { Card, CardContent } from "../ui/card";
+import { Loader2 } from 'lucide-react';
+import { ICategory } from '@/app/api/_services/entities/category';
+import { Button } from '../ui/button';
+import { Card, CardContent } from '../ui/card';
 import {
    FormField,
    FormItem,
    FormLabel,
    FormControl,
    FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from '../ui/form';
+import { Input } from '../ui/input';
 
 const formSchema = z.object({
-   name: z.string().min(1, "O nome é obrigatório"),
-   color: z.string().min(1, "A cor é obrigatória"),
+   name: z.string().min(1, 'O nome é obrigatório'),
+   color: z.string().min(1, 'A cor é obrigatória'),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -38,8 +38,8 @@ export default function CategoryForm({
    const form = useForm<FormValues>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         name: defaultValues?.name || "",
-         color: defaultValues?.color || "#000000",
+         name: defaultValues?.name || '',
+         color: defaultValues?.color || '#000000',
       },
    });
 
@@ -102,7 +102,7 @@ export default function CategoryForm({
                            Salvando...
                         </>
                      ) : (
-                        "Salvar"
+                        'Salvar'
                      )}
                   </Button>
                </form>

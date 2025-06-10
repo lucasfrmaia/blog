@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { Button } from "@/app/_components/ui/button";
+import { Button } from '@/app/_components/ui/button';
 import {
    Dialog,
    DialogContent,
    DialogHeader,
    DialogTitle,
    DialogTrigger,
-} from "@/app/_components/ui/dialog";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+} from '@/app/_components/ui/dialog';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
    Form,
    FormField,
@@ -19,23 +19,23 @@ import {
    FormLabel,
    FormControl,
    FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { useToast } from "@/app/_components/ui/use-toast";
-import { useRouter } from "next/navigation";
+} from '@/app/_components/ui/form';
+import { Input } from '@/app/_components/ui/input';
+import { useToast } from '@/app/_components/ui/use-toast';
+import { useRouter } from 'next/navigation';
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from "@/app/_components/ui/select";
-import { IRole } from "@/app/api/_services/modules/role/entities/role";
-import { useQuery } from "@tanstack/react-query";
+} from '@/app/_components/ui/select';
+import { IRole } from '@/app/api/_services/modules/role/entities/role';
+import { useQuery } from '@tanstack/react-query';
 
 const formSchema = z.object({
-   name: z.string().min(1, "O nome é obrigatório"),
-   email: z.string().email("Email inválido"),
+   name: z.string().min(1, 'O nome é obrigatório'),
+   email: z.string().email('Email inválido'),
    role: z.coerce.number().int(),
 });
 
@@ -51,20 +51,20 @@ export function UserDialog({ user, children }: UserDialogProps) {
    const form = useForm({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         name: user?.name ?? "",
-         email: user?.email ?? "",
-         password: "",
-         role: user?.role ?? "",
+         name: user?.name ?? '',
+         email: user?.email ?? '',
+         password: '',
+         role: user?.role ?? '',
       },
    });
 
    const { data: roles, isLoading } = useQuery<IRole[]>({
-      queryKey: ["roles"],
+      queryKey: ['roles'],
       queryFn: async () => {
          const response = await fetch(`/api/roles`);
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || "Erro Desconhecido");
+            throw new Error(error.message || 'Erro Desconhecido');
          }
          return response.json();
       },
@@ -74,9 +74,9 @@ export function UserDialog({ user, children }: UserDialogProps) {
       console.log(data);
       try {
          const response = await fetch(`/api/users/${user?.id}`, {
-            method: "PATCH",
+            method: 'PATCH',
             headers: {
-               "Content-Type": "application/json",
+               'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
          });
@@ -87,18 +87,18 @@ export function UserDialog({ user, children }: UserDialogProps) {
          }
 
          toast({
-            title: "Usuário atualizado",
-            description: "O usuário foi atualizado com sucesso!",
+            title: 'Usuário atualizado',
+            description: 'O usuário foi atualizado com sucesso!',
          });
 
          setOpen(false);
       } catch (error) {
          toast({
-            title: "Erro",
+            title: 'Erro',
             description:
-               "Ocorreu um erro ao atualizar o usuário" +
+               'Ocorreu um erro ao atualizar o usuário' +
                (error as Error).message,
-            variant: "destructive",
+            variant: 'destructive',
          });
       }
    };

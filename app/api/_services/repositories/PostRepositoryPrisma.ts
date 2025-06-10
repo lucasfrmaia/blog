@@ -1,12 +1,12 @@
-import { prisma } from "../../../../prisma/lib/prisma";
+import { prisma } from '../../../../prisma/lib/prisma';
 import {
    IPost,
    IPostCreate,
    IPostFilters,
    IPostUpdate,
-} from "../entities/Post";
-import { Prisma } from "@prisma/client";
-import { IPostRepository } from "../interfaces/PostRepository";
+} from '../entities/Post';
+import { Prisma } from '@prisma/client';
+import { IPostRepository } from '../interfaces/PostRepository';
 
 export class PostRepositoryPrisma implements IPostRepository {
    async create(data: IPostCreate): Promise<IPost> {
@@ -55,7 +55,7 @@ export class PostRepositoryPrisma implements IPostRepository {
             categories: true,
          },
          orderBy: {
-            createdAt: "desc",
+            createdAt: 'desc',
          },
       });
 
@@ -96,7 +96,7 @@ export class PostRepositoryPrisma implements IPostRepository {
             categories: true,
          },
          orderBy: {
-            views: "desc",
+            views: 'desc',
          },
       });
 
@@ -106,7 +106,7 @@ export class PostRepositoryPrisma implements IPostRepository {
    async findPerPage(
       page: number,
       limit: number,
-      filters?: IPostFilters
+      filters?: IPostFilters,
    ): Promise<{ posts: IPost[]; total: number }> {
       const skip = (page - 1) * limit;
 
@@ -143,11 +143,11 @@ export class PostRepositoryPrisma implements IPostRepository {
       };
 
       const orderBy: Prisma.PostOrderByWithRelationInput =
-         filters?.sortBy === "oldest"
-            ? { createdAt: "asc" }
-            : filters?.sortBy === "popular"
-            ? { views: "desc" }
-            : { createdAt: "desc" };
+         filters?.sortBy === 'oldest'
+            ? { createdAt: 'asc' }
+            : filters?.sortBy === 'popular'
+              ? { views: 'desc' }
+              : { createdAt: 'desc' };
 
       const [posts, total] = await Promise.all([
          prisma.post.findMany({
@@ -178,7 +178,7 @@ export class PostRepositoryPrisma implements IPostRepository {
             categories: true,
          },
          orderBy: {
-            createdAt: "desc",
+            createdAt: 'desc',
          },
       });
 

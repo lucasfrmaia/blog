@@ -1,10 +1,10 @@
-import { useForm } from "react-hook-form";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import { useToast } from "../ui/use-toast";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useForm } from 'react-hook-form';
+import { Button } from '../ui/button';
+import { Textarea } from '../ui/textarea';
+import { useToast } from '../ui/use-toast';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 
 interface CommentFormProps {
    postId: string;
@@ -22,7 +22,7 @@ export function CommentForm({
    parentId,
    replyToUser,
    commentId,
-   initialContent = "",
+   initialContent = '',
    isEditing = false,
    onCommentSubmitted,
    onCancel,
@@ -42,15 +42,15 @@ export function CommentForm({
       formState: { isSubmitting },
    } = useForm({
       defaultValues: {
-         content: initialContent || "",
+         content: initialContent || '',
       },
    });
 
-   const content = watch("content");
+   const content = watch('content');
 
    useEffect(() => {
       if (replyToUser && !content) {
-         setValue("content", `@${replyToUser} `);
+         setValue('content', `@${replyToUser} `);
       }
    }, []);
 
@@ -58,14 +58,14 @@ export function CommentForm({
       try {
          const url = commentId
             ? `/api/comments/${commentId}`
-            : "/api/comments/create";
+            : '/api/comments/create';
 
-         const method = commentId ? "PATCH" : "POST";
+         const method = commentId ? 'PATCH' : 'POST';
 
          const response = await fetch(url, {
             method,
             headers: {
-               "Content-Type": "application/json",
+               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                content: data.content,
@@ -77,7 +77,7 @@ export function CommentForm({
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error?.message || "Erro Desconhecido");
+            throw new Error(error?.message || 'Erro Desconhecido');
          }
 
          reset();
@@ -87,23 +87,23 @@ export function CommentForm({
 
          toast({
             title: commentId
-               ? "Comentário atualizado"
+               ? 'Comentário atualizado'
                : parentId
-               ? "Resposta adicionada"
-               : "Comentário adicionado",
+                 ? 'Resposta adicionada'
+                 : 'Comentário adicionado',
             description: commentId
-               ? "Seu comentário foi editado com sucesso."
+               ? 'Seu comentário foi editado com sucesso.'
                : parentId
-               ? "Sua resposta foi publicada com sucesso."
-               : "Seu comentário foi publicado com sucesso.",
+                 ? 'Sua resposta foi publicada com sucesso.'
+                 : 'Seu comentário foi publicado com sucesso.',
          });
       } catch (error) {
          toast({
-            title: commentId ? "Erro ao editar" : "Erro ao comentar",
+            title: commentId ? 'Erro ao editar' : 'Erro ao comentar',
             description:
                `Ocorreu um erro: ${(error as Error).message}` ||
-               "Erro desconhecido",
-            variant: "destructive",
+               'Erro desconhecido',
+            variant: 'destructive',
          });
       }
    };
@@ -118,13 +118,13 @@ export function CommentForm({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
          <div className="flex gap-4">
             <Avatar>
-               <AvatarImage src={user?.image || ""} alt={user?.name || ""} />
+               <AvatarImage src={user?.image || ''} alt={user?.name || ''} />
                <AvatarFallback>
                   {user?.name
-                     ?.split(" ")
+                     ?.split(' ')
                      .map((n) => n[0])
-                     .join("")
-                     .toUpperCase() || "U"}
+                     .join('')
+                     .toUpperCase() || 'U'}
                </AvatarFallback>
             </Avatar>
             <div className="flex-1">
@@ -132,14 +132,14 @@ export function CommentForm({
                   <Textarea
                      placeholder={
                         isEditing
-                           ? "Edite seu comentário..."
+                           ? 'Edite seu comentário...'
                            : parentId
-                           ? "Adicione uma resposta..."
-                           : "Adicione um comentário..."
+                             ? 'Adicione uma resposta...'
+                             : 'Adicione um comentário...'
                      }
-                     {...register("content", { required: true })}
+                     {...register('content', { required: true })}
                      className={`min-h-0 resize-none transition-all duration-200 border-0 border-b focus:ring-0 outline-none overflow-hidden rounded-none bg-transparent ${
-                        isExpanded ? "min-h-[100px]" : "h-[40px]"
+                        isExpanded ? 'min-h-[100px]' : 'h-[40px]'
                      }`}
                      onClick={() => setIsExpanded(true)}
                      rows={1}
@@ -147,7 +147,7 @@ export function CommentForm({
                   <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary/10" />
                   <div
                      className={`absolute bottom-0 left-0 h-[2px] bg-primary transition-all duration-200 ${
-                        isExpanded ? "w-full" : "w-0"
+                        isExpanded ? 'w-full' : 'w-0'
                      }`}
                   />
                </div>
@@ -165,12 +165,12 @@ export function CommentForm({
                         disabled={isSubmitting || !content.trim()}
                      >
                         {isSubmitting
-                           ? "Enviando..."
+                           ? 'Enviando...'
                            : commentId
-                           ? "Salvar"
-                           : parentId
-                           ? "Responder"
-                           : "Comentar"}
+                             ? 'Salvar'
+                             : parentId
+                               ? 'Responder'
+                               : 'Comentar'}
                      </Button>
                   </div>
                )}

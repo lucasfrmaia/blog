@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { apiManager } from "../../_services/ApiManager";
+import { NextRequest, NextResponse } from 'next/server';
+import { apiManager } from '../../_services/ApiManager';
 
 export async function POST(request: NextRequest) {
    try {
@@ -7,8 +7,8 @@ export async function POST(request: NextRequest) {
 
       if (!email || !password) {
          return NextResponse.json(
-            { error: "Email e senha são obrigatórios" },
-            { status: 400 }
+            { error: 'Email e senha são obrigatórios' },
+            { status: 400 },
          );
       }
 
@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(user);
    } catch (error) {
       return NextResponse.json(
-         { error: "Credenciais inválidas" },
-         { status: 401 }
+         { error: 'Credenciais inválidas' },
+         { status: 401 },
       );
    }
 }

@@ -1,8 +1,8 @@
-import { Prisma, User } from "@prisma/client";
-import { IUser, IUserCreate, IUserUpdate } from "../entities/user";
-import { hash, compare, genSalt } from "bcryptjs";
-import { prisma } from "../../../../prisma/lib/prisma";
-import { IUserRepository } from "../interfaces/UserRepository";
+import { Prisma, User } from '@prisma/client';
+import { IUser, IUserCreate, IUserUpdate } from '../entities/user';
+import { hash, compare, genSalt } from 'bcryptjs';
+import { prisma } from '../../../../prisma/lib/prisma';
+import { IUserRepository } from '../interfaces/UserRepository';
 
 export class UserRepositoryPrisma implements IUserRepository {
    async findById(id: string): Promise<IUser | null> {
@@ -22,14 +22,14 @@ export class UserRepositoryPrisma implements IUserRepository {
 
    async findPerPage(
       page: number,
-      limit: number
+      limit: number,
    ): Promise<{ users: IUser[]; total: number }> {
       const [users, total] = await Promise.all([
          prisma.user.findMany({
             skip: (page - 1) * limit,
             take: limit,
             include: { role: true, posts: true, comments: true },
-            orderBy: { createdAt: "desc" },
+            orderBy: { createdAt: 'desc' },
          }),
          prisma.user.count(),
       ]);
@@ -40,9 +40,9 @@ export class UserRepositoryPrisma implements IUserRepository {
    async create(data: IUserCreate): Promise<IUser> {
       const salt = await genSalt(10);
       const passwordString =
-         typeof data.password === "string" ? data.password : "";
+         typeof data.password === 'string' ? data.password : '';
       if (!passwordString) {
-         throw new Error("Senha é obrigatória.");
+         throw new Error('Senha é obrigatória.');
       }
       const hashedPassword = await hash(passwordString, salt);
 
@@ -50,7 +50,7 @@ export class UserRepositoryPrisma implements IUserRepository {
 
       if (!roleId) {
          throw new Error(
-            "Role ID é obrigatório via 'role: { connect: { id: ... } }'"
+            "Role ID é obrigatório via 'role: { connect: { id: ... } }'",
          );
       }
 
@@ -73,13 +73,13 @@ export class UserRepositoryPrisma implements IUserRepository {
       });
 
       if (!user) {
-         throw new Error("Usuário não encontrado");
+         throw new Error('Usuário não encontrado');
       }
 
       const isValidPassword = await compare(password, user.password);
 
       if (!isValidPassword) {
-         throw new Error("Senha incorreta");
+         throw new Error('Senha incorreta');
       }
 
       return user as User;

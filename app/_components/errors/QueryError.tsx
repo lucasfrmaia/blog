@@ -1,8 +1,8 @@
-import { AlertCircle } from "lucide-react";
-import { motion } from "framer-motion";
-import NaveBar from "../header/NaveBar";
-import Footer from "../footer/Footer";
-import { Button } from "../ui/button";
+import { AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import NaveBar from '../header/NaveBar';
+import Footer from '../footer/Footer';
+import { Button } from '../ui/button';
 
 interface QueryErrorProps {
    message?: string;
@@ -10,7 +10,7 @@ interface QueryErrorProps {
 }
 
 export default function QueryError({
-   message = "Ocorreu um erro ao carregar os dados.",
+   message = 'Ocorreu um erro ao carregar os dados.',
    onRetry,
 }: QueryErrorProps) {
    return (

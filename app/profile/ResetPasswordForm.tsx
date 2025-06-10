@@ -1,41 +1,41 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { User, Mail, Loader2, Lock, Eye, EyeOff } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "../_components/ui/button";
+import { cn } from '@/lib/utils';
+import { ROUTES_PAGE } from '@/utils/constantes/routes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { User, Mail, Loader2, Lock, Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '../_components/ui/button';
 import {
    Card,
    CardHeader,
    CardTitle,
    CardDescription,
    CardContent,
-} from "../_components/ui/card";
-import { toast } from "../_components/ui/use-toast";
-import { Input } from "../_components/ui/input";
-import { Label } from "../_components/ui/label";
-import Link from "next/link";
-import { useState } from "react";
+} from '../_components/ui/card';
+import { toast } from '../_components/ui/use-toast';
+import { Input } from '../_components/ui/input';
+import { Label } from '../_components/ui/label';
+import Link from 'next/link';
+import { useState } from 'react';
 
 const passwordSchema = z
    .object({
       currentPassword: z.string(),
-      newPassword: z.string().min(8, "A senha deve ter no minimo 8 caracteres"),
+      newPassword: z.string().min(8, 'A senha deve ter no minimo 8 caracteres'),
       confirmPassword: z
          .string()
-         .min(8, "A senha deve ter no minimo 8 caracteres"),
+         .min(8, 'A senha deve ter no minimo 8 caracteres'),
    })
    .superRefine(({ confirmPassword, newPassword }, ctx) => {
       if (confirmPassword != newPassword) {
          ctx.addIssue({
-            code: "custom",
-            message: "As senhas devem ser iguais",
-            path: ["confirmPassword"],
+            code: 'custom',
+            message: 'As senhas devem ser iguais',
+            path: ['confirmPassword'],
          });
       }
    });
@@ -59,9 +59,9 @@ export function ResetPasswordForm() {
       try {
          setIsLoading(true);
          const response = await fetch(`/api/auth/reset-password`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-               "Content-Type": "application/json",
+               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                currentPassword: data.currentPassword,
@@ -72,20 +72,20 @@ export function ResetPasswordForm() {
          const result = await response.json();
 
          if (!response.ok) {
-            throw new Error(result.message || "Erro Desconhecido");
+            throw new Error(result.message || 'Erro Desconhecido');
          }
 
          toast({
-            title: "Sucesso",
-            description: "Sua senha foi alterada com sucesso",
+            title: 'Sucesso',
+            description: 'Sua senha foi alterada com sucesso',
          });
 
          formReset();
       } catch (error) {
          toast({
-            title: "Erro ao mudar a senha",
+            title: 'Erro ao mudar a senha',
             description: `${(error as Error).message}`,
-            variant: "destructive",
+            variant: 'destructive',
          });
       } finally {
          setIsLoading(false);
@@ -98,9 +98,9 @@ export function ResetPasswordForm() {
             <Label htmlFor="currentPassword">Senha Atual</Label>
             <div className="relative max-w-72">
                <Input
-                  {...register("currentPassword")}
+                  {...register('currentPassword')}
                   id="currentPassword"
-                  type={showCurrentPassword ? "text" : "password"}
+                  type={showCurrentPassword ? 'text' : 'password'}
                   placeholder="Digite sua senha atual"
                />
                <button
@@ -125,9 +125,9 @@ export function ResetPasswordForm() {
             <Label htmlFor="newPassword">Nova Senha</Label>
             <div className="relative max-w-72">
                <Input
-                  {...register("newPassword")}
+                  {...register('newPassword')}
                   id="newPassword"
-                  type={showNewPassword ? "text" : "password"}
+                  type={showNewPassword ? 'text' : 'password'}
                   placeholder="Digite sua nova senha"
                   className="max-w-72"
                />
@@ -153,9 +153,9 @@ export function ResetPasswordForm() {
             <Label htmlFor="confirmPassword">Confirmar Nova Senha</Label>
             <div className="relative max-w-72">
                <Input
-                  {...register("confirmPassword")}
+                  {...register('confirmPassword')}
                   id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
+                  type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Confirme sua nova senha"
                   className="max-w-72"
                />
@@ -184,7 +184,7 @@ export function ResetPasswordForm() {
                   Alterando...
                </>
             ) : (
-               "Alterar Senha"
+               'Alterar Senha'
             )}
          </Button>
       </form>

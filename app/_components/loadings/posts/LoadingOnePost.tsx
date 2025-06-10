@@ -1,7 +1,7 @@
-import BaseLayout from "../../layout/BaseLayout";
-import { Card } from "../../ui/card";
-import { Separator } from "../../ui/separator";
-import { Skeleton } from "../../ui/skeleton";
+import BaseLayout from '../../layout/BaseLayout';
+import { Card } from '../../ui/card';
+import { Separator } from '../../ui/separator';
+import { Skeleton } from '../../ui/skeleton';
 
 export function LoadingOnePostSkeleton() {
    return (

@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
    try {
@@ -8,8 +8,8 @@ export async function POST(request: NextRequest) {
       // Verificar se os campos obrigatórios estão presentes
       if (!body.name || !body.description) {
          return NextResponse.json(
-            { error: "Nome e descrição são campos obrigatórios" },
-            { status: 400 }
+            { error: 'Nome e descrição são campos obrigatórios' },
+            { status: 400 },
          );
       }
 
@@ -19,13 +19,13 @@ export async function POST(request: NextRequest) {
       });
 
       return NextResponse.json(
-         { message: "Função criada com sucesso" },
-         { status: 201 }
+         { message: 'Função criada com sucesso' },
+         { status: 201 },
       );
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao criar função: " + (error as Error).message },
-         { status: 500 }
+         { error: 'Erro ao criar função: ' + (error as Error).message },
+         { status: 500 },
       );
    }
 }

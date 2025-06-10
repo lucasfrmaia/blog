@@ -1,34 +1,34 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
-import { FileText, Mail, User, Lock } from "lucide-react";
-import { redirect } from "next/navigation";
-import { AuthUser } from "@/utils/types/auth";
-import { LoadingProfile } from "../_components/loadings/LoadingProfile";
-import BaseLayout from "../_components/layout/BaseLayout";
+import { FileText, Mail, User, Lock } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { AuthUser } from '@/utils/types/auth';
+import { LoadingProfile } from '../_components/loadings/LoadingProfile';
+import BaseLayout from '../_components/layout/BaseLayout';
 import {
    Card,
    CardContent,
    CardDescription,
    CardHeader,
    CardTitle,
-} from "../_components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../_components/ui/avatar";
-import { getServerSession } from "next-auth";
-import { IUser } from "../api/_services/entities/user";
-import { NextAuthOptions } from "../api/auth/auth-options";
+} from '../_components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../_components/ui/avatar';
+import { getServerSession } from 'next-auth';
+import { IUser } from '../api/_services/entities/user';
+import { NextAuthOptions } from '../api/auth/auth-options';
 import {
    Tabs,
    TabsContent,
    TabsList,
    TabsTrigger,
-} from "../_components/ui/tabs";
-import { Button } from "../_components/ui/button";
-import { ResetPasswordForm } from "./ResetPasswordForm";
+} from '../_components/ui/tabs';
+import { Button } from '../_components/ui/button';
+import { ResetPasswordForm } from './ResetPasswordForm';
 
 export default function ProfilePage({
    searchParams,
@@ -38,10 +38,10 @@ export default function ProfilePage({
    const { data: session } = useSession();
 
    const { data: userData, isLoading } = useQuery({
-      queryKey: ["profile", session?.user.id],
+      queryKey: ['profile', session?.user.id],
       queryFn: async () => {
          const response = await fetch(
-            `${process.env.API_URL}/users/${session?.user?.id}`
+            `${process.env.API_URL}/users/${session?.user?.id}`,
          );
 
          return (await response.json()) as IUser;
@@ -52,7 +52,7 @@ export default function ProfilePage({
       return <LoadingProfile />;
    }
 
-   const defaultTab = searchParams.tab || "comments";
+   const defaultTab = searchParams.tab || 'comments';
 
    return (
       <BaseLayout>
@@ -82,7 +82,7 @@ export default function ProfilePage({
                         </span>
                         <p>
                            {new Date(
-                              userData?.createdAt || ""
+                              userData?.createdAt || '',
                            ).toLocaleDateString()}
                         </p>
                      </div>
@@ -91,7 +91,7 @@ export default function ProfilePage({
                            Função
                         </span>
                         <p className="capitalize">
-                           {userData?.role?.name || "Usuário"}
+                           {userData?.role?.name || 'Usuário'}
                         </p>
                      </div>
                   </div>
@@ -127,7 +127,7 @@ export default function ProfilePage({
                                              {format(
                                                 new Date(comment.createdAt),
                                                 "dd 'de' MMMM 'de' yyyy",
-                                                { locale: ptBR }
+                                                { locale: ptBR },
                                              )}
                                           </p>
                                           <p className="mt-2">

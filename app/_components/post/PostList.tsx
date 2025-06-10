@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Ban, Edit2, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import QueryError from "../errors/QueryError";
-import { useToast } from "../ui/use-toast";
-import { IPost } from "@/app/api/_services/entities/Post";
-import { Column, DataTable } from "../shared/DataTable";
-import { Button } from "../ui/button";
-import { PostDialog } from "./dialogs/PostDialog";
-import { Badge } from "../ui/badge";
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { Ban, Edit2, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import QueryError from '../errors/QueryError';
+import { useToast } from '../ui/use-toast';
+import { IPost } from '@/app/api/_services/entities/Post';
+import { Column, DataTable } from '../shared/DataTable';
+import { Button } from '../ui/button';
+import { PostDialog } from './dialogs/PostDialog';
+import { Badge } from '../ui/badge';
 import {
    AlertDialog,
    AlertDialogAction,
@@ -24,10 +24,10 @@ import {
    AlertDialogHeader,
    AlertDialogTitle,
    AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import { ITENS_PER_PAGE_TABLE } from "@/utils/constantes/constants";
-import { CategoryBadge } from "../category/CategoryBadge";
-import { LoadingDataTable } from "../loadings/PostListLoading";
+} from '../ui/alert-dialog';
+import { ITENS_PER_PAGE_TABLE } from '@/utils/constantes/constants';
+import { CategoryBadge } from '../category/CategoryBadge';
+import { LoadingDataTable } from '../loadings/PostListLoading';
 
 interface IPostList {
    currentPage: number;
@@ -39,7 +39,7 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
    const queryClient = useQueryClient();
 
    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ["posts", currentPage],
+      queryKey: ['posts', currentPage],
       queryFn: async () => {
          await new Promise((resolve) => setTimeout(resolve, 0.1 * 1000));
          const params = new URLSearchParams({
@@ -51,7 +51,7 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error?.message || "Erro Desconhecido");
+            throw new Error(error?.message || 'Erro Desconhecido');
          }
 
          return response.json();
@@ -62,28 +62,28 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
    const { mutate: deletePost } = useMutation({
       mutationFn: async (id: string) => {
          const response = await fetch(`/api/posts/${id}`, {
-            method: "DELETE",
+            method: 'DELETE',
          });
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error?.message || "Erro Desconhecido");
+            throw new Error(error?.message || 'Erro Desconhecido');
          }
          return response.json();
       },
       onSuccess: () => {
          toast({
-            title: "Post excluído com sucesso!",
-            description: "O post foi removido do sistema.",
+            title: 'Post excluído com sucesso!',
+            description: 'O post foi removido do sistema.',
          });
          refetch();
       },
       onError: (error) => {
          toast({
-            title: "Erro ao excluir post",
+            title: 'Erro ao excluir post',
             description:
-               "Ocorreu um erro ao tentar excluir o post: " + error.message,
-            variant: "destructive",
+               'Ocorreu um erro ao tentar excluir o post: ' + error.message,
+            variant: 'destructive',
          });
       },
    });
@@ -102,15 +102,15 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
 
    const columns: Column<IPost>[] = [
       {
-         header: "ID",
+         header: 'ID',
          accessorKey: (post: IPost) => post.id,
       },
       {
-         header: "Título",
+         header: 'Título',
          accessorKey: (post: IPost) => post.title,
       },
       {
-         header: "Categoria",
+         header: 'Categoria',
          accessorKey: (post: IPost) => {
             return (
                <div className="flex flex-wrap w-56 gap-2 text-primary">
@@ -126,19 +126,19 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
          },
       },
       {
-         header: "Visualizações",
+         header: 'Visualizações',
          accessorKey: (post: IPost) => post.views,
-         className: "text-right",
+         className: 'text-right',
       },
       {
-         header: "Data",
+         header: 'Data',
          accessorKey: (post: IPost) =>
             format(new Date(post.createdAt), "dd 'de' MMMM 'de' yyyy", {
                locale: ptBR,
             }),
       },
       {
-         header: "Ações",
+         header: 'Ações',
          accessorKey: (post: IPost) => (
             <div className="flex items-center gap-2">
                <PostDialog currentPage={currentPage} mode="edit" post={post}>

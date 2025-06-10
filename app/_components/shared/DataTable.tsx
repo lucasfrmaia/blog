@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ReactNode } from "react";
-import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ReactNode } from 'react';
+import { Button } from '../ui/button';
 import {
    Table,
    TableBody,
@@ -10,9 +10,9 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from "../ui/table";
-import { FaAngleDoubleLeft } from "react-icons/fa";
-import { DoubleArrowRightIcon } from "@radix-ui/react-icons";
+} from '../ui/table';
+import { FaAngleDoubleLeft } from 'react-icons/fa';
+import { DoubleArrowRightIcon } from '@radix-ui/react-icons';
 
 export interface Column<T> {
    header: string;
@@ -51,7 +51,7 @@ export function DataTable<T>({
 
       // Adiciona "..." se a página atual estiver além da página 3
       if (page > 3) {
-         pageNumbers.push("...");
+         pageNumbers.push('...');
       }
 
       // Adiciona até 3 páginas ao redor da atual (ex: 2, 3, 4 se page = 3)
@@ -63,7 +63,7 @@ export function DataTable<T>({
 
       // Adiciona "..." se estiver distante do fim
       if (page < totalPages - 2) {
-         pageNumbers.push("...");
+         pageNumbers.push('...');
       }
 
       // Sempre mostra a última página (se não for a primeira)
@@ -126,16 +126,16 @@ export function DataTable<T>({
 
                {getPageNumbers().map((pageNumber, index) => (
                   <div key={index}>
-                     {pageNumber === "..." ? (
+                     {pageNumber === '...' ? (
                         <span className="px-3 py-2 text-muted-foreground">
                            ...
                         </span>
                      ) : (
                         <Button
-                           variant={pageNumber === page ? "default" : "outline"}
+                           variant={pageNumber === page ? 'default' : 'outline'}
                            size="icon"
                            onClick={() =>
-                              typeof pageNumber === "number" &&
+                              typeof pageNumber === 'number' &&
                               onPageChange(pageNumber)
                            }
                         >

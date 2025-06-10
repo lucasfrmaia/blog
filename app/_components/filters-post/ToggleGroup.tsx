@@ -1,10 +1,10 @@
-import React from "react";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { cn } from '@/lib/utils';
 
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
-import { VariantProps } from "class-variance-authority";
-import { toggleVariants } from "../ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group';
+import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
+import { VariantProps } from 'class-variance-authority';
+import { toggleVariants } from '../ui/toggle';
 
 type IToggleGroupProps = {
    children?: React.ReactNode;
@@ -19,14 +19,14 @@ export const ToggleGroupContainer = ({
    children,
    className,
 }: IToggleGroupProps) => {
-   return <div className={cn("", className)}>{children}</div>;
+   return <div className={cn('', className)}>{children}</div>;
 };
 
 export const ToggleGroupTitle = ({
    children,
    className,
 }: IToggleGroupProps) => {
-   return <h3 className={cn("", className)}>{children}</h3>;
+   return <h3 className={cn('', className)}>{children}</h3>;
 };
 
 export default function ToggleGroupItems({
@@ -39,7 +39,7 @@ export default function ToggleGroupItems({
    return (
       <ToggleGroup
          {...props}
-         className={cn("", props.className)}
+         className={cn('', props.className)}
          variant="outline"
       >
          {options.map((option) => {

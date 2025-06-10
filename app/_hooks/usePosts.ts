@@ -1,7 +1,7 @@
-import { useCallback } from "react";
-import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { IPost } from "@/app/api/_services/entities/Post";
+import { useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { IPost } from '@/app/api/_services/entities/Post';
 
 interface PostsResponse {
    posts: IPost[];
@@ -33,19 +33,19 @@ export function usePosts({
       error,
       refetch,
    } = useQuery<PostsResponse>({
-      queryKey: ["posts", page, search, categories, sortBy],
+      queryKey: ['posts', page, search, categories, sortBy],
       queryFn: async () => {
          const params = new URLSearchParams({
             page: String(page),
             limit: String(limit),
             ...(search && { search }),
-            ...(categories.length > 0 && { categories: categories.join(",") }),
+            ...(categories.length > 0 && { categories: categories.join(',') }),
             ...(sortBy && { sortBy }),
          });
 
          const response = await fetch(`/api/posts/page?${params}`);
          if (!response.ok) {
-            throw new Error("Erro ao buscar posts");
+            throw new Error('Erro ao buscar posts');
          }
          return response.json();
       },
@@ -53,7 +53,7 @@ export function usePosts({
 
    const buildSearchParams = (
       currentParams: { [key: string]: string | string[] | undefined },
-      overrides: Record<string, string | string[]>
+      overrides: Record<string, string | string[]>,
    ): URLSearchParams => {
       const newParams = new URLSearchParams();
 
@@ -61,7 +61,7 @@ export function usePosts({
       Object.entries(currentParams).forEach(([key, value]) => {
          if (Array.isArray(value)) {
             if (value.length > 0) {
-               newParams.set(key, value.join(","));
+               newParams.set(key, value.join(','));
             }
          } else if (value !== undefined) {
             newParams.set(key, value);
@@ -72,7 +72,7 @@ export function usePosts({
       Object.entries(overrides).forEach(([key, value]) => {
          if (Array.isArray(value)) {
             if (value.length > 0) {
-               newParams.set(key, value.join(","));
+               newParams.set(key, value.join(','));
             } else {
                newParams.delete(key);
             }
@@ -91,13 +91,13 @@ export function usePosts({
          const newParams = buildSearchParams(searchParams, params);
 
          // Se não estiver atualizando "page", resetar para 1
-         if (!("page" in params)) {
-            newParams.set("page", "1");
+         if (!('page' in params)) {
+            newParams.set('page', '1');
          }
 
          router.push(`/posts?${newParams.toString()}`);
       },
-      [router, searchParams]
+      [router, searchParams],
    );
 
    const getPageUrl = (pageNumber: number) => {
@@ -116,7 +116,7 @@ export function usePosts({
    };
 
    const handleResetFilters = () => {
-      router.push("/posts");
+      router.push('/posts');
    };
 
    return {

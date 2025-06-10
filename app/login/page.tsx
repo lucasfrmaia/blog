@@ -1,12 +1,12 @@
-import React from "react";
-import { cn } from "@/lib/utils";
-import FormLogin from "./FormLogin";
-import Footer from "../_components/footer/Footer";
-import NaveBar from "../_components/header/NaveBar";
-import { getServerSession } from "next-auth";
-import { NextAuthOptions } from "../api/auth/auth-options";
-import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { redirect } from "next/navigation";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import FormLogin from './FormLogin';
+import Footer from '../_components/footer/Footer';
+import NaveBar from '../_components/header/NaveBar';
+import { getServerSession } from 'next-auth';
+import { NextAuthOptions } from '../api/auth/auth-options';
+import { ROUTES_PAGE } from '@/utils/constantes/routes';
+import { redirect } from 'next/navigation';
 
 type IPropFormLogin = {
    children?: React.ReactNode;
@@ -25,8 +25,8 @@ export default async function page({ children, className }: IPropFormLogin) {
          <NaveBar />
          <main
             className={cn(
-               "w-full h-[70vh] flex items-center justify-center bg-transparent",
-               className
+               'w-full h-[70vh] flex items-center justify-center bg-transparent',
+               className,
             )}
          >
             <FormLogin />

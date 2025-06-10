@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { Mail, EyeOff, Eye, Loader2, Lock } from "lucide-react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "../_components/ui/button";
+import { cn } from '@/lib/utils';
+import { ROUTES_PAGE } from '@/utils/constantes/routes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { Mail, EyeOff, Eye, Loader2, Lock } from 'lucide-react';
+import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '../_components/ui/button';
 import {
    Card,
    CardHeader,
    CardTitle,
    CardDescription,
    CardContent,
-} from "../_components/ui/card";
-import { useToast } from "../_components/ui/use-toast";
-import { Input } from "../_components/ui/input";
-import { Label } from "../_components/ui/label";
-import Link from "next/link";
+} from '../_components/ui/card';
+import { useToast } from '../_components/ui/use-toast';
+import { Input } from '../_components/ui/input';
+import { Label } from '../_components/ui/label';
+import Link from 'next/link';
 
 type IPropFormLogin = {
    children?: React.ReactNode;
@@ -29,8 +29,8 @@ type IPropFormLogin = {
 };
 
 const schema = z.object({
-   email: z.string().email("Email inválido").min(1, "O email é obrigatório"),
-   password: z.string().min(1, "A senha é obrigatória"),
+   email: z.string().email('Email inválido').min(1, 'O email é obrigatório'),
+   password: z.string().min(1, 'A senha é obrigatória'),
    remember: z.boolean(),
 });
 
@@ -49,7 +49,7 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
       try {
-         const response = await signIn("credentials", {
+         const response = await signIn('credentials', {
             email: data.email,
             password: data.password,
             redirect: false,
@@ -57,9 +57,9 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
 
          if (response?.error) {
             toast({
-               title: "Erro ao fazer login",
-               description: "Email ou senha incorretos",
-               variant: "destructive",
+               title: 'Erro ao fazer login',
+               description: 'Email ou senha incorretos',
+               variant: 'destructive',
             });
             return;
          }
@@ -67,14 +67,14 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
          router.replace(ROUTES_PAGE.home.link);
 
          toast({
-            title: "Login realizado com sucesso",
-            description: "Bem-vindo de volta!",
+            title: 'Login realizado com sucesso',
+            description: 'Bem-vindo de volta!',
          });
       } catch (error) {
          toast({
-            title: "Erro ao fazer login",
-            description: "Ocorreu um erro inesperado",
-            variant: "destructive",
+            title: 'Erro ao fazer login',
+            description: 'Ocorreu um erro inesperado',
+            variant: 'destructive',
          });
       }
    };
@@ -103,14 +103,14 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
                         <div className="relative">
                            <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                            <Input
-                              {...register("email")}
+                              {...register('email')}
                               disabled={isSubmitting}
                               id="email"
                               type="email"
                               placeholder="Digite seu email..."
                               className={cn(
-                                 "pl-9",
-                                 errors.email && "border-red-500"
+                                 'pl-9',
+                                 errors.email && 'border-red-500',
                               )}
                            />
                         </div>
@@ -126,14 +126,14 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
                         <div className="relative">
                            <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                            <Input
-                              {...register("password")}
+                              {...register('password')}
                               disabled={isSubmitting}
                               id="password"
-                              type={showPassword ? "text" : "password"}
+                              type={showPassword ? 'text' : 'password'}
                               placeholder="Digite sua senha..."
                               className={cn(
-                                 "pl-9 pr-9",
-                                 errors.password && "border-red-500"
+                                 'pl-9 pr-9',
+                                 errors.password && 'border-red-500',
                               )}
                            />
                            <button
@@ -162,7 +162,7 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
                            type="checkbox"
                            className="h-4 w-4 rounded border border-primary text-primary focus:ring-primary"
                            id="remember"
-                           {...register("remember")}
+                           {...register('remember')}
                            disabled={isSubmitting}
                         />
                         <Label
@@ -192,13 +192,13 @@ export default function FormLogin({ children, className }: IPropFormLogin) {
                            Entrando...
                         </>
                      ) : (
-                        "Entrar"
+                        'Entrar'
                      )}
                   </Button>
 
                   <div className="text-center text-sm">
                      <span className="text-muted-foreground">
-                        Não possui uma conta?{" "}
+                        Não possui uma conta?{' '}
                         <Link
                            href={ROUTES_PAGE.register.link}
                            className="text-primary hover:underline"

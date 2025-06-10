@@ -1,4 +1,4 @@
-import { Button } from "@/app/_components/ui/button";
+import { Button } from '@/app/_components/ui/button';
 import {
    Pagination,
    PaginationContent,
@@ -6,8 +6,8 @@ import {
    PaginationLink,
    PaginationNext,
    PaginationPrevious,
-} from "@/app/_components/ui/pagination";
-import Link from "next/link";
+} from '@/app/_components/ui/pagination';
+import Link from 'next/link';
 
 interface PostPaginationProps {
    currentPage: number;
@@ -40,14 +40,14 @@ export default function PostPagination({
                         <Link href={getPageUrl(page)}>
                            <Button
                               variant={
-                                 currentPage === page ? "default" : "outline"
+                                 currentPage === page ? 'default' : 'outline'
                               }
                            >
                               {page}
                            </Button>
                         </Link>
                      </PaginationItem>
-                  )
+                  ),
                )}
 
                <PaginationItem>

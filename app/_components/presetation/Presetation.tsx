@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Button } from "../ui/button";
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { Button } from '../ui/button';
 
 export default function Presentation() {
    return (
@@ -21,7 +21,7 @@ export default function Presentation() {
                   className="max-w-2xl"
                >
                   <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
-                     Explore o Mundo do{" "}
+                     Explore o Mundo do{' '}
                      <span className="text-primary">Desenvolvimento</span>
                   </h1>
                   <p className="mt-6 text-lg leading-8 text-muted-foreground">

@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
    params: {
@@ -15,8 +15,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return NextResponse.json(posts);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar posts da categoria" },
-         { status: 500 }
+         { error: 'Erro ao buscar posts da categoria' },
+         { status: 500 },
       );
    }
 }

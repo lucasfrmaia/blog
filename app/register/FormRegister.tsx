@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { User, Mail, Loader2, Lock, Eye, EyeOff } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "../_components/ui/button";
+import { cn } from '@/lib/utils';
+import { ROUTES_PAGE } from '@/utils/constantes/routes';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { User, Mail, Loader2, Lock, Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { z } from 'zod';
+import { Button } from '../_components/ui/button';
 import {
    Card,
    CardHeader,
    CardTitle,
    CardDescription,
    CardContent,
-} from "../_components/ui/card";
-import { toast } from "../_components/ui/use-toast";
-import { Input } from "../_components/ui/input";
-import { Label } from "../_components/ui/label";
-import Link from "next/link";
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+} from '../_components/ui/card';
+import { toast } from '../_components/ui/use-toast';
+import { Input } from '../_components/ui/input';
+import { Label } from '../_components/ui/label';
+import Link from 'next/link';
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 type IPropFormRegister = {
    children?: React.ReactNode;
@@ -29,14 +29,14 @@ type IPropFormRegister = {
 };
 
 const schema = z.object({
-   name: z.string().min(1, "O nome é obrigatório"),
-   email: z.string().email("Email inválido").min(1, "O email é obrigatório"),
-   password: z.string().min(8, "A senha deve ter no mínimo 8 caracteres"),
+   name: z.string().min(1, 'O nome é obrigatório'),
+   email: z.string().email('Email inválido').min(1, 'O email é obrigatório'),
+   password: z.string().min(8, 'A senha deve ter no mínimo 8 caracteres'),
    // .regex(/[A-Z]/, "A senha deve conter pelo menos uma letra maiúscula")
    // .regex(/[a-z]/, "A senha deve conter pelo menos uma letra minúscula")
    // .regex(/[0-9]/, "A senha deve conter pelo menos um número"),
    terms: z.boolean().refine((val) => val === true, {
-      message: "Você precisa aceitar os termos de uso",
+      message: 'Você precisa aceitar os termos de uso',
    }),
 });
 
@@ -57,20 +57,20 @@ export default function FormRegister({
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
       try {
-         const response = await fetch("/api/users/register", {
-            method: "POST",
+         const response = await fetch('/api/users/register', {
+            method: 'POST',
             headers: {
-               "Content-Type": "application/json",
+               'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
          });
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error?.message || "Erro Desconhecido");
+            throw new Error(error?.message || 'Erro Desconhecido');
          }
 
-         await signIn("credentials", {
+         await signIn('credentials', {
             email: data.email,
             password: data.password,
             redirect: false,
@@ -81,9 +81,9 @@ export default function FormRegister({
          const message = (error as Error).message;
 
          toast({
-            title: "Erro ao fazer login",
+            title: 'Erro ao fazer login',
             description: `Erro: ${message}`,
-            variant: "destructive",
+            variant: 'destructive',
          });
       }
    };
@@ -112,13 +112,13 @@ export default function FormRegister({
                         <div className="relative">
                            <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                            <Input
-                              {...register("name")}
+                              {...register('name')}
                               disabled={isSubmitting}
                               id="name"
                               placeholder="Digite seu nome..."
                               className={cn(
-                                 "pl-9",
-                                 errors.name && "border-red-500"
+                                 'pl-9',
+                                 errors.name && 'border-red-500',
                               )}
                            />
                         </div>
@@ -134,14 +134,14 @@ export default function FormRegister({
                         <div className="relative">
                            <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                            <Input
-                              {...register("email")}
+                              {...register('email')}
                               disabled={isSubmitting}
                               id="email"
                               type="email"
                               placeholder="Digite seu email..."
                               className={cn(
-                                 "pl-9",
-                                 errors.email && "border-red-500"
+                                 'pl-9',
+                                 errors.email && 'border-red-500',
                               )}
                            />
                         </div>
@@ -157,14 +157,14 @@ export default function FormRegister({
                         <div className="relative">
                            <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                            <Input
-                              {...register("password")}
+                              {...register('password')}
                               disabled={isSubmitting}
                               id="password"
-                              type={showPassword ? "text" : "password"}
+                              type={showPassword ? 'text' : 'password'}
                               placeholder="Digite sua senha..."
                               className={cn(
-                                 "pl-9 pr-9",
-                                 errors.password && "border-red-500"
+                                 'pl-9 pr-9',
+                                 errors.password && 'border-red-500',
                               )}
                            />
                            <button
@@ -191,14 +191,14 @@ export default function FormRegister({
                      <input
                         type="checkbox"
                         id="terms"
-                        {...register("terms")}
+                        {...register('terms')}
                         disabled={isSubmitting}
                      />
                      <Label
                         htmlFor="terms"
                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                      >
-                        Li e aceito os{" "}
+                        Li e aceito os{' '}
                         <Link
                            href={ROUTES_PAGE.termsOfUse.link}
                            className="text-primary hover:underline"
@@ -224,13 +224,13 @@ export default function FormRegister({
                            Criando conta...
                         </>
                      ) : (
-                        "Criar conta"
+                        'Criar conta'
                      )}
                   </Button>
 
                   <div className="text-center text-sm">
                      <span className="text-muted-foreground">
-                        Já possui uma conta?{" "}
+                        Já possui uma conta?{' '}
                         <Link
                            href={ROUTES_PAGE.login.link}
                            className="text-primary hover:underline"

@@ -1,5 +1,5 @@
-import { NextResponse, NextRequest } from "next/server";
-import { apiManager } from "../../_services/ApiManager";
+import { NextResponse, NextRequest } from 'next/server';
+import { apiManager } from '../../_services/ApiManager';
 
 interface RouteParams {
    params: {
@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       }
    } catch (error) {
       return NextResponse.json({
-         error: "Erro ao atualizar o usuário: " + (error as Error).message,
+         error: 'Erro ao atualizar o usuário: ' + (error as Error).message,
          status: 500,
       });
    }
@@ -35,10 +35,10 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
          roleId: Number(body.role),
       });
 
-      return NextResponse.json({ message: "Sucesso ao atualizar o usuário" });
+      return NextResponse.json({ message: 'Sucesso ao atualizar o usuário' });
    } catch (error) {
       return NextResponse.json({
-         error: "Erro ao atualizar o usuário: " + (error as Error).message,
+         error: 'Erro ao atualizar o usuário: ' + (error as Error).message,
          status: 500,
       });
    }

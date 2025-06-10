@@ -1,5 +1,5 @@
-import { ICategory } from "@/app/api/_services/entities/category";
-import { Badge } from "../ui/badge";
+import { ICategory } from '@/app/api/_services/entities/category';
+import { Badge } from '../ui/badge';
 
 export function CategoryBadge({
    category,
@@ -15,7 +15,7 @@ export function CategoryBadge({
          className={className}
          style={{
             backgroundColor: category.color,
-            color: "white",
+            color: 'white',
          }}
       >
          {category.name}

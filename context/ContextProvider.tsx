@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ThemeProvider } from "next-themes";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SessionProvider } from "next-auth/react";
-import { Toaster } from "@/app/_components/ui/toaster";
+import { ThemeProvider } from 'next-themes';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SessionProvider } from 'next-auth/react';
+import { Toaster } from '@/app/_components/ui/toaster';
 
 interface ContextProviderProps {
    children: React.ReactNode;

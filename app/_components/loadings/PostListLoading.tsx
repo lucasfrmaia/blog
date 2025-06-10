@@ -1,5 +1,5 @@
-import { ITENS_PER_PAGE_TABLE } from "@/utils/constantes/constants";
-import { Skeleton } from "../ui/skeleton";
+import { ITENS_PER_PAGE_TABLE } from '@/utils/constantes/constants';
+import { Skeleton } from '../ui/skeleton';
 import {
    Table,
    TableBody,
@@ -7,7 +7,7 @@ import {
    TableHead,
    TableHeader,
    TableRow,
-} from "../ui/table";
+} from '../ui/table';
 
 // Quantidade fixa de linhas e colunas simuladas
 const SKELETON_COL_COUNT = 5;
@@ -23,7 +23,7 @@ export function LoadingDataTable() {
                         <TableHead key={colIdx}>
                            <Skeleton className="h-4 w-24" />
                         </TableHead>
-                     )
+                     ),
                   )}
                </TableRow>
             </TableHeader>
@@ -36,10 +36,10 @@ export function LoadingDataTable() {
                               <TableCell key={colIdx}>
                                  <Skeleton className="h-4 w-full" />
                               </TableCell>
-                           )
+                           ),
                         )}
                      </TableRow>
-                  )
+                  ),
                )}
             </TableBody>
          </Table>

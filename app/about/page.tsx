@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight, Mail } from "lucide-react";
-import BaseLayout from "../_components/layout/BaseLayout";
-import { Button } from "../_components/ui/button";
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight, Mail } from 'lucide-react';
+import BaseLayout from '../_components/layout/BaseLayout';
+import { Button } from '../_components/ui/button';
 
 export default function AboutPage() {
    return (
@@ -99,7 +99,7 @@ export default function AboutPage() {
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="flex gap-4">
                      <div className="bg-primary/10 p-3 rounded-lg h-fit">
-                        <code className="text-primary text-2xl">{"</"}</code>
+                        <code className="text-primary text-2xl">{'</'}</code>
                      </div>
                      <div>
                         <h3 className="text-xl font-semibold mb-2">
@@ -113,7 +113,7 @@ export default function AboutPage() {
                   </div>
                   <div className="flex gap-4">
                      <div className="bg-primary/10 p-3 rounded-lg h-fit">
-                        <code className="text-primary text-2xl">{"{ }"}</code>
+                        <code className="text-primary text-2xl">{'{ }'}</code>
                      </div>
                      <div>
                         <h3 className="text-xl font-semibold mb-2">
@@ -127,7 +127,7 @@ export default function AboutPage() {
                   </div>
                   <div className="flex gap-4">
                      <div className="bg-primary/10 p-3 rounded-lg h-fit">
-                        <code className="text-primary text-2xl">{"⚡"}</code>
+                        <code className="text-primary text-2xl">{'⚡'}</code>
                      </div>
                      <div>
                         <h3 className="text-xl font-semibold mb-2">
@@ -141,7 +141,7 @@ export default function AboutPage() {
                   </div>
                   <div className="flex gap-4">
                      <div className="bg-primary/10 p-3 rounded-lg h-fit">
-                        <code className="text-primary text-2xl">{"🔒"}</code>
+                        <code className="text-primary text-2xl">{'🔒'}</code>
                      </div>
                      <div>
                         <h3 className="text-xl font-semibold mb-2">

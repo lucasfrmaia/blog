@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React from "react";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import { NAVEBAR_ROUTES } from "@/utils/constantes/routes";
-import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
-import { AuthUser } from "@/utils/types/auth";
-import { UserMenu } from "./UserMenu";
+import React from 'react';
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { NAVEBAR_ROUTES } from '@/utils/constantes/routes';
+import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
+import { AuthUser } from '@/utils/types/auth';
+import { UserMenu } from './UserMenu';
 
 // ToDo mudar role
 export default function NaveBar() {
@@ -31,10 +31,10 @@ export default function NaveBar() {
                      key={link}
                      href={link}
                      className={cn(
-                        "transition-colors hover:text-foreground/80",
+                        'transition-colors hover:text-foreground/80',
                         pathname === link
-                           ? "text-foreground"
-                           : "text-foreground/60"
+                           ? 'text-foreground'
+                           : 'text-foreground/60',
                      )}
                   >
                      {label}
@@ -45,10 +45,10 @@ export default function NaveBar() {
                   <Link
                      href="/dashboard"
                      className={cn(
-                        "transition-colors hover:text-foreground/80",
-                        pathname?.startsWith("/dashboard")
-                           ? "text-foreground"
-                           : "text-foreground/60"
+                        'transition-colors hover:text-foreground/80',
+                        pathname?.startsWith('/dashboard')
+                           ? 'text-foreground'
+                           : 'text-foreground/60',
                      )}
                   >
                      Dashboard

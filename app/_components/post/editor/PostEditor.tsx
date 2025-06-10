@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Placeholder from '@tiptap/extension-placeholder';
 import {
    Bold,
    Italic,
@@ -15,9 +15,9 @@ import {
    Code,
    Undo,
    Redo,
-} from "lucide-react";
-import { Editor } from "@tiptap/core";
-import { Button } from "../../ui/button";
+} from 'lucide-react';
+import { Editor } from '@tiptap/core';
+import { Button } from '../../ui/button';
 
 interface PostEditorProps {
    value: string;
@@ -29,7 +29,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
       extensions: [
          StarterKit,
          Placeholder.configure({
-            placeholder: "Comece a escrever seu post...",
+            placeholder: 'Comece a escrever seu post...',
          }),
       ],
       content: value,
@@ -49,7 +49,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                variant="ghost"
                size="sm"
                onClick={() => editor.chain().focus().toggleBold().run()}
-               className={editor.isActive("bold") ? "bg-muted" : ""}
+               className={editor.isActive('bold') ? 'bg-muted' : ''}
             >
                <Bold className="h-4 w-4" />
             </Button>
@@ -57,7 +57,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                variant="ghost"
                size="sm"
                onClick={() => editor.chain().focus().toggleItalic().run()}
-               className={editor.isActive("italic") ? "bg-muted" : ""}
+               className={editor.isActive('italic') ? 'bg-muted' : ''}
             >
                <Italic className="h-4 w-4" />
             </Button>
@@ -65,7 +65,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                variant="ghost"
                size="sm"
                onClick={() => editor.chain().focus().toggleBulletList().run()}
-               className={editor.isActive("bulletList") ? "bg-muted" : ""}
+               className={editor.isActive('bulletList') ? 'bg-muted' : ''}
             >
                <List className="h-4 w-4" />
             </Button>
@@ -73,7 +73,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                variant="ghost"
                size="sm"
                onClick={() => editor.chain().focus().toggleOrderedList().run()}
-               className={editor.isActive("orderedList") ? "bg-muted" : ""}
+               className={editor.isActive('orderedList') ? 'bg-muted' : ''}
             >
                <ListOrdered className="h-4 w-4" />
             </Button>
@@ -81,7 +81,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                variant="ghost"
                size="sm"
                onClick={() => editor.chain().focus().toggleBlockquote().run()}
-               className={editor.isActive("blockquote") ? "bg-muted" : ""}
+               className={editor.isActive('blockquote') ? 'bg-muted' : ''}
             >
                <Quote className="h-4 w-4" />
             </Button>
@@ -92,7 +92,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                   editor.chain().focus().toggleHeading({ level: 1 }).run()
                }
                className={
-                  editor.isActive("heading", { level: 1 }) ? "bg-muted" : ""
+                  editor.isActive('heading', { level: 1 }) ? 'bg-muted' : ''
                }
             >
                <Heading1 className="h-4 w-4" />
@@ -104,7 +104,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                   editor.chain().focus().toggleHeading({ level: 2 }).run()
                }
                className={
-                  editor.isActive("heading", { level: 2 }) ? "bg-muted" : ""
+                  editor.isActive('heading', { level: 2 }) ? 'bg-muted' : ''
                }
             >
                <Heading2 className="h-4 w-4" />
@@ -116,7 +116,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                   editor.chain().focus().toggleHeading({ level: 3 }).run()
                }
                className={
-                  editor.isActive("heading", { level: 3 }) ? "bg-muted" : ""
+                  editor.isActive('heading', { level: 3 }) ? 'bg-muted' : ''
                }
             >
                <Heading3 className="h-4 w-4" />
@@ -125,7 +125,7 @@ export default function PostEditor({ value, onChange }: PostEditorProps) {
                variant="ghost"
                size="sm"
                onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-               className={editor.isActive("codeBlock") ? "bg-muted" : ""}
+               className={editor.isActive('codeBlock') ? 'bg-muted' : ''}
             >
                <Code className="h-4 w-4" />
             </Button>

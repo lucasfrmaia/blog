@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { IPost, IPostCreate } from "@/app/api/_services/entities/Post";
-import { ICategory } from "@/app/api/_services/entities/category";
-import { useSession } from "next-auth/react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import dynamic from "next/dynamic";
-import "react-quill/dist/quill.snow.css";
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { IPost, IPostCreate } from '@/app/api/_services/entities/Post';
+import { ICategory } from '@/app/api/_services/entities/category';
+import { useSession } from 'next-auth/react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import dynamic from 'next/dynamic';
+import 'react-quill/dist/quill.snow.css';
 
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 import {
    Form,
@@ -20,25 +20,25 @@ import {
    FormLabel,
    FormControl,
    FormMessage,
-} from "@/app/_components/ui/form";
-import { Input } from "@/app/_components/ui/input";
-import { Textarea } from "@/app/_components/ui/textarea";
+} from '@/app/_components/ui/form';
+import { Input } from '@/app/_components/ui/input';
+import { Textarea } from '@/app/_components/ui/textarea';
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from "@/app/_components/ui/select";
-import { Button } from "@/app/_components/ui/button";
-import { Check, X } from "lucide-react";
+} from '@/app/_components/ui/select';
+import { Button } from '@/app/_components/ui/button';
+import { Check, X } from 'lucide-react';
 
 const formSchema = z.object({
-   title: z.string().min(1, "O título é obrigatório"),
-   description: z.string().min(1, "A descrição é obrigatória"),
-   content: z.string().min(1, "O conteúdo é obrigatório"),
-   img: z.string().min(1, "A imagem de capa é obrigatória"),
-   categories: z.array(z.string()).min(1, "Selecione pelo menos uma categoria"),
+   title: z.string().min(1, 'O título é obrigatório'),
+   description: z.string().min(1, 'A descrição é obrigatória'),
+   content: z.string().min(1, 'O conteúdo é obrigatório'),
+   img: z.string().min(1, 'A imagem de capa é obrigatória'),
+   categories: z.array(z.string()).min(1, 'Selecione pelo menos uma categoria'),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -53,11 +53,11 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
    const user = session?.user;
 
    const { data: categories } = useQuery<ICategory[]>({
-      queryKey: ["categories"],
+      queryKey: ['categories'],
       queryFn: async () => {
-         const response = await fetch("/api/categories");
+         const response = await fetch('/api/categories');
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
+            throw new Error('Erro ao buscar categorias');
          }
          return response.json();
       },
@@ -66,10 +66,10 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
    const form = useForm<FormValues>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         title: defaultValues?.title ?? "",
-         description: defaultValues?.description ?? "",
-         content: defaultValues?.content ?? "",
-         img: defaultValues?.img ?? "",
+         title: defaultValues?.title ?? '',
+         description: defaultValues?.description ?? '',
+         content: defaultValues?.content ?? '',
+         img: defaultValues?.img ?? '',
          categories: defaultValues?.categories?.map((cat) => cat.id) ?? [],
       },
    });
@@ -134,10 +134,10 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                            modules={{
                               toolbar: [
                                  [{ header: [1, 2, 3, false] }],
-                                 ["bold", "italic", "underline", "strike"],
-                                 [{ list: "ordered" }, { list: "bullet" }],
-                                 ["link", "image"],
-                                 ["clean"],
+                                 ['bold', 'italic', 'underline', 'strike'],
+                                 [{ list: 'ordered' }, { list: 'bullet' }],
+                                 ['link', 'image'],
+                                 ['clean'],
                               ],
                            }}
                         />
@@ -185,7 +185,7 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                                        key={category.id}
                                        value={category.id}
                                        disabled={field.value.includes(
-                                          category.id
+                                          category.id,
                                        )}
                                     >
                                        {category.name}
@@ -197,7 +197,7 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                            <div className="flex flex-wrap gap-2">
                               {field.value.map((categoryId) => {
                                  const category = categories?.find(
-                                    (c) => c.id === categoryId
+                                    (c) => c.id === categoryId,
                                  );
                                  return (
                                     category && (
@@ -214,8 +214,9 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                                              onClick={() =>
                                                 field.onChange(
                                                    field.value.filter(
-                                                      (id) => id !== category.id
-                                                   )
+                                                      (id) =>
+                                                         id !== category.id,
+                                                   ),
                                                 )
                                              }
                                           >
@@ -234,7 +235,7 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
             />
 
             <Button type="submit" className="w-full">
-               {defaultValues ? "Atualizar" : "Criar"} Post
+               {defaultValues ? 'Atualizar' : 'Criar'} Post
             </Button>
          </form>
       </Form>

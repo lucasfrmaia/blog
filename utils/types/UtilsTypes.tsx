@@ -1,1 +1,1 @@
-export type TTypeSort = "alfabetica" | "dataCrescente" | "dataDecrescente";
+export type TTypeSort = 'alfabetica' | 'dataCrescente' | 'dataDecrescente';

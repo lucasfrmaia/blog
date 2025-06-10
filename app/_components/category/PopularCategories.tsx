@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
-import { ICategory } from "@/app/api/_services/entities/category";
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '../ui/button';
+import { ICategory } from '@/app/api/_services/entities/category';
 
 export default function PopularCategories() {
    const { data: categories, isLoading } = useQuery<ICategory[]>({
-      queryKey: ["popular_categories"],
+      queryKey: ['popular_categories'],
       queryFn: async () => {
-         const response = await fetch("/api/categories/popular");
+         const response = await fetch('/api/categories/popular');
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias populares");
+            throw new Error('Erro ao buscar categorias populares');
          }
          return response.json();
       },

@@ -1,14 +1,14 @@
-import { AuthUser } from "@/utils/types/auth";
-import { AuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
+import { AuthUser } from '@/utils/types/auth';
+import { AuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const NextAuthOptions = {
    providers: [
       CredentialsProvider({
-         name: "Credentials",
+         name: 'Credentials',
          credentials: {
-            email: { label: "Email", type: "email" },
-            password: { label: "Password", type: "password" },
+            email: { label: 'Email', type: 'email' },
+            password: { label: 'Password', type: 'password' },
          },
          async authorize(credentials): Promise<AuthUser | null> {
             try {
@@ -17,17 +17,17 @@ export const NextAuthOptions = {
                }
 
                const response = await fetch(
-                  "http://localhosT:3000/api/users/auth",
+                  'http://localhosT:3000/api/users/auth',
                   {
-                     method: "POST",
+                     method: 'POST',
                      headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                      },
                      body: JSON.stringify({
                         email: credentials.email,
                         password: credentials.password,
                      }),
-                  }
+                  },
                );
 
                if (!response.ok) {
@@ -43,7 +43,7 @@ export const NextAuthOptions = {
                   role: user.role?.id,
                } as AuthUser;
             } catch (error) {
-               console.error("Erro na autenticação:", error);
+               console.error('Erro na autenticação:', error);
                return null;
             }
          },
@@ -72,11 +72,11 @@ export const NextAuthOptions = {
       },
    },
    pages: {
-      signIn: "/login",
-      error: "/login",
+      signIn: '/login',
+      error: '/login',
    },
    session: {
-      strategy: "jwt",
+      strategy: 'jwt',
       maxAge: 30 * 24 * 60 * 60, // 30 dias
    },
 } as AuthOptions;

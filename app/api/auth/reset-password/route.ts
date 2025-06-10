@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import bcrypt from "bcryptjs";
-import { NextAuthOptions } from "../auth-options";
-import { apiManager } from "../../_services/ApiManager";
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import bcrypt from 'bcryptjs';
+import { NextAuthOptions } from '../auth-options';
+import { apiManager } from '../../_services/ApiManager';
 
 export async function POST(req: Request) {
    try {
@@ -10,8 +10,8 @@ export async function POST(req: Request) {
 
       if (!session?.user) {
          return NextResponse.json(
-            { message: "Não autorizado" },
-            { status: 401 }
+            { message: 'Não autorizado' },
+            { status: 401 },
          );
       }
 
@@ -21,20 +21,20 @@ export async function POST(req: Request) {
 
       if (!user) {
          return NextResponse.json(
-            { message: "Usuário não encontrado" },
-            { status: 404 }
+            { message: 'Usuário não encontrado' },
+            { status: 404 },
          );
       }
 
       const isPasswordValid = await bcrypt.compare(
          currentPassword,
-         user.password
+         user.password,
       );
 
       if (!isPasswordValid) {
          return NextResponse.json(
-            { message: "Senha atual incorreta" },
-            { status: 400 }
+            { message: 'Senha atual incorreta' },
+            { status: 400 },
          );
       }
 
@@ -46,14 +46,14 @@ export async function POST(req: Request) {
       });
 
       return NextResponse.json(
-         { message: "Senha alterada com sucesso" },
-         { status: 200 }
+         { message: 'Senha alterada com sucesso' },
+         { status: 200 },
       );
    } catch (error) {
-      console.error("Erro ao alterar senha:", error);
+      console.error('Erro ao alterar senha:', error);
       return NextResponse.json(
-         { message: "Erro ao alterar senha, por favor tente novamente" },
-         { status: 500 }
+         { message: 'Erro ao alterar senha, por favor tente novamente' },
+         { status: 500 },
       );
    }
 }

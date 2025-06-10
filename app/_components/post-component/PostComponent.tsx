@@ -1,8 +1,8 @@
-import { cn } from "@/lib/utils";
-import React from "react";
-import { Button } from "../ui/button";
-import Link from "next/link";
-import { IPost } from "@/app/api/_services/entities/Post";
+import { cn } from '@/lib/utils';
+import React from 'react';
+import { Button } from '../ui/button';
+import Link from 'next/link';
+import { IPost } from '@/app/api/_services/entities/Post';
 
 export function PostContainer({
    children,
@@ -12,7 +12,7 @@ export function PostContainer({
    className?: string;
 }) {
    return (
-      <div className={cn("flex space-x-2 items-center", className)}>
+      <div className={cn('flex space-x-2 items-center', className)}>
          {children}
       </div>
    );
@@ -25,7 +25,7 @@ export function PostHeader({
    children: React.ReactNode;
    className?: string;
 }) {
-   return <div className={cn("flex items-center", className)}>{children}</div>;
+   return <div className={cn('flex items-center', className)}>{children}</div>;
 }
 
 export function PostImage({
@@ -39,7 +39,7 @@ export function PostImage({
 }) {
    return (
       <Link href={`/posts/${post.id}`}>
-         <img className={cn("", className)} src={post.img || ""} alt={alt} />
+         <img className={cn('', className)} src={post.img || ''} alt={alt} />
       </Link>
    );
 }
@@ -52,7 +52,7 @@ export function PostTitle({
    className?: string;
 }) {
    return (
-      <h2 className={cn("font-bold text-3xl", className)}>
+      <h2 className={cn('font-bold text-3xl', className)}>
          <Link className="hover:underline" href={`/posts/${post.id}`}>
             {post.title}
          </Link>
@@ -68,7 +68,7 @@ export function PostDescription({
    className?: string;
 }) {
    return (
-      <p className={cn("text-muted-foreground", className)}>
+      <p className={cn('text-muted-foreground', className)}>
          {post.description}
       </p>
    );
@@ -83,7 +83,7 @@ export function PostReadMoreButton({
    post: IPost;
 }) {
    return (
-      <Button className={cn("w-24", className)}>
+      <Button className={cn('w-24', className)}>
          <Link href={`/posts/${post.id}`}>Read More</Link>
       </Button>
    );
@@ -97,7 +97,7 @@ export function PostContent({
    className?: string;
 }) {
    return (
-      <div className={cn("flex flex-1 flex-col gap-y-2", className)}>
+      <div className={cn('flex flex-1 flex-col gap-y-2', className)}>
          {children}
       </div>
    );
@@ -113,9 +113,9 @@ export function PostCategories({
    classNameLi?: string;
 }) {
    return (
-      <ul className={cn("inline-block", className)}>
+      <ul className={cn('inline-block', className)}>
          {post.categories?.map((category, index) => (
-            <li key={index} className={cn("inline-block", classNameLi)}>
+            <li key={index} className={cn('inline-block', classNameLi)}>
                <span>{category.name}</span>
             </li>
          ))}
@@ -133,14 +133,14 @@ export function PostCategoriesBadge({
    classNameLi?: string;
 }) {
    return (
-      <ul className={cn("", className)}>
+      <ul className={cn('', className)}>
          {post.categories?.map((category, index) => (
             <li
                style={{ backgroundColor: category.color }}
                key={`PostCatrgoriesBadge-${category.id}`}
                className={cn(
-                  "inline-block px-2 text-center h-6 text-secondary rounded-3xl",
-                  classNameLi
+                  'inline-block px-2 text-center h-6 text-secondary rounded-3xl',
+                  classNameLi,
                )}
             >
                <span>{category.name}</span>

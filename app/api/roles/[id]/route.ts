@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
    params: {
@@ -15,16 +15,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
       if (!role) {
          return NextResponse.json(
-            { error: "Função não encontrada" },
-            { status: 404 }
+            { error: 'Função não encontrada' },
+            { status: 404 },
          );
       }
 
       return NextResponse.json(role);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar função" },
-         { status: 500 }
+         { error: 'Erro ao buscar função' },
+         { status: 500 },
       );
    }
 }
@@ -38,8 +38,8 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       // Verificar se os campos obrigatórios estão presentes
       if (!body.name || !body.description) {
          return NextResponse.json(
-            { error: "Nome e descrição são campos obrigatórios" },
-            { status: 400 }
+            { error: 'Nome e descrição são campos obrigatórios' },
+            { status: 400 },
          );
       }
 
@@ -50,13 +50,13 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       });
 
       return NextResponse.json(
-         { message: "Role atualizada com sucesso" },
-         { status: 200 }
+         { message: 'Role atualizada com sucesso' },
+         { status: 200 },
       );
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao atualizar role" },
-         { status: 500 }
+         { error: 'Erro ao atualizar role' },
+         { status: 500 },
       );
    }
 }
@@ -67,11 +67,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       const { id } = params;
       await apiManager.role.delete(Number(id));
 
-      return NextResponse.json({ message: "Função excluída com sucesso" });
+      return NextResponse.json({ message: 'Função excluída com sucesso' });
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao excluir função" },
-         { status: 500 }
+         { error: 'Erro ao excluir função' },
+         { status: 500 },
       );
    }
 }

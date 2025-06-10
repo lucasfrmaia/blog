@@ -1,7 +1,7 @@
-import { User } from "@prisma/client";
-import { IComment } from "./comment";
-import { IPost } from "./Post";
-import { IRole } from "./role";
+import { User } from '@prisma/client';
+import { IComment } from './comment';
+import { IPost } from './Post';
+import { IRole } from './role';
 
 export type IUser = User & {
    role?: IRole;
@@ -9,9 +9,9 @@ export type IUser = User & {
    comments?: IComment[];
 };
 
-export type IUserCreate = Pick<User, "name" | "email" | "password" | "roleId">;
+export type IUserCreate = Pick<User, 'name' | 'email' | 'password' | 'roleId'>;
 
 export type IUserUpdate = Partial<
-   Pick<User, "name" | "email" | "password" | "roleId">
+   Pick<User, 'name' | 'email' | 'password' | 'roleId'>
 > &
-   Pick<User, "id">;
+   Pick<User, 'id'>;

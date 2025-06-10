@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 import {
    PostContainer,
    PostImage,
@@ -10,14 +10,14 @@ import {
    PostCategories,
    PostReadMoreButton,
    PostHeader,
-} from "../post-component/PostComponent";
-import TitleSection from "../ui/utils/TitleSection";
-import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
-import { useQuery } from "@tanstack/react-query";
-import { IPost } from "@/app/api/_services/entities/Post";
+} from '../post-component/PostComponent';
+import TitleSection from '../ui/utils/TitleSection';
+import { Button } from '../ui/button';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { AMOUNT_POST_RECENT } from '@/utils/constantes/constants';
+import { useQuery } from '@tanstack/react-query';
+import { IPost } from '@/app/api/_services/entities/Post';
 
 type IPropRecentPost = {
    children?: React.ReactNode;
@@ -26,11 +26,11 @@ type IPropRecentPost = {
 
 export default function RecentPost({ children, className }: IPropRecentPost) {
    const { data: posts, isLoading } = useQuery<IPost[]>({
-      queryKey: ["recent_posts"],
+      queryKey: ['recent_posts'],
       queryFn: async () => {
-         const response = await fetch("/api/posts/recent");
+         const response = await fetch('/api/posts/recent');
          if (!response.ok) {
-            throw new Error("Erro ao buscar posts recentes");
+            throw new Error('Erro ao buscar posts recentes');
          }
          return response.json();
       },
@@ -41,7 +41,7 @@ export default function RecentPost({ children, className }: IPropRecentPost) {
    }
 
    return (
-      <section className={cn("flex flex-col", className)}>
+      <section className={cn('flex flex-col', className)}>
          <TitleSection>Posts Recentes</TitleSection>
          <div className="mb-4">
             {posts.map((post) => {
@@ -72,7 +72,7 @@ export default function RecentPost({ children, className }: IPropRecentPost) {
             })}
          </div>
 
-         <Link className="block self-center" href={"/posts"}>
+         <Link className="block self-center" href={'/posts'}>
             <Button className="self-center">Ver Todos</Button>
          </Link>
       </section>

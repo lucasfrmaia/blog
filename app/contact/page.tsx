@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import {
    Send,
    Mail,
@@ -11,18 +11,18 @@ import {
    Linkedin,
    Twitter,
    MessageSquare,
-} from "lucide-react";
-import BaseLayout from "../_components/layout/BaseLayout";
-import { Button } from "../_components/ui/button";
+} from 'lucide-react';
+import BaseLayout from '../_components/layout/BaseLayout';
+import { Button } from '../_components/ui/button';
 import {
    Card,
    CardHeader,
    CardTitle,
    CardDescription,
    CardContent,
-} from "../_components/ui/card";
-import { Textarea } from "../_components/ui/textarea";
-import { Input } from "../_components/ui/input";
+} from '../_components/ui/card';
+import { Textarea } from '../_components/ui/textarea';
+import { Input } from '../_components/ui/input';
 
 export default function ContactPage() {
    return (

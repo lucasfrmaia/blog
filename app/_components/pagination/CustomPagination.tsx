@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface IPaginationProps {
    children?: React.ReactNode;
@@ -15,11 +15,11 @@ import {
    PaginationLink,
    PaginationNext,
    PaginationPrevious,
-} from "../ui/pagination";
+} from '../ui/pagination';
 
 const CustomPagination: React.FC<IPaginationProps> = ({
    children,
-   className = "",
+   className = '',
    totalItems,
    currentPage,
 }) => {

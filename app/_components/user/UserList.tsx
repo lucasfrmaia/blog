@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Edit2, Trash2 } from "lucide-react";
-import UserListLoading from "../loadings/UserListLoading";
-import QueryError from "../errors/QueryError";
-import { useToast } from "../ui/use-toast";
-import { IUser } from "@/app/api/_services/entities/user";
-import { Column, DataTable } from "../shared/DataTable";
-import { Button } from "../ui/button";
-import { UserDialog } from "./dialogs/UserDialog";
-import { Badge } from "../ui/badge";
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { Edit2, Trash2 } from 'lucide-react';
+import UserListLoading from '../loadings/UserListLoading';
+import QueryError from '../errors/QueryError';
+import { useToast } from '../ui/use-toast';
+import { IUser } from '@/app/api/_services/entities/user';
+import { Column, DataTable } from '../shared/DataTable';
+import { Button } from '../ui/button';
+import { UserDialog } from './dialogs/UserDialog';
+import { Badge } from '../ui/badge';
 import {
    AlertDialog,
    AlertDialogAction,
@@ -23,9 +23,9 @@ import {
    AlertDialogHeader,
    AlertDialogTitle,
    AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import { ITENS_PER_PAGE_TABLE } from "@/utils/constantes/constants";
-import { useRouter, useSearchParams } from "next/navigation";
+} from '../ui/alert-dialog';
+import { ITENS_PER_PAGE_TABLE } from '@/utils/constantes/constants';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export function UserList() {
    const router = useRouter();
@@ -36,7 +36,7 @@ export function UserList() {
    const [currentPage, setCurrentPage] = useState(1);
 
    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ["users", currentPage],
+      queryKey: ['users', currentPage],
       queryFn: async () => {
          const params = new URLSearchParams({
             page: currentPage.toString(),
@@ -46,7 +46,7 @@ export function UserList() {
          const response = await fetch(`/api/users/page?${params}`);
 
          if (!response.ok) {
-            throw new Error("Erro ao buscar usuários");
+            throw new Error('Erro ao buscar usuários');
          }
 
          return response.json();
@@ -56,28 +56,28 @@ export function UserList() {
    const { mutate: deleteUser } = useMutation({
       mutationFn: async (id: string) => {
          const response = await fetch(`/api/users?id=${id}`, {
-            method: "DELETE",
+            method: 'DELETE',
          });
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || "Erro Desconhecido");
+            throw new Error(error.message || 'Erro Desconhecido');
          }
          return response.json();
       },
       onSuccess: () => {
          toast({
-            title: "Usuário excluído com sucesso!",
-            description: "O usuário foi removido do sistema.",
+            title: 'Usuário excluído com sucesso!',
+            description: 'O usuário foi removido do sistema.',
          });
-         queryClient.invalidateQueries({ queryKey: ["users"] });
+         queryClient.invalidateQueries({ queryKey: ['users'] });
       },
       onError: (error) => {
          toast({
-            title: "Erro ao excluir usuário",
+            title: 'Erro ao excluir usuário',
             description:
-               "Ocorreu um erro ao tentar excluir o usuário: " + error.message,
-            variant: "destructive",
+               'Ocorreu um erro ao tentar excluir o usuário: ' + error.message,
+            variant: 'destructive',
          });
       },
    });
@@ -97,35 +97,35 @@ export function UserList() {
 
    const columns: Column<IUser>[] = [
       {
-         header: "ID",
+         header: 'ID',
          accessorKey: (user: IUser) => user.id,
       },
       {
-         header: "Nome",
+         header: 'Nome',
          accessorKey: (user: IUser) => user.name,
       },
       {
-         header: "Email",
+         header: 'Email',
          accessorKey: (user: IUser) => user.email,
       },
       {
-         header: "Função",
-         accessorKey: (user: IUser) => user.role?.name || "Sem função",
+         header: 'Função',
+         accessorKey: (user: IUser) => user.role?.name || 'Sem função',
       },
       {
-         header: "Posts",
+         header: 'Posts',
          accessorKey: (user: IUser) => user.posts?.length || 0,
-         className: "text-right",
+         className: 'text-right',
       },
       {
-         header: "Data",
+         header: 'Data',
          accessorKey: (user: IUser) =>
             format(new Date(user.createdAt), "dd 'de' MMMM 'de' yyyy", {
                locale: ptBR,
             }),
       },
       {
-         header: "Ações",
+         header: 'Ações',
          accessorKey: (user: IUser) => (
             <div className="flex items-center gap-2">
                <UserDialog user={user}>

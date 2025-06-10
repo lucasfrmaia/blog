@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { cn } from "@/lib/utils";
-import React, { useRef, useState } from "react";
-import { IoIosSearch } from "react-icons/io";
+import { cn } from '@/lib/utils';
+import React, { useRef, useState } from 'react';
+import { IoIosSearch } from 'react-icons/io';
 
 type IPropSearchBar = {
    className?: string;
@@ -28,9 +28,9 @@ export default function SearchBar({
    return (
       <div
          className={cn(
-            "inline-flex justify-between items-center rounded-sm bg-transparent p-3",
-            `${isClicked ? "outline outline-1 outline-teal-500" : ""}`,
-            className
+            'inline-flex justify-between items-center rounded-sm bg-transparent p-3',
+            `${isClicked ? 'outline outline-1 outline-teal-500' : ''}`,
+            className,
          )}
       >
          <input

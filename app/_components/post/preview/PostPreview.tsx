@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ICategory } from "@/app/api/_services/entities/category";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-import { Badge } from "../../ui/badge";
-import { Card } from "../../ui/card";
+import { ICategory } from '@/app/api/_services/entities/category';
+import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
+import { Badge } from '../../ui/badge';
+import { Card } from '../../ui/card';
 
 interface PostPreviewProps {
    title: string;

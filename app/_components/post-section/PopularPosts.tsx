@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import {
    PostContainer,
    PostImage,
@@ -12,10 +12,10 @@ import {
    PostDescription,
    PostReadMoreButton,
    PostCategoriesBadge,
-} from "../post-component/PostComponent";
-import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
-import TitleSection from "../ui/utils/TitleSection";
-import { IPost } from "@/app/api/_services/entities/Post";
+} from '../post-component/PostComponent';
+import { AMOUNT_POST_RECENT } from '@/utils/constantes/constants';
+import TitleSection from '../ui/utils/TitleSection';
+import { IPost } from '@/app/api/_services/entities/Post';
 
 interface IPopularPostsProps {
    children?: React.ReactNode;
@@ -25,15 +25,15 @@ interface IPopularPostsProps {
 
 const PopularPosts: React.FC<IPopularPostsProps> = ({
    children,
-   className = "",
+   className = '',
    // Outras props aqui
 }) => {
    const { data: posts, isLoading } = useQuery<IPost[]>({
-      queryKey: ["popular_posts"],
+      queryKey: ['popular_posts'],
       queryFn: async () => {
-         const response = await fetch("/api/posts/popular");
+         const response = await fetch('/api/posts/popular');
          if (!response.ok) {
-            throw new Error("Erro ao buscar posts populares");
+            throw new Error('Erro ao buscar posts populares');
          }
          return response.json();
       },

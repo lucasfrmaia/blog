@@ -1,51 +1,51 @@
 export const ROUTES_PAGE = {
    home: {
-      link: "/",
-      label: "Home",
+      link: '/',
+      label: 'Home',
    },
    blog: {
-      link: "/posts",
-      label: "Posts",
+      link: '/posts',
+      label: 'Posts',
    },
    about: {
-      link: "/about",
-      label: "Sobre",
+      link: '/about',
+      label: 'Sobre',
    },
    contact: {
-      link: "/contact",
-      label: "Contato",
+      link: '/contact',
+      label: 'Contato',
    },
    login: {
-      link: "/login",
-      label: "Login",
+      link: '/login',
+      label: 'Login',
    },
    register: {
-      link: "/register",
-      label: "Registro",
+      link: '/register',
+      label: 'Registro',
    },
    recovery: {
-      link: "/recovery",
-      label: "Recuperar Senha",
+      link: '/recovery',
+      label: 'Recuperar Senha',
    },
    dashboard: {
-      link: "/dashboard",
-      label: "Dashboard",
+      link: '/dashboard',
+      label: 'Dashboard',
    },
    profile: {
-      link: "/profile",
-      label: "Perfil",
+      link: '/profile',
+      label: 'Perfil',
    },
    termsOfUse: {
-      link: "/terms-of-use",
-      label: "Termos de Uso",
+      link: '/terms-of-use',
+      label: 'Termos de Uso',
    },
    privacyPolicy: {
-      link: "/privacy-policy",
-      label: "Política de Privacidade",
+      link: '/privacy-policy',
+      label: 'Política de Privacidade',
    },
    cookiePolicy: {
-      link: "/cookie-policy",
-      label: "Política de Cookies",
+      link: '/cookie-policy',
+      label: 'Política de Cookies',
    },
 } as const;
 

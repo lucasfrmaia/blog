@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import { IoMdClose as X } from "react-icons/io";
-import { FaCheck as Check } from "react-icons/fa";
-import { LuChevronsUpDown as ChevronsUpDown } from "react-icons/lu";
-import { FaTrashAlt } from "react-icons/fa";
-import { Button } from "./button";
+import * as React from 'react';
+import { cn } from '@/lib/utils';
+import { IoMdClose as X } from 'react-icons/io';
+import { FaCheck as Check } from 'react-icons/fa';
+import { LuChevronsUpDown as ChevronsUpDown } from 'react-icons/lu';
+import { FaTrashAlt } from 'react-icons/fa';
+import { Button } from './button';
 import {
    Command,
    CommandEmpty,
@@ -14,9 +14,9 @@ import {
    CommandInput,
    CommandItem,
    CommandList,
-} from "./command";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { Badge } from "./badge";
+} from './command';
+import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import { Badge } from './badge';
 
 export type OptionType = {
    label: string;
@@ -36,7 +36,7 @@ export function MultiSelect({
    selected,
    onChange,
    className,
-   label = "Nenhum item foi selecionado...",
+   label = 'Nenhum item foi selecionado...',
    ...props
 }: MultiSelectProps) {
    const [open, setOpen] = React.useState(false);
@@ -53,7 +53,7 @@ export function MultiSelect({
                role="combobox"
                aria-expanded={open}
                className={`w-full justify-between ${
-                  selected.length > 1 ? "h-auto" : "h-10"
+                  selected.length > 1 ? 'h-auto' : 'h-10'
                }`}
                onClick={() => setOpen(!open)}
             >
@@ -98,19 +98,19 @@ export function MultiSelect({
                               onChange(
                                  selected.includes(option.value)
                                     ? selected.filter(
-                                         (item) => item !== option.value
+                                         (item) => item !== option.value,
                                       )
-                                    : [...selected, option.value]
+                                    : [...selected, option.value],
                               );
                               setOpen(false);
                            }}
                         >
                            <Check
                               className={cn(
-                                 "mr-2 h-4 w-4",
+                                 'mr-2 h-4 w-4',
                                  selected.includes(option.value)
-                                    ? "opacity-100"
-                                    : "opacity-0"
+                                    ? 'opacity-100'
+                                    : 'opacity-0',
                               )}
                            />
                            {option.label}

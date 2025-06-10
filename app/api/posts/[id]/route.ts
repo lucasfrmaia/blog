@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
    params: {
@@ -15,16 +15,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
       if (!post) {
          return NextResponse.json(
-            { error: "Post não encontrado" },
-            { status: 404 }
+            { error: 'Post não encontrado' },
+            { status: 404 },
          );
       }
 
       return NextResponse.json(post);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar post" },
-         { status: 500 }
+         { error: 'Erro ao buscar post' },
+         { status: 500 },
       );
    }
 }
@@ -40,11 +40,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
          ...body,
       });
 
-      return NextResponse.json({ message: "Post atualizado com sucesso" });
+      return NextResponse.json({ message: 'Post atualizado com sucesso' });
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao atualizar post" },
-         { status: 500 }
+         { error: 'Erro ao atualizar post' },
+         { status: 500 },
       );
    }
 }
@@ -55,11 +55,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       const { id } = params;
       await apiManager.post.delete(id);
 
-      return NextResponse.json({ message: "Post excluído com sucesso" });
+      return NextResponse.json({ message: 'Post excluído com sucesso' });
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao excluir post: " + (error as Error).message },
-         { status: 500 }
+         { error: 'Erro ao excluir post: ' + (error as Error).message },
+         { status: 500 },
       );
    }
 }

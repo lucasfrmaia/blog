@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { Edit2, Trash2 } from "lucide-react";
-import CategoryListLoading from "../loadings/CategoryListLoading";
-import QueryError from "../errors/QueryError";
-import { useToast } from "../ui/use-toast";
-import { ICategory } from "@/app/api/_services/entities/category";
-import { Column, DataTable } from "../shared/DataTable";
-import { Button } from "../ui/button";
-import { CategoryDialog } from "./dialogs/CategoryDialog";
-import { Badge } from "../ui/badge";
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { Edit2, Trash2 } from 'lucide-react';
+import CategoryListLoading from '../loadings/CategoryListLoading';
+import QueryError from '../errors/QueryError';
+import { useToast } from '../ui/use-toast';
+import { ICategory } from '@/app/api/_services/entities/category';
+import { Column, DataTable } from '../shared/DataTable';
+import { Button } from '../ui/button';
+import { CategoryDialog } from './dialogs/CategoryDialog';
+import { Badge } from '../ui/badge';
 import {
    AlertDialog,
    AlertDialogAction,
@@ -23,10 +23,10 @@ import {
    AlertDialogHeader,
    AlertDialogTitle,
    AlertDialogTrigger,
-} from "../ui/alert-dialog";
-import { ITENS_PER_PAGE_TABLE } from "@/utils/constantes/constants";
-import { useRouter, useSearchParams } from "next/navigation";
-import { CategoryBadge } from "./CategoryBadge";
+} from '../ui/alert-dialog';
+import { ITENS_PER_PAGE_TABLE } from '@/utils/constantes/constants';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { CategoryBadge } from './CategoryBadge';
 
 export default function CategoryList() {
    const router = useRouter();
@@ -37,7 +37,7 @@ export default function CategoryList() {
    const [currentPage, setCurrentPage] = useState(1);
 
    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ["categories", currentPage],
+      queryKey: ['categories', currentPage],
       queryFn: async () => {
          const params = new URLSearchParams({
             page: currentPage.toString(),
@@ -48,7 +48,7 @@ export default function CategoryList() {
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error?.message || "Erro Desconhecido");
+            throw new Error(error?.message || 'Erro Desconhecido');
          }
 
          return response.json();
@@ -58,29 +58,29 @@ export default function CategoryList() {
    const { mutate: deleteCategory } = useMutation({
       mutationFn: async (id: string) => {
          const response = await fetch(`/api/categories/${id}`, {
-            method: "DELETE",
+            method: 'DELETE',
          });
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error?.message || "Erro Desconhecido");
+            throw new Error(error?.message || 'Erro Desconhecido');
          }
          return response.json();
       },
       onSuccess: () => {
          toast({
-            title: "Categoria excluída com sucesso!",
-            description: "A categoria foi removida do sistema.",
+            title: 'Categoria excluída com sucesso!',
+            description: 'A categoria foi removida do sistema.',
          });
-         queryClient.invalidateQueries({ queryKey: ["categories"] });
+         queryClient.invalidateQueries({ queryKey: ['categories'] });
       },
       onError: (error) => {
          toast({
-            title: "Erro ao excluir categoria",
+            title: 'Erro ao excluir categoria',
             description:
-               "Ocorreu um erro ao tentar excluir a categoria: " +
+               'Ocorreu um erro ao tentar excluir a categoria: ' +
                error.message,
-            variant: "destructive",
+            variant: 'destructive',
          });
       },
    });
@@ -100,32 +100,32 @@ export default function CategoryList() {
 
    const columns: Column<ICategory>[] = [
       {
-         header: "ID",
+         header: 'ID',
          accessorKey: (category: ICategory) => category.id,
       },
       {
-         header: "Nome",
+         header: 'Nome',
          accessorKey: (category: ICategory) => category.name,
       },
       {
-         header: "Cor",
+         header: 'Cor',
          accessorKey: (category: ICategory) => (
             <CategoryBadge category={category} />
          ),
       },
       {
-         header: "Posts",
+         header: 'Posts',
          accessorKey: (category: ICategory) => category.posts?.length || 0,
-         className: "text-right",
+         className: 'text-right',
       },
       {
-         header: "Data",
+         header: 'Data',
          accessorKey: (category: ICategory) => {
             return <div>{new Date(category.createdAt).toDateString()}</div>;
          },
       },
       {
-         header: "Ações",
+         header: 'Ações',
          accessorKey: (category: ICategory) => (
             <div className="flex items-center gap-2">
                <CategoryDialog

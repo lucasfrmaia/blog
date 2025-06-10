@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
    try {
@@ -7,16 +7,16 @@ export async function GET() {
 
       if (!latestPost) {
          return NextResponse.json(
-            { error: "Nenhum post encontrado" },
-            { status: 404 }
+            { error: 'Nenhum post encontrado' },
+            { status: 404 },
          );
       }
 
       return NextResponse.json(latestPost);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar o último post" },
-         { status: 500 }
+         { error: 'Erro ao buscar o último post' },
+         { status: 500 },
       );
    }
 }

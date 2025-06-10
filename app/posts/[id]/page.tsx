@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { CategoryBadge } from "@/app/_components/category/CategoryBadge";
-import CommentSection from "@/app/_components/comment/CommentSection";
-import BaseLayout from "@/app/_components/layout/BaseLayout";
-import { LoadingOnePostSkeleton } from "@/app/_components/loadings/posts/LoadingOnePost";
-import { Badge } from "@/app/_components/ui/badge";
-import { Card } from "@/app/_components/ui/card";
-import { Separator } from "@/app/_components/ui/separator";
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { IPost } from "@/app/api/_services/entities/Post";
-import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import { CategoryBadge } from '@/app/_components/category/CategoryBadge';
+import CommentSection from '@/app/_components/comment/CommentSection';
+import BaseLayout from '@/app/_components/layout/BaseLayout';
+import { LoadingOnePostSkeleton } from '@/app/_components/loadings/posts/LoadingOnePost';
+import { Badge } from '@/app/_components/ui/badge';
+import { Card } from '@/app/_components/ui/card';
+import { Separator } from '@/app/_components/ui/separator';
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { IPost } from '@/app/api/_services/entities/Post';
+import { Avatar, AvatarImage, AvatarFallback } from '@radix-ui/react-avatar';
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
 export default function PostPage({ params }: { params: { id: string } }) {
    const { data: post, isLoading } = useQuery<IPost>({
-      queryKey: ["post", params.id],
+      queryKey: ['post', params.id],
       queryFn: async () => {
          const response = await fetch(`/api/posts/${params.id}`);
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
+            throw new Error('Erro ao buscar categorias');
          }
          return response.json();
       },
@@ -52,17 +52,17 @@ export default function PostPage({ params }: { params: { id: string } }) {
                <div className="flex items-center space-x-4 mb-8">
                   <Avatar>
                      <AvatarImage
-                        src={"/placeholder-avatar.jpg"}
-                        alt={post.author?.name || ""}
+                        src={'/placeholder-avatar.jpg'}
+                        alt={post.author?.name || ''}
                      />
                      <AvatarFallback>
-                        {post.author?.name?.charAt(0).toUpperCase() || "A"}
+                        {post.author?.name?.charAt(0).toUpperCase() || 'A'}
                      </AvatarFallback>
                   </Avatar>
                   <div>
                      <p className="font-medium">{post.author?.name}</p>
                      <p className="text-sm text-muted-foreground">
-                        Criado em:{" "}
+                        Criado em:{' '}
                         {new Date(post.createdAt).toLocaleDateString()}
                      </p>
                   </div>

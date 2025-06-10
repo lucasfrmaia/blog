@@ -1,6 +1,6 @@
-import { Comment } from "@prisma/client";
-import { IUser } from "./user";
-import { IPost } from "./Post";
+import { Comment } from '@prisma/client';
+import { IUser } from './user';
+import { IPost } from './Post';
 
 export type IComment = Comment & {
    replies?: IComment[];
@@ -12,8 +12,8 @@ export type IComment = Comment & {
 
 export type ICommentCreate = Pick<
    Comment,
-   "content" | "userId" | "postId" | "parentId"
+   'content' | 'userId' | 'postId' | 'parentId'
 >;
 
-export type ICommentUpdate = Partial<Pick<Comment, "content">> &
-   Pick<Comment, "id">;
+export type ICommentUpdate = Partial<Pick<Comment, 'content'>> &
+   Pick<Comment, 'id'>;

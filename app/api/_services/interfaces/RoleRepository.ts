@@ -1,5 +1,5 @@
-import { IRole, IRoleCreate, IRoleUpdate } from "../entities/role";
-import { IBaseRepository } from "./BaseRepository";
+import { IRole, IRoleCreate, IRoleUpdate } from '../entities/role';
+import { IBaseRepository } from './BaseRepository';
 
 export interface IRoleRepository
    extends IBaseRepository<IRole, IRoleCreate, IRoleUpdate> {
@@ -7,6 +7,6 @@ export interface IRoleRepository
    findByUserId(userId: string): Promise<IRole | null>;
    findPerPage(
       page: number,
-      limit: number
+      limit: number,
    ): Promise<{ roles: IRole[]; total: number }>;
 }

@@ -1,12 +1,12 @@
-import { Button } from "../ui/button";
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { CommentForm } from "./CommentForm";
-import { useSession } from "next-auth/react";
-import { ROUTES_PAGE } from "@/utils/constantes/routes";
-import { useRouter } from "next/navigation";
-import { CommentCard } from "./CommentCard";
-import { IComment } from "@/app/api/_services/entities/comment";
+import { Button } from '../ui/button';
+import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { CommentForm } from './CommentForm';
+import { useSession } from 'next-auth/react';
+import { ROUTES_PAGE } from '@/utils/constantes/routes';
+import { useRouter } from 'next/navigation';
+import { CommentCard } from './CommentCard';
+import { IComment } from '@/app/api/_services/entities/comment';
 
 interface CommentListProps {
    postId: string;
@@ -44,7 +44,7 @@ export function CommentList({
          }
          return acc;
       },
-      {}
+      {},
    );
 
    const toggleReplies = (commentId: string) => {
@@ -94,8 +94,8 @@ export function CommentList({
                            ) : (
                               <ChevronDown className="h-4 w-4" />
                            )}
-                           {isExpanded ? "Ocultar" : "Ver"} {replies.length}{" "}
-                           {replies.length === 1 ? "resposta" : "respostas"}
+                           {isExpanded ? 'Ocultar' : 'Ver'} {replies.length}{' '}
+                           {replies.length === 1 ? 'resposta' : 'respostas'}
                         </Button>
                      </div>
                   )}

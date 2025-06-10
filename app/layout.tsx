@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import { ContextProvider } from "@/context/ContextProvider";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { ContextProvider } from '@/context/ContextProvider';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-   title: "Blog",
-   description: "Um blog moderno e completo",
+   title: 'Blog',
+   description: 'Um blog moderno e completo',
 };
 
 export default function RootLayout({

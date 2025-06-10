@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { Search, SlidersHorizontal, X, Filter, RotateCcw } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Badge } from "../ui/badge";
-import { Input } from "../ui/input";
+import { Search, SlidersHorizontal, X, Filter, RotateCcw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Badge } from '../ui/badge';
+import { Input } from '../ui/input';
 import {
    Select,
    SelectContent,
    SelectItem,
    SelectTrigger,
    SelectValue,
-} from "../ui/select";
-import { ICategory } from "@/app/api/_services/entities/category";
-import { Button } from "../ui/button";
-import { useQuery } from "@tanstack/react-query";
+} from '../ui/select';
+import { ICategory } from '@/app/api/_services/entities/category';
+import { Button } from '../ui/button';
+import { useQuery } from '@tanstack/react-query';
 
 interface PostFiltersProps {
    initialSearch: string;
@@ -40,11 +40,11 @@ export default function PostFilters({
    const [sortBy, setSortBy] = useState(initialSortBy);
 
    const { data: categories, isLoading } = useQuery<ICategory[]>({
-      queryKey: ["categories"],
+      queryKey: ['categories'],
       queryFn: async () => {
-         const response = await fetch("/api/categories");
+         const response = await fetch('/api/categories');
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
+            throw new Error('Erro ao buscar categorias');
          }
          return response.json();
       },
@@ -60,7 +60,7 @@ export default function PostFilters({
       setSelectedCategories((prev) =>
          prev.includes(categoryId)
             ? prev.filter((id) => id !== categoryId)
-            : [...prev, categoryId]
+            : [...prev, categoryId],
       );
    };
 
@@ -77,14 +77,14 @@ export default function PostFilters({
    };
 
    const handleReset = () => {
-      setSearchValue("");
+      setSearchValue('');
       setSelectedCategories([]);
-      setSortBy("recent");
+      setSortBy('recent');
       onResetFilters();
    };
 
    const hasActiveFilters =
-      searchValue || selectedCategories.length > 0 || sortBy !== "recent";
+      searchValue || selectedCategories.length > 0 || sortBy !== 'recent';
 
    return (
       <div className="space-y-4 p-4 border rounded-lg bg-card">
@@ -115,8 +115,8 @@ export default function PostFilters({
                   key={category.id}
                   variant={
                      selectedCategories.includes(category.id)
-                        ? "default"
-                        : "outline"
+                        ? 'default'
+                        : 'outline'
                   }
                   size="sm"
                   onClick={() => handleCategorySelect(category.id)}
@@ -137,7 +137,7 @@ export default function PostFilters({
                         variant="secondary"
                         style={{
                            backgroundColor: category.color,
-                           color: "white",
+                           color: 'white',
                         }}
                         className="flex items-center gap-1"
                      >
@@ -170,7 +170,7 @@ export default function PostFilters({
             )}
             <Button
                disabled={
-                  typeof hasActiveFilters == "boolean" && !hasActiveFilters
+                  typeof hasActiveFilters == 'boolean' && !hasActiveFilters
                }
                onClick={handleApplyFilters}
                className="gap-2"

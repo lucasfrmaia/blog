@@ -1,6 +1,6 @@
-import { AuthUser } from "@/utils/types/auth";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { AuthUser } from '@/utils/types/auth';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 interface ProfileInfoProps {
    user: AuthUser;
@@ -16,7 +16,7 @@ export function ProfileInfo({ user }: ProfileInfoProps) {
             <div className="flex items-center gap-4">
                <Avatar className="h-20 w-20">
                   <AvatarImage
-                     src={user.image || "/placeholder-avatar.jpg"}
+                     src={user.image || '/placeholder-avatar.jpg'}
                      alt={user.name}
                   />
                   <AvatarFallback>
@@ -32,16 +32,16 @@ export function ProfileInfo({ user }: ProfileInfoProps) {
                <div>
                   <p className="font-medium">Função</p>
                   <p className="text-muted-foreground capitalize">
-                     {user.role || "Usuário"}
+                     {user.role || 'Usuário'}
                   </p>
                </div>
                <div>
                   <p className="font-medium">Membro desde</p>
                   <p className="text-muted-foreground">
-                     {new Date().toLocaleDateString("pt-BR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
+                     {new Date().toLocaleDateString('pt-BR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
                      })}
                   </p>
                </div>

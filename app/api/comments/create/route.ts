@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
    try {
@@ -9,9 +9,9 @@ export async function POST(request: NextRequest) {
       if (!body.content || !body.userId || !body.postId) {
          return NextResponse.json(
             {
-               error: "Conteúdo, ID do usuário e ID do post são campos obrigatórios",
+               error: 'Conteúdo, ID do usuário e ID do post são campos obrigatórios',
             },
-            { status: 400 }
+            { status: 400 },
          );
       }
 
@@ -23,13 +23,13 @@ export async function POST(request: NextRequest) {
       });
 
       return NextResponse.json(
-         { message: "Comentário criado com sucesso" },
-         { status: 201 }
+         { message: 'Comentário criado com sucesso' },
+         { status: 201 },
       );
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao criar comentário" },
-         { status: 500 }
+         { error: 'Erro ao criar comentário' },
+         { status: 500 },
       );
    }
 }

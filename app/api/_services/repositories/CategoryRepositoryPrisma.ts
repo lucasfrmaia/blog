@@ -1,15 +1,15 @@
-import { prisma } from "@/prisma/lib/prisma";
+import { prisma } from '@/prisma/lib/prisma';
 import {
    ICategory,
    ICategoryCreate,
    ICategoryUpdate,
-} from "../entities/category";
-import { ICategoryRepository } from "../interfaces/CategoryRepository";
+} from '../entities/category';
+import { ICategoryRepository } from '../interfaces/CategoryRepository';
 
 export class CategoryRepositoryPrisma implements ICategoryRepository {
    async findPerPage(
       page: number,
-      limit: number
+      limit: number,
    ): Promise<{ categories: ICategory[]; total: number }> {
       const [categories, total] = await Promise.all([
          prisma.category.findMany({
@@ -19,7 +19,7 @@ export class CategoryRepositoryPrisma implements ICategoryRepository {
                posts: true,
             },
             orderBy: {
-               name: "asc",
+               name: 'asc',
             },
          }),
          prisma.category.count(),
@@ -100,7 +100,7 @@ export class CategoryRepositoryPrisma implements ICategoryRepository {
          },
          orderBy: {
             posts: {
-               _count: "desc",
+               _count: 'desc',
             },
          },
          take: limit,

@@ -1,5 +1,5 @@
-import React from "react";
-import { BsFilterRight } from "react-icons/bs";
+import React from 'react';
+import { BsFilterRight } from 'react-icons/bs';
 
 type IPropFiltersWithLabel = {};
 

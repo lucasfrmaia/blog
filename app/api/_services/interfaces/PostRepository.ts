@@ -3,8 +3,8 @@ import {
    IPostCreate,
    IPostFilters,
    IPostUpdate,
-} from "../entities/Post";
-import { IBaseRepository } from "./BaseRepository";
+} from '../entities/Post';
+import { IBaseRepository } from './BaseRepository';
 
 export interface IPostRepository
    extends IBaseRepository<IPost, IPostCreate, IPostUpdate> {
@@ -13,7 +13,7 @@ export interface IPostRepository
    findPerPage(
       page: number,
       limit: number,
-      filters?: IPostFilters
+      filters?: IPostFilters,
    ): Promise<{ posts: IPost[]; total: number }>;
    getLastPost(): Promise<IPost | null>;
 }

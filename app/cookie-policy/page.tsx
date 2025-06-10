@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import BaseLayout from "../_components/layout/BaseLayout";
+import { motion } from 'framer-motion';
+import BaseLayout from '../_components/layout/BaseLayout';
 import {
    Card,
    CardHeader,
    CardTitle,
    CardContent,
-} from "../_components/ui/card";
+} from '../_components/ui/card';
 
 export default function CookiePolicyPage() {
    return (

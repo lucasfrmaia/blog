@@ -1,8 +1,8 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { NextAuthOptions } from "../../auth/auth-options";
-import { ADMIN_ROLE_ID } from "@/utils/constantes/constants";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { NextAuthOptions } from '../../auth/auth-options';
+import { ADMIN_ROLE_ID } from '@/utils/constantes/constants';
 
 interface RouteParams {
    params: {
@@ -18,16 +18,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
       if (!comment) {
          return NextResponse.json(
-            { error: "Comentário não encontrado" },
-            { status: 404 }
+            { error: 'Comentário não encontrado' },
+            { status: 404 },
          );
       }
 
       return NextResponse.json(comment);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar comentário" },
-         { status: 500 }
+         { error: 'Erro ao buscar comentário' },
+         { status: 500 },
       );
    }
 }
@@ -35,15 +35,15 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 // Atualizar comentário
 export async function PATCH(
    req: Request,
-   { params }: { params: { commentId: string } }
+   { params }: { params: { commentId: string } },
 ) {
    try {
       const session = await getServerSession(NextAuthOptions);
 
       if (!session?.user) {
          return NextResponse.json(
-            { message: "Não autorizado" },
-            { status: 401 }
+            { message: 'Não autorizado' },
+            { status: 401 },
          );
       }
 
@@ -53,15 +53,15 @@ export async function PATCH(
 
       if (!comment) {
          return NextResponse.json(
-            { message: "Comentário não encontrado" },
-            { status: 404 }
+            { message: 'Comentário não encontrado' },
+            { status: 404 },
          );
       }
 
       if (comment.userId !== session.user.id) {
          return NextResponse.json(
-            { message: "Você não tem permissão para editar este comentário" },
-            { status: 403 }
+            { message: 'Você não tem permissão para editar este comentário' },
+            { status: 403 },
          );
       }
 
@@ -72,15 +72,15 @@ export async function PATCH(
 
       return NextResponse.json(
          {
-            message: "Comentário atualizado com sucesso",
+            message: 'Comentário atualizado com sucesso',
          },
-         { status: 200 }
+         { status: 200 },
       );
    } catch (error) {
-      console.error("Erro ao editar comentário:", error);
+      console.error('Erro ao editar comentário:', error);
       return NextResponse.json(
-         { message: "Erro ao editar comentário" },
-         { status: 500 }
+         { message: 'Erro ao editar comentário' },
+         { status: 500 },
       );
    }
 }
@@ -88,15 +88,15 @@ export async function PATCH(
 // Excluir comentário
 export async function DELETE(
    request: Request,
-   { params }: { params: { commentId: string } }
+   { params }: { params: { commentId: string } },
 ) {
    try {
       const session = await getServerSession(NextAuthOptions);
 
       if (!session) {
          return NextResponse.json(
-            { message: "Não autorizado" },
-            { status: 401 }
+            { message: 'Não autorizado' },
+            { status: 401 },
          );
       }
 
@@ -104,8 +104,8 @@ export async function DELETE(
 
       if (!comment) {
          return NextResponse.json(
-            { message: "Comentário não encontrado" },
-            { status: 404 }
+            { message: 'Comentário não encontrado' },
+            { status: 404 },
          );
       }
 
@@ -115,22 +115,22 @@ export async function DELETE(
          session.user?.role !== ADMIN_ROLE_ID
       ) {
          return NextResponse.json(
-            { message: "Não autorizado" },
-            { status: 403 }
+            { message: 'Não autorizado' },
+            { status: 403 },
          );
       }
 
       await apiManager.comment.delete(params.commentId);
 
       return NextResponse.json(
-         { message: "Comentário deletado com sucesso" },
-         { status: 200 }
+         { message: 'Comentário deletado com sucesso' },
+         { status: 200 },
       );
    } catch (error) {
-      console.error("Erro ao deletar comentário:", error);
+      console.error('Erro ao deletar comentário:', error);
       return NextResponse.json(
-         { message: "Erro ao deletar comentário" },
-         { status: 500 }
+         { message: 'Erro ao deletar comentário' },
+         { status: 500 },
       );
    }
 }

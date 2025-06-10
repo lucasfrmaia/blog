@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { Button } from "../ui/button";
-import PostCard from "../post/PostCard";
-import { IPost } from "@/app/api/_services/entities/Post";
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '../ui/button';
+import PostCard from '../post/PostCard';
+import { IPost } from '@/app/api/_services/entities/Post';
 
 export default function PostSection() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery<IPost[]>({
-      queryKey: ["posts"],
+      queryKey: ['posts'],
       queryFn: async () => {
-         const response = await fetch("/api/posts/popular");
+         const response = await fetch('/api/posts/popular');
          if (!response.ok) {
-            throw new Error("Erro ao buscar posts");
+            throw new Error('Erro ao buscar posts');
          }
          return response.json();
       },
@@ -55,9 +55,9 @@ export default function PostSection() {
                            id={post.id}
                            title={post.title}
                            excerpt={post.description}
-                           coverImage={post.img || "/placeholder.jpg"}
+                           coverImage={post.img || '/placeholder.jpg'}
                            readTime={`${Math.ceil(
-                              post.description.length / 1000
+                              post.description.length / 1000,
                            )} min de leitura`}
                            categories={post.categories}
                            publishedAt={post.createdAt}

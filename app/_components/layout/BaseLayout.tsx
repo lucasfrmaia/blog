@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import Footer from "../footer/Footer";
-import NaveBar from "../header/NaveBar";
+import React from 'react';
+import Footer from '../footer/Footer';
+import NaveBar from '../header/NaveBar';
 
 interface BaseLayoutProps {
    children: React.ReactNode;

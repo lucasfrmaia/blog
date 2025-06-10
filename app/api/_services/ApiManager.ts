@@ -1,13 +1,13 @@
-import { ICategoryRepository } from "./interfaces/CategoryRepository";
-import { ICommentRepository } from "./interfaces/CommentRepository";
-import { IPostRepository } from "./interfaces/PostRepository";
-import { IRoleRepository } from "./interfaces/RoleRepository";
-import { IUserRepository } from "./interfaces/UserRepository";
-import { CategoryRepositoryPrisma } from "./repositories/CategoryRepositoryPrisma";
-import { CommentRepositoryPrisma } from "./repositories/CommentRepositoryPrisma";
-import { PostRepositoryPrisma } from "./repositories/PostRepositoryPrisma";
-import { RoleRepositoryPrisma } from "./repositories/RoleRepositoryPrisma";
-import { UserRepositoryPrisma } from "./repositories/UserRepositoryPrisma";
+import { ICategoryRepository } from './interfaces/CategoryRepository';
+import { ICommentRepository } from './interfaces/CommentRepository';
+import { IPostRepository } from './interfaces/PostRepository';
+import { IRoleRepository } from './interfaces/RoleRepository';
+import { IUserRepository } from './interfaces/UserRepository';
+import { CategoryRepositoryPrisma } from './repositories/CategoryRepositoryPrisma';
+import { CommentRepositoryPrisma } from './repositories/CommentRepositoryPrisma';
+import { PostRepositoryPrisma } from './repositories/PostRepositoryPrisma';
+import { RoleRepositoryPrisma } from './repositories/RoleRepositoryPrisma';
+import { UserRepositoryPrisma } from './repositories/UserRepositoryPrisma';
 
 // Singleton para manter os repositórios em memória
 const prismaRepository = {
@@ -24,7 +24,7 @@ class ApiManager {
       public readonly category: ICategoryRepository,
       public readonly user: IUserRepository,
       public readonly comment: ICommentRepository,
-      public readonly role: IRoleRepository
+      public readonly role: IRoleRepository,
    ) {}
 
    private static instance: ApiManager | null = null;
@@ -38,7 +38,7 @@ class ApiManager {
             currentRepository.category,
             currentRepository.user,
             currentRepository.comment,
-            currentRepository.role
+            currentRepository.role,
          );
       }
       return ApiManager.instance;

@@ -1,11 +1,11 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Clock, MessageSquare, Eye, CalendarDays } from "lucide-react";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Clock, MessageSquare, Eye, CalendarDays } from 'lucide-react';
 
-import { Badge } from "../ui/badge";
-import { Card, CardContent, CardHeader } from "../ui/card";
-import { ICategory } from "@/app/api/_services/entities/category";
-import { CategoryBadge } from "../category/CategoryBadge";
+import { Badge } from '../ui/badge';
+import { Card, CardContent, CardHeader } from '../ui/card';
+import { ICategory } from '@/app/api/_services/entities/category';
+import { CategoryBadge } from '../category/CategoryBadge';
 
 interface PostCardProps {
    id: string;
@@ -30,12 +30,12 @@ export default function PostCard({
    commentsCount = 0,
    publishedAt,
 }: PostCardProps) {
-   const formattedDate = new Date(publishedAt).toLocaleString("pt-BR", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
+   const formattedDate = new Date(publishedAt).toLocaleString('pt-BR', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
    });
 
    return (

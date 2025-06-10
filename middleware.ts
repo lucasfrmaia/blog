@@ -1,14 +1,14 @@
-import { withAuth } from "next-auth/middleware";
-import { NextResponse } from "next/server";
-import { PROTECTED_ROUTES, ROUTES_PAGE } from "./utils/constantes/routes";
-import { ADMIN_ROLE_ID } from "./utils/constantes/constants";
+import { withAuth } from 'next-auth/middleware';
+import { NextResponse } from 'next/server';
+import { PROTECTED_ROUTES, ROUTES_PAGE } from './utils/constantes/routes';
+import { ADMIN_ROLE_ID } from './utils/constantes/constants';
 
 export default withAuth(
    function middleware(req) {
       const token = req.nextauth.token;
 
       const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
-         req.nextUrl.pathname.startsWith(route)
+         req.nextUrl.pathname.startsWith(route),
       );
 
       if (!token && isProtectedRoute) {
@@ -17,7 +17,7 @@ export default withAuth(
 
       // ToDo mudar role
       if (
-         req.nextUrl.pathname.startsWith("/dashboard") &&
+         req.nextUrl.pathname.startsWith('/dashboard') &&
          token?.role !== ADMIN_ROLE_ID
       ) {
          return NextResponse.redirect(new URL(ROUTES_PAGE.home.link, req.url));
@@ -29,15 +29,15 @@ export default withAuth(
       callbacks: {
          authorized: ({ token }) => !!token,
       },
-   }
+   },
 );
 
 export const config = {
    matcher: [
-      "/dashboard/:path*",
-      "/profile/:path*",
-      "/settings/:path*",
-      "/my-posts/:path*",
-      "/my-comments/:path*",
+      '/dashboard/:path*',
+      '/profile/:path*',
+      '/settings/:path*',
+      '/my-posts/:path*',
+      '/my-comments/:path*',
    ],
 };

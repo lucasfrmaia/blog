@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React from "react";
-import { cn } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { CiLogout } from "react-icons/ci";
-import ToggleTheme from "./ToggleTheme";
-import { IoIosLogOut } from "react-icons/io";
-import { CiBookmark } from "react-icons/ci";
-import { FaCommentAlt } from "react-icons/fa";
-import { CiSettings } from "react-icons/ci";
-import { Button } from "../ui/button";
-import { signOut } from "next-auth/react";
-import { IconButton, IconLink } from "./IconSetting";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { CiLogout } from 'react-icons/ci';
+import ToggleTheme from './ToggleTheme';
+import { IoIosLogOut } from 'react-icons/io';
+import { CiBookmark } from 'react-icons/ci';
+import { FaCommentAlt } from 'react-icons/fa';
+import { CiSettings } from 'react-icons/ci';
+import { Button } from '../ui/button';
+import { signOut } from 'next-auth/react';
+import { IconButton, IconLink } from './IconSetting';
 
 type IPropPopoverUser = {
    children?: React.ReactNode;
@@ -20,19 +20,19 @@ type IPropPopoverUser = {
 };
 const settings = [
    {
-      label: "Posts Salvos",
+      label: 'Posts Salvos',
       Icon: CiBookmark,
-      href: "#",
+      href: '#',
    },
    {
-      label: "Meus Comentários",
+      label: 'Meus Comentários',
       Icon: FaCommentAlt,
-      href: "/profile?tab=comments",
+      href: '/profile?tab=comments',
    },
    {
-      label: "Configurações",
+      label: 'Configurações',
       Icon: CiSettings,
-      href: "/profile?tab=password",
+      href: '/profile?tab=password',
    },
 ];
 

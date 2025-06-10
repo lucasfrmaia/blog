@@ -1,5 +1,5 @@
-import { ICommentCreate, ICommentUpdate, IComment } from "../entities/comment";
-import { IBaseRepository } from "./BaseRepository";
+import { ICommentCreate, ICommentUpdate, IComment } from '../entities/comment';
+import { IBaseRepository } from './BaseRepository';
 
 export interface ICommentRepository
    extends IBaseRepository<IComment, ICommentCreate, ICommentUpdate> {

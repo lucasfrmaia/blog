@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
    try {
@@ -7,14 +7,14 @@ export async function POST(request: NextRequest) {
 
       if (!body.title || !body.content || !body.authorId) {
          return NextResponse.json(
-            { error: "Título, conteúdo e ID do autor são campos obrigatórios" },
-            { status: 400 }
+            { error: 'Título, conteúdo e ID do autor são campos obrigatórios' },
+            { status: 400 },
          );
       }
 
       await apiManager.post.create({
          title: body.title,
-         description: body.description || "",
+         description: body.description || '',
          content: body.content,
          authorId: body.authorId,
          img: body.img,
@@ -22,13 +22,13 @@ export async function POST(request: NextRequest) {
       });
 
       return NextResponse.json(
-         { message: "Post criado com sucesso" },
-         { status: 201 }
+         { message: 'Post criado com sucesso' },
+         { status: 201 },
       );
    } catch (error) {
       return NextResponse.json(
          { error: `Erro ao criar post: ${(error as Error).message}` },
-         { status: 500 }
+         { status: 500 },
       );
    }
 }

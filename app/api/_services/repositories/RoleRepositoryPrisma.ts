@@ -1,13 +1,13 @@
-import { IRoleRepository } from "../interfaces/RoleRepository";
-import { IRole, IRoleCreate, IRoleUpdate } from "../entities/role";
-import { prisma } from "../../../../prisma/lib/prisma";
+import { IRoleRepository } from '../interfaces/RoleRepository';
+import { IRole, IRoleCreate, IRoleUpdate } from '../entities/role';
+import { prisma } from '../../../../prisma/lib/prisma';
 
 export class RoleRepositoryPrisma implements IRoleRepository {
    async create(data: IRoleCreate): Promise<IRole> {
       const role = await prisma.role.create({
          data: {
             name: data.name,
-            description: data.description || "",
+            description: data.description || '',
          },
          include: { users: true },
       });
@@ -33,7 +33,7 @@ export class RoleRepositoryPrisma implements IRoleRepository {
 
       if (usersWithRole.length > 0) {
          throw new Error(
-            `Não é possível deletar a role ${id} pois está associada a ${usersWithRole.length} usuário(s).`
+            `Não é possível deletar a role ${id} pois está associada a ${usersWithRole.length} usuário(s).`,
          );
       }
 
@@ -90,7 +90,7 @@ export class RoleRepositoryPrisma implements IRoleRepository {
 
    async findPerPage(
       page: number,
-      limit: number
+      limit: number,
    ): Promise<{ roles: IRole[]; total: number }> {
       const [roles, total] = await Promise.all([
          prisma.role.findMany({
@@ -100,7 +100,7 @@ export class RoleRepositoryPrisma implements IRoleRepository {
                users: true,
             },
             orderBy: {
-               name: "asc",
+               name: 'asc',
             },
          }),
          prisma.role.count(),

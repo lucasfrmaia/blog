@@ -1,13 +1,13 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
    try {
       const url = new URL(request.url);
 
       // Obter os parâmetros da URL
-      const pageParam = url.searchParams.get("page");
-      const limitParam = url.searchParams.get("limit");
+      const pageParam = url.searchParams.get('page');
+      const limitParam = url.searchParams.get('limit');
 
       // Converter para números e definir valores padrão
       const page = pageParam ? parseInt(pageParam) : 1;
@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
       // Validar parâmetros
       if (page < 1 || limit < 1) {
          return NextResponse.json(
-            { error: "Parâmetros de paginação inválidos" },
-            { status: 400 }
+            { error: 'Parâmetros de paginação inválidos' },
+            { status: 400 },
          );
       }
 
@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(result);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar categorias paginadas" },
-         { status: 500 }
+         { error: 'Erro ao buscar categorias paginadas' },
+         { status: 500 },
       );
    }
 }

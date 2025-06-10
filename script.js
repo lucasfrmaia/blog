@@ -1,55 +1,55 @@
-const API_URL = "http://localhost:3000/api/posts/create"; // Substitua pela URL correta da sua API
-const authorId = "b6dae9d8-b5e5-4ca3-9182-80dc79cbc2bc";
+const API_URL = 'http://localhost:3000/api/posts/create'; // Substitua pela URL correta da sua API
+const authorId = 'b6dae9d8-b5e5-4ca3-9182-80dc79cbc2bc';
 
 const categories = [
    {
-      id: "35b0abaa-8b60-46ec-ae4d-e365f133f56e",
-      title: "Engenharia de Software",
+      id: '35b0abaa-8b60-46ec-ae4d-e365f133f56e',
+      title: 'Engenharia de Software',
    },
-   { id: "c93c6f39-94d8-44c3-b96a-87c79a12b410", title: "Estrutura de Dados" },
-   { id: "0a39a495-6eb1-4f1e-b47e-b2b2b12adecd", title: "Grafos" },
+   { id: 'c93c6f39-94d8-44c3-b96a-87c79a12b410', title: 'Estrutura de Dados' },
+   { id: '0a39a495-6eb1-4f1e-b47e-b2b2b12adecd', title: 'Grafos' },
    {
-      id: "78310224-21be-45e6-8d6d-d7fd2e79c6a3",
-      title: "Introdução a Computação",
+      id: '78310224-21be-45e6-8d6d-d7fd2e79c6a3',
+      title: 'Introdução a Computação',
    },
-   { id: "b2b92a50-5034-4494-8bb6-b52a6529b77d", title: "Matemática" },
+   { id: 'b2b92a50-5034-4494-8bb6-b52a6529b77d', title: 'Matemática' },
 ];
 
 const topicsByCategory = {
-   "Engenharia de Software": [
-      "Modelo em Cascata",
-      "Engenharia de Requisitos",
-      "Metodologias Ágeis",
-      "DevOps",
-      "Gerência de Configuração de Software",
+   'Engenharia de Software': [
+      'Modelo em Cascata',
+      'Engenharia de Requisitos',
+      'Metodologias Ágeis',
+      'DevOps',
+      'Gerência de Configuração de Software',
    ],
-   "Estrutura de Dados": [
-      "Arrays e Listas",
-      "Pilhas e Filas",
-      "Árvores Binárias",
-      "Tabelas Hash",
-      "Grafos",
+   'Estrutura de Dados': [
+      'Arrays e Listas',
+      'Pilhas e Filas',
+      'Árvores Binárias',
+      'Tabelas Hash',
+      'Grafos',
    ],
    Grafos: [
-      "Introdução à Teoria dos Grafos",
-      "Grafos Direcionados e Não Direcionados",
-      "Algoritmo de Dijkstra",
-      "Busca em Largura e Profundidade",
-      "Aplicações de Grafos",
+      'Introdução à Teoria dos Grafos',
+      'Grafos Direcionados e Não Direcionados',
+      'Algoritmo de Dijkstra',
+      'Busca em Largura e Profundidade',
+      'Aplicações de Grafos',
    ],
-   "Introdução a Computação": [
-      "História da Computação",
-      "Arquitetura de Computadores",
-      "Sistemas Operacionais",
-      "Linguagens de Programação",
-      "Algoritmos e Lógica de Programação",
+   'Introdução a Computação': [
+      'História da Computação',
+      'Arquitetura de Computadores',
+      'Sistemas Operacionais',
+      'Linguagens de Programação',
+      'Algoritmos e Lógica de Programação',
    ],
    Matemática: [
-      "Conjuntos e Operações",
-      "Funções e Gráficos",
-      "Probabilidade e Estatística",
-      "Álgebra Linear",
-      "Cálculo Diferencial e Integral",
+      'Conjuntos e Operações',
+      'Funções e Gráficos',
+      'Probabilidade e Estatística',
+      'Álgebra Linear',
+      'Cálculo Diferencial e Integral',
    ],
 };
 
@@ -95,30 +95,30 @@ const createPosts = async () => {
    for (const post of posts) {
       try {
          const response = await fetch(API_URL, {
-            method: "POST",
+            method: 'POST',
             headers: {
-               "Content-Type": "application/json",
+               'Content-Type': 'application/json',
                // Adicione outros cabeçalhos de autenticação, se necessário
             },
             body: JSON.stringify(post),
          });
 
-         const contentType = response.headers.get("content-type");
+         const contentType = response.headers.get('content-type');
          const text = await response.text();
 
          if (!response.ok) {
-            console.error("Erro na resposta da API:", response.status, text);
+            console.error('Erro na resposta da API:', response.status, text);
             continue;
          }
 
-         if (contentType && contentType.includes("application/json")) {
+         if (contentType && contentType.includes('application/json')) {
             const data = JSON.parse(text);
-            console.log("Post criado com sucesso:", data.title);
+            console.log('Post criado com sucesso:', data.title);
          } else {
-            console.error("Resposta não é JSON:", text);
+            console.error('Resposta não é JSON:', text);
          }
       } catch (error) {
-         console.error("Erro na requisição:", error);
+         console.error('Erro na requisição:', error);
       }
    }
 };

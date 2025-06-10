@@ -8,7 +8,7 @@
       "start": "next start",
       "lint": "next lint",
       "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-      "format": "prettier --write ."
+      "format": "npx prettier --write ."
    },
    "dependencies": {
       "@hookform/resolvers": "^3.10.0",

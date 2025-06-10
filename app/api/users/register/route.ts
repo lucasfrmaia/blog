@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { apiManager } from "../../_services/ApiManager";
+import { NextResponse } from 'next/server';
+import { apiManager } from '../../_services/ApiManager';
 
 export async function POST(request: Request) {
    try {
@@ -8,8 +8,8 @@ export async function POST(request: Request) {
 
       if (!name || !email || !password) {
          return NextResponse.json(
-            { error: "Dados inválidos" },
-            { status: 400 }
+            { error: 'Dados inválidos' },
+            { status: 400 },
          );
       }
 
@@ -17,8 +17,8 @@ export async function POST(request: Request) {
 
       if (existingUser != null) {
          return NextResponse.json(
-            { error: "Email já cadastrado" },
-            { status: 400 }
+            { error: 'Email já cadastrado' },
+            { status: 400 },
          );
       }
 
@@ -30,14 +30,14 @@ export async function POST(request: Request) {
       });
 
       return NextResponse.json(
-         { message: "Usuário criado com sucesso" },
-         { status: 201 }
+         { message: 'Usuário criado com sucesso' },
+         { status: 201 },
       );
    } catch (error) {
-      console.error("Erro ao criar usuário:", error);
+      console.error('Erro ao criar usuário:', error);
       return NextResponse.json(
-         { error: "Erro ao criar usuário" },
-         { status: 500 }
+         { error: 'Erro ao criar usuário' },
+         { status: 500 },
       );
    }
 }

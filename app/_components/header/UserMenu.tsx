@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession, signOut } from 'next-auth/react';
 
-import { LogOut, Settings, User, LayoutDashboard } from "lucide-react";
-import Link from "next/link";
-import { ThemeToggle } from "../theme/ThemeToggle";
-import { AuthUser } from "@/utils/types/auth";
+import { LogOut, Settings, User, LayoutDashboard } from 'lucide-react';
+import Link from 'next/link';
+import { ThemeToggle } from '../theme/ThemeToggle';
+import { AuthUser } from '@/utils/types/auth';
 import {
    DropdownMenu,
    DropdownMenuContent,
@@ -14,9 +14,9 @@ import {
    DropdownMenuLabel,
    DropdownMenuSeparator,
    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+} from '../ui/dropdown-menu';
+import { Button } from '../ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 // ToDo mudar role
 export function UserMenu() {
@@ -48,8 +48,8 @@ export function UserMenu() {
                >
                   <Avatar className="h-8 w-8">
                      <AvatarImage
-                        src={user?.image || "/placeholder-avatar.jpg"}
-                        alt={user?.name || ""}
+                        src={user?.image || '/placeholder-avatar.jpg'}
+                        alt={user?.name || ''}
                      />
                      <AvatarFallback>
                         {user?.name?.charAt(0).toUpperCase()}

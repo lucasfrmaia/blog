@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
    PostContainer,
    PostImage,
@@ -11,11 +11,11 @@ import {
    PostDescription,
    PostReadMoreButton,
    PostCategoriesBadge,
-} from "../post-component/PostComponent";
-import { AMOUNT_POST_RECENT } from "@/utils/constantes/constants";
-import TitleSection from "../ui/utils/TitleSection";
-import { cn } from "@/lib/utils";
-import { ICategory } from "@/app/api/_services/entities/category";
+} from '../post-component/PostComponent';
+import { AMOUNT_POST_RECENT } from '@/utils/constantes/constants';
+import TitleSection from '../ui/utils/TitleSection';
+import { cn } from '@/lib/utils';
+import { ICategory } from '@/app/api/_services/entities/category';
 
 interface ICategoryPostsProps {
    children?: React.ReactNode;
@@ -25,15 +25,15 @@ interface ICategoryPostsProps {
 
 const CategoryPosts: React.FC<ICategoryPostsProps> = ({
    children,
-   className = "",
+   className = '',
    // Outras props aqui
 }) => {
    const { data: categories, isLoading } = useQuery<ICategory[]>({
-      queryKey: ["categories"],
+      queryKey: ['categories'],
       queryFn: async () => {
-         const response = await fetch("/api/categories");
+         const response = await fetch('/api/categories');
          if (!response.ok) {
-            throw new Error("Erro ao buscar categorias");
+            throw new Error('Erro ao buscar categorias');
          }
          return response.json();
       },
@@ -44,7 +44,7 @@ const CategoryPosts: React.FC<ICategoryPostsProps> = ({
    }
 
    return (
-      <article className={cn("", className)}>
+      <article className={cn('', className)}>
          <h4 className="text-muted-foreground">Procure por categoria</h4>
          <TitleSection>Categorias Populares</TitleSection>
 
@@ -53,7 +53,7 @@ const CategoryPosts: React.FC<ICategoryPostsProps> = ({
                return (
                   <li
                      key={`category-popular-${id}`}
-                     style={{ backgroundColor: color + "80" }}
+                     style={{ backgroundColor: color + '80' }}
                      className="inline-flex justify-center items-center h-9 text-center px-4 rounded-md font-bold"
                   >
                      {name}

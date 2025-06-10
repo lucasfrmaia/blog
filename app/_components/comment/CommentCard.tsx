@@ -1,28 +1,28 @@
-import { useSession } from "next-auth/react";
-import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
-import { useEffect, useState } from "react";
+import { useSession } from 'next-auth/react';
+import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import { useEffect, useState } from 'react';
 import {
    ThumbsUp,
    ThumbsDown,
    MoreVertical,
    Trash2Icon,
    Edit2Icon,
-} from "lucide-react";
-import { useToast } from "../ui/use-toast";
-import { useQueryClient } from "@tanstack/react-query";
-import { Button } from "../ui/button";
+} from 'lucide-react';
+import { useToast } from '../ui/use-toast';
+import { useQueryClient } from '@tanstack/react-query';
+import { Button } from '../ui/button';
 import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Card, CardContent } from "../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { CommentForm } from "./CommentForm";
-import { ADMIN_ROLE_ID } from "@/utils/constantes/constants";
-import { IComment } from "@/app/api/_services/entities/comment";
+} from '../ui/dropdown-menu';
+import { Card, CardContent } from '../ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { CommentForm } from './CommentForm';
+import { ADMIN_ROLE_ID } from '@/utils/constantes/constants';
+import { IComment } from '@/app/api/_services/entities/comment';
 
 interface CommentCardProps {
    comment: IComment;
@@ -44,7 +44,7 @@ export function CommentCard({
    const [reaction, setReaction] = useState({
       likes: comment?.likes ?? 0,
       deslikes: comment?.deslikes ?? 0,
-      userReaction: null as "like" | "deslike" | null,
+      userReaction: null as 'like' | 'deslike' | null,
    });
 
    const [isEditing, setIsEditing] = useState(false);
@@ -56,39 +56,39 @@ export function CommentCard({
    const handleDelete = async () => {
       try {
          const response = await fetch(`/api/comments/${comment.id}`, {
-            method: "DELETE",
+            method: 'DELETE',
          });
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || "Erro ao deletar comentário");
+            throw new Error(error.message || 'Erro ao deletar comentário');
          }
 
          toast({
-            title: "Comentário deletado",
-            description: "O comentário foi deletado com sucesso",
+            title: 'Comentário deletado',
+            description: 'O comentário foi deletado com sucesso',
          });
 
-         queryClient.invalidateQueries({ queryKey: ["comments", postId] });
+         queryClient.invalidateQueries({ queryKey: ['comments', postId] });
       } catch (error) {
          toast({
-            title: "Erro ao deletar comentário",
+            title: 'Erro ao deletar comentário',
             description: (error as Error).message,
-            variant: "destructive",
+            variant: 'destructive',
          });
       }
    };
 
-   const handleLike = async (type: "like" | "deslike") => {
+   const handleLike = async (type: 'like' | 'deslike') => {
       if (isProcessing || !session?.user?.id) return;
 
       setIsProcessing(true);
 
       try {
          const response = await fetch(`/api/comments/${comment.id}/reaction`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-               "Content-Type": "application/json",
+               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                userId: session.user.id,
@@ -98,7 +98,7 @@ export function CommentCard({
 
          if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.message || "Erro ao registrar reação");
+            throw new Error(error.message || 'Erro ao registrar reação');
          }
 
          const data = await response.json();
@@ -109,13 +109,13 @@ export function CommentCard({
             userReaction:
                reaction.userReaction === type
                   ? null
-                  : (type as "like" | "deslike"),
+                  : (type as 'like' | 'deslike'),
          });
       } catch (error) {
          toast({
-            title: "Erro ao reagir",
+            title: 'Erro ao reagir',
             description: (error as Error).message,
-            variant: "destructive",
+            variant: 'destructive',
          });
       } finally {
          setIsProcessing(false);
@@ -134,7 +134,7 @@ export function CommentCard({
                onCommentSubmitted={() => {
                   setIsEditing(false);
                   queryClient.invalidateQueries({
-                     queryKey: ["comments", postId],
+                     queryKey: ['comments', postId],
                   });
                }}
             />
@@ -148,15 +148,15 @@ export function CommentCard({
             <div className="flex items-start space-x-4">
                <Avatar>
                   <AvatarImage
-                     src={comment.user?.avatar || "/placeholder.jpg"}
-                     alt={comment.user?.name || ""}
+                     src={comment.user?.avatar || '/placeholder.jpg'}
+                     alt={comment.user?.name || ''}
                   />
                   <AvatarFallback>
                      {comment.user?.name
-                        ?.split(" ")
+                        ?.split(' ')
                         .map((n) => n[0])
-                        .join("")
-                        .toUpperCase() || "U"}
+                        .join('')
+                        .toUpperCase() || 'U'}
                   </AvatarFallback>
                </Avatar>
                <div className="flex-1">
@@ -198,23 +198,23 @@ export function CommentCard({
                   <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">
                      <button
                         className={`flex items-center gap-x-2 ${
-                           reaction.userReaction === "like"
-                              ? "text-blue-500"
-                              : ""
+                           reaction.userReaction === 'like'
+                              ? 'text-blue-500'
+                              : ''
                         }`}
                         disabled={isProcessing}
-                        onClick={() => handleLike("like")}
+                        onClick={() => handleLike('like')}
                      >
                         <ThumbsUp className="w-4 h-4" /> {reaction.likes}
                      </button>
                      <button
                         className={`flex items-center gap-x-2 ${
-                           reaction.userReaction === "deslike"
-                              ? "text-red-500"
-                              : ""
+                           reaction.userReaction === 'deslike'
+                              ? 'text-red-500'
+                              : ''
                         }`}
                         disabled={isProcessing}
-                        onClick={() => handleLike("deslike")}
+                        onClick={() => handleLike('deslike')}
                      >
                         <ThumbsDown className="h-4 w-4" /> {reaction.deslikes}
                      </button>

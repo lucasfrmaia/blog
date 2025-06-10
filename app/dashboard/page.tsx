@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
+import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 
-import BaseLayout from "../_components/layout/BaseLayout";
-import { PostList } from "../_components/post/PostList";
-import { Button } from "../_components/ui/button";
+import BaseLayout from '../_components/layout/BaseLayout';
+import { PostList } from '../_components/post/PostList';
+import { Button } from '../_components/ui/button';
 import {
    Card,
    CardHeader,
    CardTitle,
    CardContent,
    CardDescription,
-} from "../_components/ui/card";
-import { UserList } from "../_components/user/UserList";
-import { apiManager } from "../api/_services/ApiManager";
+} from '../_components/ui/card';
+import { UserList } from '../_components/user/UserList';
+import { apiManager } from '../api/_services/ApiManager';
 import {
    Eye,
    FileText,
@@ -22,22 +22,22 @@ import {
    Plus,
    TrendingUp,
    Users,
-} from "lucide-react";
-import Link from "next/link";
-import CategoryList from "../_components/category/CategoryList";
-import { CategoryDialog } from "../_components/category/dialogs/CategoryDialog";
-import { PostDialog } from "../_components/post/dialogs/PostDialog";
-import { useState } from "react";
+} from 'lucide-react';
+import Link from 'next/link';
+import CategoryList from '../_components/category/CategoryList';
+import { CategoryDialog } from '../_components/category/dialogs/CategoryDialog';
+import { PostDialog } from '../_components/post/dialogs/PostDialog';
+import { useState } from 'react';
 
 export default function DashboardPage() {
    const [currentPagePost, setCurrentPagePost] = useState(1);
 
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
-      queryKey: ["posts"],
+      queryKey: ['posts'],
       queryFn: async () => {
-         const response = await fetch("/api/posts");
+         const response = await fetch('/api/posts');
          if (!response.ok) {
-            throw new Error("Erro ao buscar posts");
+            throw new Error('Erro ao buscar posts');
          }
          return response.json();
       },
@@ -48,7 +48,7 @@ export default function DashboardPage() {
    const totalComments =
       posts?.reduce(
          (acc: number, post: any) => acc + (post.comments?.length || 0),
-         0
+         0,
       ) || 0;
    const engagement =
       posts && posts.length > 0
@@ -56,7 +56,7 @@ export default function DashboardPage() {
               ((totalViews + totalComments) / (posts.length * 100)) *
               100
            ).toFixed(1)}%`
-         : "0%";
+         : '0%';
 
    return (
       <BaseLayout>

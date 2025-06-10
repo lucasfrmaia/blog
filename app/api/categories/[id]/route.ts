@@ -1,5 +1,5 @@
-import { apiManager } from "@/app/api/_services/ApiManager";
-import { NextRequest, NextResponse } from "next/server";
+import { apiManager } from '@/app/api/_services/ApiManager';
+import { NextRequest, NextResponse } from 'next/server';
 
 interface RouteParams {
    params: {
@@ -15,16 +15,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
       if (!category) {
          return NextResponse.json(
-            { error: "Categoria não encontrada" },
-            { status: 404 }
+            { error: 'Categoria não encontrada' },
+            { status: 404 },
          );
       }
 
       return NextResponse.json(category);
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao buscar categoria" },
-         { status: 500 }
+         { error: 'Erro ao buscar categoria' },
+         { status: 500 },
       );
    }
 }
@@ -40,11 +40,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
          ...body,
       });
 
-      return NextResponse.json({ message: "Categoria atualizada com sucesso" });
+      return NextResponse.json({ message: 'Categoria atualizada com sucesso' });
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao atualizar categoria" },
-         { status: 500 }
+         { error: 'Erro ao atualizar categoria' },
+         { status: 500 },
       );
    }
 }
@@ -55,11 +55,11 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       const { id } = params;
       await apiManager.category.delete(id);
 
-      return NextResponse.json({ message: "Categoria excluída com sucesso" });
+      return NextResponse.json({ message: 'Categoria excluída com sucesso' });
    } catch (error) {
       return NextResponse.json(
-         { error: "Erro ao excluir categoria" },
-         { status: 500 }
+         { error: 'Erro ao excluir categoria' },
+         { status: 500 },
       );
    }
 }

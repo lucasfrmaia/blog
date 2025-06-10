@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
-import PostCard from "./PostCard";
-import { IPost } from "@/app/api/_services/entities/Post";
+import { motion } from 'framer-motion';
+import PostCard from './PostCard';
+import { IPost } from '@/app/api/_services/entities/Post';
 
 interface PostGridProps {
    posts: IPost[];
@@ -23,9 +23,9 @@ export default function PostGrid({ posts }: PostGridProps) {
                   id={post.id}
                   title={post.title}
                   excerpt={post.description}
-                  coverImage={post.img || "/placeholder.jpg"}
+                  coverImage={post.img || '/placeholder.jpg'}
                   readTime={`${Math.ceil(
-                     post.description.length / 1000
+                     post.description.length / 1000,
                   )} min de leitura`}
                   categories={post.categories}
                   views={post.views}

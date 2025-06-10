@@ -1,30 +1,30 @@
-"use client";
+'use client';
 
-import { Form, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { Form, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import {
    ICategory,
    ICategoryCreate,
-} from "@/app/api/_services/entities/category";
-import { Button } from "../ui/button";
+} from '@/app/api/_services/entities/category';
+import { Button } from '../ui/button';
 import {
    FormField,
    FormItem,
    FormLabel,
    FormControl,
    FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from '../ui/form';
+import { Input } from '../ui/input';
 
 const categoryFormSchema = z.object({
-   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
+   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
    description: z
       .string()
-      .min(3, "A descrição deve ter pelo menos 3 caracteres"),
+      .min(3, 'A descrição deve ter pelo menos 3 caracteres'),
    color: z
       .string()
-      .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Cor inválida"),
+      .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, 'Cor inválida'),
 });
 
 type CategoryFormData = z.infer<typeof categoryFormSchema>;
@@ -43,9 +43,9 @@ export default function CategoryForm({
    const form = useForm<CategoryFormData>({
       resolver: zodResolver(categoryFormSchema),
       defaultValues: {
-         name: category?.name || "",
-         color: category?.color || "#000000",
-         description: category?.description || "",
+         name: category?.name || '',
+         color: category?.color || '#000000',
+         description: category?.description || '',
       },
    });
 
@@ -123,10 +123,10 @@ export default function CategoryForm({
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>
                {isSubmitting
-                  ? "Salvando..."
+                  ? 'Salvando...'
                   : category
-                  ? "Atualizar Categoria"
-                  : "Criar Categoria"}
+                    ? 'Atualizar Categoria'
+                    : 'Criar Categoria'}
             </Button>
          </form>
       </Form>

@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { Form, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { IUser, IUserUpdate } from "@/app/api/_services/entities/user";
-import { Button } from "../ui/button";
+import { Form, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { IUser, IUserUpdate } from '@/app/api/_services/entities/user';
+import { Button } from '../ui/button';
 import {
    FormField,
    FormItem,
    FormLabel,
    FormControl,
    FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
+} from '../ui/form';
+import { Input } from '../ui/input';
 
 const formSchema = z.object({
-   name: z.string().min(3, "O nome deve ter pelo menos 3 caracteres"),
-   email: z.string().email("Email inválido"),
+   name: z.string().min(3, 'O nome deve ter pelo menos 3 caracteres'),
+   email: z.string().email('Email inválido'),
    password: z
       .string()
-      .min(6, "A senha deve ter pelo menos 6 caracteres")
+      .min(6, 'A senha deve ter pelo menos 6 caracteres')
       .optional(),
 });
 
@@ -39,8 +39,8 @@ export default function UserForm({
    const form = useForm<FormValues>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         name: defaultValues?.name || "",
-         email: defaultValues?.email || "",
+         name: defaultValues?.name || '',
+         email: defaultValues?.email || '',
       },
    });
 
@@ -101,7 +101,7 @@ export default function UserForm({
             />
 
             <Button type="submit" disabled={isSubmitting}>
-               {isSubmitting ? "Salvando..." : "Salvar"}
+               {isSubmitting ? 'Salvando...' : 'Salvar'}
             </Button>
          </form>
       </Form>

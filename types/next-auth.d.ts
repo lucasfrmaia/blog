@@ -1,7 +1,7 @@
-import { AuthUser } from "@/utils/types/auth";
-import NextAuth from "next-auth";
+import { AuthUser } from '@/utils/types/auth';
+import NextAuth from 'next-auth';
 
-declare module "next-auth" {
+declare module 'next-auth' {
    interface Session {
       user: {
          id: string;

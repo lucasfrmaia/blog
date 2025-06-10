@@ -1,6 +1,6 @@
-import { prisma } from "@/prisma/lib/prisma";
-import { IComment, ICommentCreate, ICommentUpdate } from "../entities/comment";
-import { ICommentRepository } from "../interfaces/CommentRepository";
+import { prisma } from '@/prisma/lib/prisma';
+import { IComment, ICommentCreate, ICommentUpdate } from '../entities/comment';
+import { ICommentRepository } from '../interfaces/CommentRepository';
 
 export class CommentRepositoryPrisma implements ICommentRepository {
    async create(data: ICommentCreate): Promise<IComment> {
@@ -45,12 +45,12 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             post: true,
             replies: {
                orderBy: {
-                  createdAt: "asc",
+                  createdAt: 'asc',
                },
             },
          },
          orderBy: {
-            createdAt: "asc",
+            createdAt: 'asc',
          },
       });
 
@@ -67,7 +67,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             post: true,
          },
          orderBy: {
-            createdAt: "desc",
+            createdAt: 'desc',
          },
       });
 
@@ -81,7 +81,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             post: true,
          },
          orderBy: {
-            createdAt: "desc",
+            createdAt: 'desc',
          },
       });
 
