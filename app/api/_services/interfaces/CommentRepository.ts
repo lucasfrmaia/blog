@@ -1,11 +1,8 @@
 import { ICommentCreate, ICommentUpdate, IComment } from "../entities/comment";
+import { IBaseRepository } from "./BaseRepository";
 
-export interface ICommentRepository {
-   create(data: ICommentCreate): Promise<void>;
-   update(data: ICommentUpdate): Promise<void>;
-   findById(id: string): Promise<IComment | null>;
-   findAll(): Promise<IComment[]>;
-   delete(id: string): Promise<void>;
+export interface ICommentRepository
+   extends IBaseRepository<IComment, ICommentCreate, ICommentUpdate> {
    findByPostId(postId: string): Promise<IComment[]>;
    findByUserId(userId: string): Promise<IComment[]>;
 }

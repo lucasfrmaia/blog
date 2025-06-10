@@ -14,7 +14,8 @@ export async function POST(request: Request) {
       }
 
       const existingUser = await apiManager.user.findByEmail(email);
-      if (existingUser) {
+
+      if (existingUser != null) {
          return NextResponse.json(
             { error: "Email já cadastrado" },
             { status: 400 }

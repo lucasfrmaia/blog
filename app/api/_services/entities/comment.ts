@@ -6,6 +6,8 @@ export type IComment = Comment & {
    replies?: IComment[];
    user?: IUser;
    post?: IPost;
+   deslikes?: string;
+   likes?: string;
 };
 
 export type ICommentCreate = Pick<

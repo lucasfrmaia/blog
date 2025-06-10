@@ -28,8 +28,8 @@ export class CategoryRepositoryPrisma implements ICategoryRepository {
       return { categories, total };
    }
 
-   async create(data: ICategoryCreate): Promise<void> {
-      await prisma.category.create({
+   async create(data: ICategoryCreate): Promise<ICategory> {
+      return await prisma.category.create({
          data: {
             name: data.name,
             description: data.description,

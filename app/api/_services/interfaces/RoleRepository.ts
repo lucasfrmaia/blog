@@ -1,11 +1,8 @@
 import { IRole, IRoleCreate, IRoleUpdate } from "../entities/role";
+import { IBaseRepository } from "./BaseRepository";
 
-export interface IRoleRepository {
-   create(data: IRoleCreate): Promise<IRole>;
-   update(data: IRoleUpdate): Promise<void>;
-   delete(id: number): Promise<void>;
-   findAll(): Promise<IRole[]>;
-   findById(id: number): Promise<IRole | null>;
+export interface IRoleRepository
+   extends IBaseRepository<IRole, IRoleCreate, IRoleUpdate> {
    findByName(name: string): Promise<IRole | null>;
    findByUserId(userId: string): Promise<IRole | null>;
    findPerPage(

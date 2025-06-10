@@ -32,7 +32,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
          id: id,
          name: body.name,
          email: body.email,
-         role: Number(body.role),
+         roleId: Number(body.role),
       });
 
       return NextResponse.json({ message: "Sucesso ao atualizar o usuário" });

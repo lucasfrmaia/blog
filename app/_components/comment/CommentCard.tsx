@@ -41,12 +41,14 @@ export function CommentCard({
    const { toast } = useToast();
    const queryClient = useQueryClient();
 
-   const [likes, setLikes] = useState(0);
-   const [dislikes, setDislikes] = useState(0);
-   const [likeStatus, setLikeStatus] = useState<"like" | "dislike" | null>(
-      null
-   );
+   const [reaction, setReaction] = useState({
+      likes: comment?.likes ?? 0,
+      deslikes: comment?.deslikes ?? 0,
+      userReaction: null as "like" | "deslike" | null,
+   });
+
    const [isEditing, setIsEditing] = useState(false);
+   const [isProcessing, setIsProcessing] = useState(false);
 
    const canEdit = session?.user?.id === comment.user?.id;
    const canDelete = canEdit || session?.user?.role === ADMIN_ROLE_ID;
@@ -77,24 +79,46 @@ export function CommentCard({
       }
    };
 
-   const handleLike = (type: "like" | "dislike") => {
-      if (!likeStatus) {
-         type === "like" ? setLikes((l) => l + 1) : setDislikes((d) => d + 1);
-         setLikeStatus(type);
-         return;
-      }
+   const handleLike = async (type: "like" | "deslike") => {
+      if (isProcessing || !session?.user?.id) return;
 
-      if (type === "like" && likeStatus === "dislike") {
-         setLikes((l) => l + 1);
-         setDislikes((d) => d - 1);
-         setLikeStatus("like");
-      } else if (type === "dislike" && likeStatus === "like") {
-         setDislikes((d) => d + 1);
-         setLikes((l) => l - 1);
-         setLikeStatus("dislike");
-      } else {
-         type === "like" ? setLikes((l) => l - 1) : setDislikes((d) => d - 1);
-         setLikeStatus(null);
+      setIsProcessing(true);
+
+      try {
+         const response = await fetch(`/api/comments/${comment.id}/reaction`, {
+            method: "POST",
+            headers: {
+               "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+               userId: session.user.id,
+               reaction: type,
+            }),
+         });
+
+         if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Erro ao registrar reação");
+         }
+
+         const data = await response.json();
+
+         setReaction({
+            likes: data.likes,
+            deslikes: data.deslikes,
+            userReaction:
+               reaction.userReaction === type
+                  ? null
+                  : (type as "like" | "deslike"),
+         });
+      } catch (error) {
+         toast({
+            title: "Erro ao reagir",
+            description: (error as Error).message,
+            variant: "destructive",
+         });
+      } finally {
+         setIsProcessing(false);
       }
    };
 
@@ -124,8 +148,7 @@ export function CommentCard({
             <div className="flex items-start space-x-4">
                <Avatar>
                   <AvatarImage
-                     // ToDo Arrumar o avatar profile
-                     src={comment.user?.id || "/placeholder.jpg"}
+                     src={comment.user?.avatar || "/placeholder.jpg"}
                      alt={comment.user?.name || ""}
                   />
                   <AvatarFallback>
@@ -159,12 +182,13 @@ export function CommentCard({
                                  <DropdownMenuItem
                                     onClick={() => setIsEditing(true)}
                                  >
-                                    <Edit2Icon className="w-4 h-4 mr-2" />{" "}
+                                    <Edit2Icon className="w-4 h-4 mr-2" />
                                     Editar
                                  </DropdownMenuItem>
                               )}
                               <DropdownMenuItem onClick={handleDelete}>
-                                 <Trash2Icon className="w-4 h-4 mr-2" /> Deletar
+                                 <Trash2Icon className="w-4 h-4 mr-2" />
+                                 Deletar
                               </DropdownMenuItem>
                            </DropdownMenuContent>
                         </DropdownMenu>
@@ -173,16 +197,26 @@ export function CommentCard({
                   <p className="">{comment.content}</p>
                   <div className="flex items-center space-x-4 mt-2 text-sm text-muted-foreground">
                      <button
-                        className="flex items-center gap-x-2"
+                        className={`flex items-center gap-x-2 ${
+                           reaction.userReaction === "like"
+                              ? "text-blue-500"
+                              : ""
+                        }`}
+                        disabled={isProcessing}
                         onClick={() => handleLike("like")}
                      >
-                        <ThumbsUp className="w-4 h-4" /> {likes}
+                        <ThumbsUp className="w-4 h-4" /> {reaction.likes}
                      </button>
                      <button
-                        className="flex items-center gap-x-2"
-                        onClick={() => handleLike("dislike")}
+                        className={`flex items-center gap-x-2 ${
+                           reaction.userReaction === "deslike"
+                              ? "text-red-500"
+                              : ""
+                        }`}
+                        disabled={isProcessing}
+                        onClick={() => handleLike("deslike")}
                      >
-                        <ThumbsDown className="h-4 w-4" /> {dislikes}
+                        <ThumbsDown className="h-4 w-4" /> {reaction.deslikes}
                      </button>
                      {onReply && <button onClick={onReply}>Responder</button>}
                   </div>

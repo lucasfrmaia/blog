@@ -9,9 +9,9 @@ import { Prisma } from "@prisma/client";
 import { IPostRepository } from "../interfaces/PostRepository";
 
 export class PostRepositoryPrisma implements IPostRepository {
-   async create(data: IPostCreate): Promise<void> {
+   async create(data: IPostCreate): Promise<IPost> {
       const { categories, ...postData } = data;
-      await prisma.post.create({
+      return await prisma.post.create({
          data: {
             ...postData,
             categories: {

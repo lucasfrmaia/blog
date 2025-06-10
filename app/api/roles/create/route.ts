@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       });
 
       return NextResponse.json(
-         { message: "Função criada com sucesso", role: newRole?.name },
+         { message: "Função criada com sucesso" },
          { status: 201 }
       );
    } catch (error) {

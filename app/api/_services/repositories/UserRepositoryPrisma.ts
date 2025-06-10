@@ -37,7 +37,7 @@ export class UserRepositoryPrisma implements IUserRepository {
       return { users: users as User[], total };
    }
 
-   async create(data: IUserCreate): Promise<void> {
+   async create(data: IUserCreate): Promise<IUser> {
       const salt = await genSalt(10);
       const passwordString =
          typeof data.password === "string" ? data.password : "";
@@ -54,7 +54,7 @@ export class UserRepositoryPrisma implements IUserRepository {
          );
       }
 
-      const user = await prisma.user.create({
+      return await prisma.user.create({
          data: {
             name: data.name,
             email: data.email,

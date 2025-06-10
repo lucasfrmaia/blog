@@ -3,13 +3,23 @@ import { cn } from "@/lib/utils";
 import FormLogin from "./FormLogin";
 import Footer from "../_components/footer/Footer";
 import NaveBar from "../_components/header/NaveBar";
+import { getServerSession } from "next-auth";
+import { NextAuthOptions } from "../api/auth/auth-options";
+import { ROUTES_PAGE } from "@/utils/constantes/routes";
+import { redirect } from "next/navigation";
 
 type IPropFormLogin = {
    children?: React.ReactNode;
    className?: string;
 };
 
-export default function page({ children, className }: IPropFormLogin) {
+export default async function page({ children, className }: IPropFormLogin) {
+   const session = await getServerSession(NextAuthOptions);
+
+   if (session?.user) {
+      redirect(ROUTES_PAGE.home.link);
+   }
+
    return (
       <>
          <NaveBar />

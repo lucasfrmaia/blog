@@ -3,13 +3,10 @@ import {
    ICategoryCreate,
    ICategoryUpdate,
 } from "../entities/category";
+import { IBaseRepository } from "./BaseRepository";
 
-export interface ICategoryRepository {
-   create(data: ICategoryCreate): Promise<void>;
-   update(data: ICategoryUpdate): Promise<void>;
-   findById(id: string): Promise<ICategory | null>;
-   findAll(): Promise<ICategory[]>;
-   delete(id: string): Promise<void>;
+export interface ICategoryRepository
+   extends IBaseRepository<ICategory, ICategoryCreate, ICategoryUpdate> {
    findByPostId(postId: string): Promise<ICategory[]>;
    findPopularCategories(limit?: number): Promise<ICategory[]>;
    findPerPage(

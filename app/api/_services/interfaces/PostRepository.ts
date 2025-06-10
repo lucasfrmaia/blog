@@ -4,13 +4,10 @@ import {
    IPostFilters,
    IPostUpdate,
 } from "../entities/Post";
+import { IBaseRepository } from "./BaseRepository";
 
-export interface IPostRepository {
-   create(data: IPostCreate): Promise<void>;
-   update(data: IPostUpdate): Promise<void>;
-   findById(id: string): Promise<IPost | null>;
-   findAll(): Promise<IPost[]>;
-   delete(id: string): Promise<void>;
+export interface IPostRepository
+   extends IBaseRepository<IPost, IPostCreate, IPostUpdate> {
    findByCategory(categoryId: string): Promise<IPost[]>;
    findPopular(limit?: number): Promise<IPost[]>;
    findPerPage(

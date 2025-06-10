@@ -1,12 +1,9 @@
 import { IUser, IUserCreate, IUserUpdate } from "../entities/user";
+import { IBaseRepository } from "./BaseRepository";
 
-export interface IUserRepository {
-   create(data: IUserCreate): Promise<void>;
-   update(data: IUserUpdate): Promise<void>;
-   delete(id: string): Promise<void>;
+export interface IUserRepository
+   extends IBaseRepository<IUser, IUserCreate, IUserUpdate> {
    findByEmail(email: string): Promise<IUser | null>;
-   findById(id: string): Promise<IUser | null>;
-   findAll(): Promise<IUser[]>;
    findByRoleId(roleId: number): Promise<IUser[]>;
    findPerPage(
       page: number,

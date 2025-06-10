@@ -3,8 +3,8 @@ import { IComment, ICommentCreate, ICommentUpdate } from "../entities/comment";
 import { ICommentRepository } from "../interfaces/CommentRepository";
 
 export class CommentRepositoryPrisma implements ICommentRepository {
-   async create(data: ICommentCreate): Promise<void> {
-      await prisma.comment.create({
+   async create(data: ICommentCreate): Promise<IComment> {
+      return await prisma.comment.create({
          data: {
             content: data.content,
             userId: data.userId,

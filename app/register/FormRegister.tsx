@@ -57,13 +57,18 @@ export default function FormRegister({
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
       try {
-         await fetch("/api/users/register", {
+         const response = await fetch("/api/users/register", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
          });
+
+         if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error?.message || "Erro Desconhecido");
+         }
 
          await signIn("credentials", {
             email: data.email,
