@@ -1,4 +1,4 @@
-import { Comment } from '@prisma/client';
+import { Comment, LikeComment } from '@prisma/client';
 import { IUser } from './user';
 import { IPost } from './Post';
 
@@ -6,9 +6,10 @@ export type IComment = Comment & {
    replies?: IComment[];
    user?: IUser;
    post?: IPost;
-   deslikes?: string;
-   likes?: string;
+   likes?: LikeComment[];
 };
+
+export type ITypeLike = 'like' | 'deslike';
 
 export type ICommentCreate = Pick<
    Comment,

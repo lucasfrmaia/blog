@@ -36,7 +36,7 @@ model User {
   posts     Post[]
   comments  Comment[]
   favorites Post[] @relation("favorites")
-  likePost LikePost[]
+  likesComment LikeComment[]
 }
 
 model Category {
@@ -44,7 +44,7 @@ model Category {
   name        String @unique
   color       String
   createdAt   DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  updatedAt   DateTime @default(now()) @updatedAt
   description String @default("")
 
   posts Post[]
@@ -66,16 +66,6 @@ model Post {
   User User[] @relation("favorites")
   categories    Category[] 
   comments    Comment[]
-  LikePost LikePost[]
-}
-
-model LikePost {
-   id         Int @id @default(autoincrement())
-   postId     String
-   userId     String
-
-   post      Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-   user      User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Comment {
@@ -92,5 +82,16 @@ model Comment {
   post     Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
   parent   Comment?  @relation("CommentToReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies  Comment[] @relation("CommentToReplies")
+
+  likes LikeComment[]
 }
 
+model LikeComment {
+   commentId String
+   userId    String
+   type      String
+   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+   @@id([commentId, userId])
+}

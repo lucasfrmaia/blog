@@ -7,6 +7,7 @@ import { CommentForm } from './CommentForm';
 import { CommentList } from './CommentList';
 import { Card, CardContent } from '../ui/card';
 import { IComment } from '@/app/api/_services/entities/comment';
+import { useEffect } from 'react';
 
 interface CommentSectionProps {
    postId: string;

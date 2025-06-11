@@ -1,5 +1,5 @@
 import { Button } from '../ui/button';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { CommentForm } from './CommentForm';
 import { useSession } from 'next-auth/react';

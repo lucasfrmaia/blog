@@ -32,6 +32,8 @@ import {
 } from '@/app/_components/ui/select';
 import { Button } from '@/app/_components/ui/button';
 import { Check, X } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../ui/tabs';
+import PostPreview from '../preview/PostPreview';
 
 const formSchema = z.object({
    title: z.string().min(1, 'O título é obrigatório'),
@@ -85,159 +87,205 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
       await onSubmit(postData);
    };
 
+   const title = form.watch('title');
+   const img = form.watch('img');
+   const description = form.watch('description');
+   const content = form.watch('content');
+   const categoriesId = form.watch('categories');
+   const currentCategories = categoriesId.map((currentId) => {
+      const category = categories?.find((c) => currentId === c.id);
+
+      if (!category) {
+         throw new Error('Categoria com ID Inválido');
+      }
+
+      return category;
+   });
+
    return (
-      <Form {...form}>
-         <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="p-4 space-y-4"
-         >
-            <FormField
-               control={form.control}
-               name="title"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Título</FormLabel>
-                     <FormControl>
-                        <Input {...field} />
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+      <Tabs>
+         <TabsList>
+            <TabsTrigger value="form">Formulário</TabsTrigger>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+         </TabsList>
 
-            <FormField
-               control={form.control}
-               name="description"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Descrição</FormLabel>
-                     <FormControl>
-                        <Textarea {...field} />
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+         <TabsContent value="form">
+            <Form {...form}>
+               <form
+                  onSubmit={form.handleSubmit(handleSubmit)}
+                  className="p-4 space-y-4"
+               >
+                  <FormField
+                     control={form.control}
+                     name="title"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Título</FormLabel>
+                           <FormControl>
+                              <Input {...field} />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
 
-            <FormField
-               control={form.control}
-               name="content"
-               render={({ field }) => (
-                  <FormItem className="h-[550px]">
-                     <FormLabel>Conteúdo</FormLabel>
-                     <FormControl>
-                        <ReactQuill
-                           theme="snow"
-                           value={field.value}
-                           onChange={field.onChange}
-                           className="h-[450px]"
-                           modules={{
-                              toolbar: [
-                                 [{ header: [1, 2, 3, false] }],
-                                 ['bold', 'italic', 'underline', 'strike'],
-                                 [{ list: 'ordered' }, { list: 'bullet' }],
-                                 ['link', 'image'],
-                                 ['clean'],
-                              ],
-                           }}
-                        />
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+                  <FormField
+                     control={form.control}
+                     name="description"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Descrição</FormLabel>
+                           <FormControl>
+                              <Textarea {...field} />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
 
-            <FormField
-               control={form.control}
-               name="img"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Imagem de Capa</FormLabel>
-                     <FormControl>
-                        <Input {...field} />
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+                  <FormField
+                     control={form.control}
+                     name="content"
+                     render={({ field }) => (
+                        <FormItem className="h-[550px]">
+                           <FormLabel>Conteúdo</FormLabel>
+                           <FormControl>
+                              <ReactQuill
+                                 theme="snow"
+                                 value={field.value}
+                                 onChange={field.onChange}
+                                 className="h-[450px]"
+                                 modules={{
+                                    toolbar: [
+                                       [{ header: [1, 2, 3, false] }],
+                                       [
+                                          'bold',
+                                          'italic',
+                                          'underline',
+                                          'strike',
+                                       ],
+                                       [
+                                          { list: 'ordered' },
+                                          { list: 'bullet' },
+                                       ],
+                                       ['link', 'image'],
+                                       ['clean'],
+                                    ],
+                                 }}
+                              />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
 
-            <FormField
-               control={form.control}
-               name="categories"
-               render={({ field }) => (
-                  <FormItem>
-                     <FormLabel>Categorias</FormLabel>
-                     <FormControl>
-                        <div className="space-y-2">
-                           <Select
-                              onValueChange={(value) => {
-                                 if (!field.value.includes(value)) {
-                                    field.onChange([...field.value, value]);
-                                 }
-                              }}
-                           >
-                              <SelectTrigger>
-                                 <SelectValue placeholder="Selecione as categorias" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                 {categories?.map((category) => (
-                                    <SelectItem
-                                       key={category.id}
-                                       value={category.id}
-                                       disabled={field.value.includes(
-                                          category.id,
-                                       )}
-                                    >
-                                       {category.name}
-                                    </SelectItem>
-                                 ))}
-                              </SelectContent>
-                           </Select>
+                  <FormField
+                     control={form.control}
+                     name="img"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Imagem de Capa</FormLabel>
+                           <FormControl>
+                              <Input {...field} />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
 
-                           <div className="flex flex-wrap gap-2">
-                              {field.value.map((categoryId) => {
-                                 const category = categories?.find(
-                                    (c) => c.id === categoryId,
-                                 );
-                                 return (
-                                    category && (
-                                       <div
-                                          key={category.id}
-                                          className="flex items-center gap-1 bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
-                                       >
-                                          <span>{category.name}</span>
-                                          <Button
-                                             type="button"
-                                             variant="ghost"
-                                             size="icon"
-                                             className="h-4 w-4 p-0"
-                                             onClick={() =>
-                                                field.onChange(
-                                                   field.value.filter(
-                                                      (id) =>
-                                                         id !== category.id,
-                                                   ),
-                                                )
-                                             }
+                  <FormField
+                     control={form.control}
+                     name="categories"
+                     render={({ field }) => (
+                        <FormItem>
+                           <FormLabel>Categorias</FormLabel>
+                           <FormControl>
+                              <div className="space-y-2">
+                                 <Select
+                                    onValueChange={(value) => {
+                                       if (!field.value.includes(value)) {
+                                          field.onChange([
+                                             ...field.value,
+                                             value,
+                                          ]);
+                                       }
+                                    }}
+                                 >
+                                    <SelectTrigger>
+                                       <SelectValue placeholder="Selecione as categorias" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                       {categories?.map((category) => (
+                                          <SelectItem
+                                             key={category.id}
+                                             value={category.id}
+                                             disabled={field.value.includes(
+                                                category.id,
+                                             )}
                                           >
-                                             <X className="h-3 w-3" />
-                                          </Button>
-                                       </div>
-                                    )
-                                 );
-                              })}
-                           </div>
-                        </div>
-                     </FormControl>
-                     <FormMessage />
-                  </FormItem>
-               )}
-            />
+                                             {category.name}
+                                          </SelectItem>
+                                       ))}
+                                    </SelectContent>
+                                 </Select>
 
-            <Button type="submit" className="w-full">
-               {defaultValues ? 'Atualizar' : 'Criar'} Post
-            </Button>
-         </form>
-      </Form>
+                                 <div className="flex flex-wrap gap-2">
+                                    {field.value.map((categoryId) => {
+                                       const category = categories?.find(
+                                          (c) => c.id === categoryId,
+                                       );
+                                       return (
+                                          category && (
+                                             <div
+                                                key={category.id}
+                                                className="flex items-center gap-1 bg-secondary text-secondary-foreground px-2 py-1 rounded-md"
+                                             >
+                                                <span>{category.name}</span>
+                                                <Button
+                                                   type="button"
+                                                   variant="ghost"
+                                                   size="icon"
+                                                   className="h-4 w-4 p-0"
+                                                   onClick={() =>
+                                                      field.onChange(
+                                                         field.value.filter(
+                                                            (id) =>
+                                                               id !==
+                                                               category.id,
+                                                         ),
+                                                      )
+                                                   }
+                                                >
+                                                   <X className="h-3 w-3" />
+                                                </Button>
+                                             </div>
+                                          )
+                                       );
+                                    })}
+                                 </div>
+                              </div>
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <Button type="submit" className="w-full">
+                     {defaultValues ? 'Atualizar' : 'Criar'} Post
+                  </Button>
+               </form>
+            </Form>
+         </TabsContent>
+
+         <TabsContent value="preview">
+            <PostPreview
+               coverImage={img}
+               title={title}
+               description={description}
+               content={content}
+               categories={currentCategories}
+            />
+         </TabsContent>
+      </Tabs>
    );
 }

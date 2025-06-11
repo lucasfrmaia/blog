@@ -22,7 +22,7 @@ import { Card, CardContent } from '../ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { CommentForm } from './CommentForm';
 import { ADMIN_ROLE_ID } from '@/utils/constantes/constants';
-import { IComment } from '@/app/api/_services/entities/comment';
+import { IComment, ITypeLike } from '@/app/api/_services/entities/comment';
 
 interface CommentCardProps {
    comment: IComment;
@@ -42,9 +42,12 @@ export function CommentCard({
    const queryClient = useQueryClient();
 
    const [reaction, setReaction] = useState({
-      likes: comment?.likes ?? 0,
-      deslikes: comment?.deslikes ?? 0,
-      userReaction: null as 'like' | 'deslike' | null,
+      likes: comment?.likes?.filter((like) => like.type === 'like').length ?? 0,
+      deslikes:
+         comment?.likes?.filter((like) => like.type === 'deslike').length ?? 0,
+      userReaction:
+         comment?.likes?.find((like) => like.userId === session?.user?.id)
+            ?.type ?? null,
    });
 
    const [isEditing, setIsEditing] = useState(false);
@@ -79,13 +82,13 @@ export function CommentCard({
       }
    };
 
-   const handleLike = async (type: 'like' | 'deslike') => {
+   const handleLike = async (type: ITypeLike) => {
       if (isProcessing || !session?.user?.id) return;
 
       setIsProcessing(true);
 
       try {
-         const response = await fetch(`/api/comments/${comment.id}/reaction`, {
+         const response = await fetch(`/api/comments/reaction/${comment.id}`, {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',
@@ -146,7 +149,7 @@ export function CommentCard({
       <Card>
          <CardContent className="p-4">
             <div className="flex items-start space-x-4">
-               <Avatar>
+               <Avatar className="mt-2 h-12 w-12">
                   <AvatarImage
                      src={comment.user?.avatar || '/placeholder.jpg'}
                      alt={comment.user?.name || ''}
@@ -161,7 +164,7 @@ export function CommentCard({
                </Avatar>
                <div className="flex-1">
                   <div className="flex items-center justify-between">
-                     <div className="flex items-center gap-x-2">
+                     <div className="flex items-end gap-x-1">
                         <p className="font-medium">{comment.user?.name}</p>
                         <p className="text-sm text-muted-foreground">
                            {formatDistanceToNow(new Date(comment.createdAt), {
@@ -169,6 +172,11 @@ export function CommentCard({
                               locale: ptBR,
                            })}
                         </p>
+                        {comment.edited && (
+                           <p className="text-sm text-muted-foreground">
+                              (editado)
+                           </p>
+                        )}
                      </div>
                      {canDelete && (
                         <DropdownMenu>

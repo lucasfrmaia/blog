@@ -11,6 +11,10 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             postId: data.postId,
             parentId: data.parentId,
          },
+         include: {
+            user: true,
+            likes: true,
+         },
       });
    }
 
@@ -19,6 +23,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          where: { id: data.id },
          data: {
             content: data.content,
+            edited: true,
          },
       });
    }
@@ -28,7 +33,13 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          where: { id },
          include: {
             user: true,
-            replies: true,
+            replies: {
+               include: {
+                  user: true,
+                  likes: true,
+               },
+            },
+            likes: true,
          },
       });
 
@@ -47,7 +58,12 @@ export class CommentRepositoryPrisma implements ICommentRepository {
                orderBy: {
                   createdAt: 'asc',
                },
+               include: {
+                  user: true,
+                  likes: true,
+               },
             },
+            likes: true,
          },
          orderBy: {
             createdAt: 'asc',
@@ -65,6 +81,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          include: {
             user: true,
             post: true,
+            likes: true,
          },
          orderBy: {
             createdAt: 'desc',
@@ -79,6 +96,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
          include: {
             user: true,
             post: true,
+            likes: true,
          },
          orderBy: {
             createdAt: 'desc',

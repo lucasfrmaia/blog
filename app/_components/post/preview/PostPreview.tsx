@@ -37,7 +37,7 @@ export default function PostPreview({
          <div className="flex items-center space-x-4 mb-8">
             <Avatar>
                <AvatarImage src="/placeholder-avatar.jpg" />
-               <AvatarFallback>AU</AvatarFallback>
+               <AvatarFallback>PR</AvatarFallback>
             </Avatar>
             <div>
                <p className="font-medium">Preview</p>

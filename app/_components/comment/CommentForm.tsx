@@ -89,13 +89,13 @@ export function CommentForm({
             title: commentId
                ? 'Comentário atualizado'
                : parentId
-                 ? 'Resposta adicionada'
-                 : 'Comentário adicionado',
+               ? 'Resposta adicionada'
+               : 'Comentário adicionado',
             description: commentId
                ? 'Seu comentário foi editado com sucesso.'
                : parentId
-                 ? 'Sua resposta foi publicada com sucesso.'
-                 : 'Seu comentário foi publicado com sucesso.',
+               ? 'Sua resposta foi publicada com sucesso.'
+               : 'Seu comentário foi publicado com sucesso.',
          });
       } catch (error) {
          toast({
@@ -134,8 +134,8 @@ export function CommentForm({
                         isEditing
                            ? 'Edite seu comentário...'
                            : parentId
-                             ? 'Adicione uma resposta...'
-                             : 'Adicione um comentário...'
+                           ? 'Adicione uma resposta...'
+                           : 'Adicione um comentário...'
                      }
                      {...register('content', { required: true })}
                      className={`min-h-0 resize-none transition-all duration-200 border-0 border-b focus:ring-0 outline-none overflow-hidden rounded-none bg-transparent ${
@@ -167,10 +167,10 @@ export function CommentForm({
                         {isSubmitting
                            ? 'Enviando...'
                            : commentId
-                             ? 'Salvar'
-                             : parentId
-                               ? 'Responder'
-                               : 'Comentar'}
+                           ? 'Salvar'
+                           : parentId
+                           ? 'Responder'
+                           : 'Comentar'}
                      </Button>
                   </div>
                )}
