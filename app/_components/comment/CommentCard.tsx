@@ -42,9 +42,8 @@ export function CommentCard({
    const queryClient = useQueryClient();
 
    const [reaction, setReaction] = useState({
-      likes: comment?.likes?.filter((like) => like.type === 'like').length ?? 0,
-      deslikes:
-         comment?.likes?.filter((like) => like.type === 'deslike').length ?? 0,
+      likes: comment.likesCount,
+      deslikes: comment.deslikesCount,
       userReaction:
          comment?.likes?.find((like) => like.userId === session?.user?.id)
             ?.type ?? null,

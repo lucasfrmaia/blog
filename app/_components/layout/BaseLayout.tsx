@@ -12,7 +12,7 @@ export default function BaseLayout({ children }: BaseLayoutProps) {
    return (
       <div className="min-h-screen flex flex-col">
          <NaveBar />
-         <main className="flex-1">{children}</main>
+         <main className="flex-1 max-md:p-4">{children}</main>
          <Footer />
       </div>
    );
