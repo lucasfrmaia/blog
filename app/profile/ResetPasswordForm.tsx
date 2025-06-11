@@ -46,18 +46,16 @@ export function ResetPasswordForm() {
    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
    const [showNewPassword, setShowNewPassword] = useState(false);
    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-   const [isLoading, setIsLoading] = useState(false);
 
    const {
       register,
       handleSubmit,
-      formState: { errors },
+      formState: { errors, isLoading },
       reset: formReset,
    } = useForm<TypePasswordForm>({ resolver: zodResolver(passwordSchema) });
 
    const onSubmit: SubmitHandler<TypePasswordForm> = async (data) => {
       try {
-         setIsLoading(true);
          const response = await fetch(`/api/auth/reset-password`, {
             method: 'POST',
             headers: {
@@ -87,8 +85,6 @@ export function ResetPasswordForm() {
             description: `${(error as Error).message}`,
             variant: 'destructive',
          });
-      } finally {
-         setIsLoading(false);
       }
    };
 
@@ -102,11 +98,13 @@ export function ResetPasswordForm() {
                   id="currentPassword"
                   type={showCurrentPassword ? 'text' : 'password'}
                   placeholder="Digite sua senha atual"
+                  disabled={isLoading}
                />
                <button
                   type="button"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2"
+                  disabled={isLoading}
                >
                   {showCurrentPassword ? (
                      <EyeOff className="h-4 w-4 text-gray-500" />
@@ -130,11 +128,13 @@ export function ResetPasswordForm() {
                   type={showNewPassword ? 'text' : 'password'}
                   placeholder="Digite sua nova senha"
                   className="max-w-72"
+                  disabled={isLoading}
                />
                <button
                   type="button"
                   onClick={() => setShowNewPassword(!showNewPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2"
+                  disabled={isLoading}
                >
                   {showNewPassword ? (
                      <EyeOff className="h-4 w-4 text-gray-500" />
@@ -158,11 +158,13 @@ export function ResetPasswordForm() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   placeholder="Confirme sua nova senha"
                   className="max-w-72"
+                  disabled={isLoading}
                />
                <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  disabled={isLoading}
                >
                   {showConfirmPassword ? (
                      <EyeOff className="h-4 w-4 text-gray-500" />

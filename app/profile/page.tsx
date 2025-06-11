@@ -60,7 +60,10 @@ export default function ProfilePage({
             <Card className="mb-8 w-full max-w-[1000px]">
                <CardHeader className="flex w-full flex-row items-center gap-4">
                   <Avatar className="h-16 w-16">
-                     <AvatarImage src={userData?.image} alt={userData?.name} />
+                     <AvatarImage
+                        src={userData?.avatar || ''}
+                        alt={userData?.name}
+                     />
                      <AvatarFallback>
                         <User className="h-8 w-8" />
                      </AvatarFallback>
