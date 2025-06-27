@@ -4,6 +4,7 @@ import { ICategory } from '@/app/api/_services/entities/category';
 import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
 import { Badge } from '../../ui/badge';
 import { Card } from '../../ui/card';
+import { CategoryBadge } from '../../category/CategoryBadge';
 
 interface PostPreviewProps {
    title: string;
@@ -49,9 +50,10 @@ export default function PostPreview({
 
          <div className="flex flex-wrap gap-2 mb-8">
             {categories.map((category) => (
-               <Badge key={category.id} variant="secondary">
-                  {category.name}
-               </Badge>
+               <CategoryBadge
+                  key={`Post-Preview-${category.name}-${category.id}`}
+                  category={category}
+               />
             ))}
          </div>
 

@@ -13,7 +13,7 @@ export default function PostSection() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery<IPost[]>({
       queryKey: ['posts'],
       queryFn: async () => {
-         const response = await fetch('/api/posts/popular');
+         const response = await fetch(`${process.env.API_URL}/posts/popular`);
          if (!response.ok) {
             throw new Error('Erro ao buscar posts');
          }

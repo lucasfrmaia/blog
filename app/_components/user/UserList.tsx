@@ -43,7 +43,9 @@ export function UserList() {
             limit: ITENS_PER_PAGE_TABLE.toString(),
          });
 
-         const response = await fetch(`/api/users/page?${params}`);
+         const response = await fetch(
+            `${process.env.API_URL}/users/page?${params}`,
+         );
 
          if (!response.ok) {
             throw new Error('Erro ao buscar usuários');
@@ -55,7 +57,7 @@ export function UserList() {
 
    const { mutate: deleteUser } = useMutation({
       mutationFn: async (id: string) => {
-         const response = await fetch(`/api/users?id=${id}`, {
+         const response = await fetch(`${process.env.API_URL}/users?id=${id}`, {
             method: 'DELETE',
          });
 
@@ -128,11 +130,6 @@ export function UserList() {
          header: 'Ações',
          accessorKey: (user: IUser) => (
             <div className="flex items-center gap-2">
-               <UserDialog user={user}>
-                  <Button variant="ghost" size="icon">
-                     <Edit2 className="h-4 w-4" />
-                  </Button>
-               </UserDialog>
                <AlertDialog>
                   <AlertDialogTrigger asChild>
                      <Button variant="ghost" size="icon">

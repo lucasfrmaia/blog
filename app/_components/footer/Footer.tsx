@@ -15,7 +15,9 @@ export default function Footer() {
    const { data: categories, isLoading } = useQuery<ICategory[]>({
       queryKey: ['popular_categories'],
       queryFn: async () => {
-         const response = await fetch('/api/categories/popular');
+         const response = await fetch(
+            `${process.env.API_URL}/categories/popular`,
+         );
          if (!response.ok) {
             throw new Error('Erro ao buscar categorias populares');
          }

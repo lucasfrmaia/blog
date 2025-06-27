@@ -42,7 +42,7 @@ export default function PostFilters({
    const { data: categories, isLoading } = useQuery<ICategory[]>({
       queryKey: ['categories'],
       queryFn: async () => {
-         const response = await fetch('/api/categories');
+         const response = await fetch(`${process.env.API_URL}/categories`);
          if (!response.ok) {
             throw new Error('Erro ao buscar categorias');
          }

@@ -137,13 +137,6 @@ export default function ProfilePage({
                                              {comment.content}
                                           </p>
                                        </div>
-                                       <Button
-                                          variant="ghost"
-                                          size="sm"
-                                          className="text-destructive"
-                                       >
-                                          Deletar
-                                       </Button>
                                     </div>
                                  </CardContent>
                               </Card>

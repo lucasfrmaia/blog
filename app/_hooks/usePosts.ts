@@ -43,7 +43,9 @@ export function usePosts({
             ...(sortBy && { sortBy }),
          });
 
-         const response = await fetch(`/api/posts/page?${params}`);
+         const response = await fetch(
+            `${process.env.API_URL}/posts/page?${params}`,
+         );
          if (!response.ok) {
             throw new Error('Erro ao buscar posts');
          }

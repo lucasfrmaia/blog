@@ -56,16 +56,19 @@ export function ResetPasswordForm() {
 
    const onSubmit: SubmitHandler<TypePasswordForm> = async (data) => {
       try {
-         const response = await fetch(`/api/auth/reset-password`, {
-            method: 'POST',
-            headers: {
-               'Content-Type': 'application/json',
+         const response = await fetch(
+            `${process.env.API_URL}/auth/reset-password`,
+            {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({
+                  currentPassword: data.currentPassword,
+                  newPassword: data.newPassword,
+               }),
             },
-            body: JSON.stringify({
-               currentPassword: data.currentPassword,
-               newPassword: data.newPassword,
-            }),
-         });
+         );
 
          const result = await response.json();
 

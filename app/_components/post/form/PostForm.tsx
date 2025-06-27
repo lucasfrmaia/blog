@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { IPost, IPostCreate } from '@/app/api/_services/entities/Post';
 import { ICategory } from '@/app/api/_services/entities/category';
@@ -53,26 +53,14 @@ interface PostFormProps {
 export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
    const { data: session } = useSession();
    const user = session?.user;
-
    const { data: categories } = useQuery<ICategory[]>({
       queryKey: ['categories'],
       queryFn: async () => {
-         const response = await fetch('/api/categories');
+         const response = await fetch(`${process.env.API_URL}/categories`);
          if (!response.ok) {
             throw new Error('Erro ao buscar categorias');
          }
          return response.json();
-      },
-   });
-
-   const form = useForm<FormValues>({
-      resolver: zodResolver(formSchema),
-      defaultValues: {
-         title: defaultValues?.title ?? '',
-         description: defaultValues?.description ?? '',
-         content: defaultValues?.content ?? '',
-         img: defaultValues?.img ?? '',
-         categories: defaultValues?.categories?.map((cat) => cat.id) ?? [],
       },
    });
 
@@ -87,20 +75,29 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
       await onSubmit(postData);
    };
 
+   const form = useForm<FormValues>({
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+         title: defaultValues?.title ?? '',
+         description: defaultValues?.description ?? '',
+         content: defaultValues?.content ?? '',
+         img: defaultValues?.img ?? '',
+         categories: defaultValues?.categories?.map((cat) => cat.id) ?? [],
+      },
+   });
+
    const title = form.watch('title');
    const img = form.watch('img');
    const description = form.watch('description');
    const content = form.watch('content');
    const categoriesId = form.watch('categories');
-   const currentCategories = categoriesId.map((currentId) => {
-      const category = categories?.find((c) => currentId === c.id);
+   const currentCategories = useMemo(() => {
+      if (!categories) return [];
 
-      if (!category) {
-         throw new Error('Categoria com ID Inválido');
-      }
-
-      return category;
-   });
+      return categoriesId
+         .map((currentId) => categories.find((c) => currentId === c.id))
+         .filter((c): c is ICategory => !!c); // Remove null/undefined
+   }, [categories, categoriesId]);
 
    return (
       <Tabs>
@@ -137,42 +134,6 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                            <FormLabel>Descrição</FormLabel>
                            <FormControl>
                               <Textarea {...field} />
-                           </FormControl>
-                           <FormMessage />
-                        </FormItem>
-                     )}
-                  />
-
-                  <FormField
-                     control={form.control}
-                     name="content"
-                     render={({ field }) => (
-                        <FormItem className="h-[550px]">
-                           <FormLabel>Conteúdo</FormLabel>
-                           <FormControl>
-                              <ReactQuill
-                                 theme="snow"
-                                 value={field.value}
-                                 onChange={field.onChange}
-                                 className="h-[450px]"
-                                 modules={{
-                                    toolbar: [
-                                       [{ header: [1, 2, 3, false] }],
-                                       [
-                                          'bold',
-                                          'italic',
-                                          'underline',
-                                          'strike',
-                                       ],
-                                       [
-                                          { list: 'ordered' },
-                                          { list: 'bullet' },
-                                       ],
-                                       ['link', 'image'],
-                                       ['clean'],
-                                    ],
-                                 }}
-                              />
                            </FormControl>
                            <FormMessage />
                         </FormItem>
@@ -264,6 +225,42 @@ export default function PostForm({ defaultValues, onSubmit }: PostFormProps) {
                                     })}
                                  </div>
                               </div>
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+
+                  <FormField
+                     control={form.control}
+                     name="content"
+                     render={({ field }) => (
+                        <FormItem className="h-[550px]">
+                           <FormLabel>Conteúdo</FormLabel>
+                           <FormControl>
+                              <ReactQuill
+                                 theme="snow"
+                                 value={field.value}
+                                 onChange={field.onChange}
+                                 className="h-[450px]"
+                                 modules={{
+                                    toolbar: [
+                                       [{ header: [1, 2, 3, false] }],
+                                       [
+                                          'bold',
+                                          'italic',
+                                          'underline',
+                                          'strike',
+                                       ],
+                                       [
+                                          { list: 'ordered' },
+                                          { list: 'bullet' },
+                                       ],
+                                       ['link', 'image'],
+                                       ['clean'],
+                                    ],
+                                 }}
+                              />
                            </FormControl>
                            <FormMessage />
                         </FormItem>

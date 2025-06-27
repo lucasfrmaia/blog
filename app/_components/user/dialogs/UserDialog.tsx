@@ -61,7 +61,7 @@ export function UserDialog({ user, children }: UserDialogProps) {
    const { data: roles, isLoading } = useQuery<IRole[]>({
       queryKey: ['roles'],
       queryFn: async () => {
-         const response = await fetch(`/api/roles`);
+         const response = await fetch(`${process.env.API_URL}/roles`);
          if (!response.ok) {
             const error = await response.json();
             throw new Error(error.message || 'Erro Desconhecido');
@@ -73,13 +73,16 @@ export function UserDialog({ user, children }: UserDialogProps) {
    const onSubmit = async (data: z.infer<typeof formSchema>) => {
       console.log(data);
       try {
-         const response = await fetch(`/api/users/${user?.id}`, {
-            method: 'PATCH',
-            headers: {
-               'Content-Type': 'application/json',
+         const response = await fetch(
+            `${process.env.API_URL}/users/${user?.id}`,
+            {
+               method: 'PATCH',
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify(data),
             },
-            body: JSON.stringify(data),
-         });
+         );
 
          if (!response.ok) {
             const errorData = await response.json();

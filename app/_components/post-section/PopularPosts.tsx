@@ -31,7 +31,7 @@ const PopularPosts: React.FC<IPopularPostsProps> = ({
    const { data: posts, isLoading } = useQuery<IPost[]>({
       queryKey: ['popular_posts'],
       queryFn: async () => {
-         const response = await fetch('/api/posts/popular');
+         const response = await fetch(`${process.env.API_URL}/posts/popular`);
          if (!response.ok) {
             throw new Error('Erro ao buscar posts populares');
          }

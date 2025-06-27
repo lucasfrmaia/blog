@@ -47,7 +47,9 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
             limit: ITENS_PER_PAGE_TABLE.toString(),
          });
 
-         const response = await fetch(`/api/posts/page?${params}`);
+         const response = await fetch(
+            `${process.env.API_URL}/posts/page?${params}`,
+         );
 
          if (!response.ok) {
             const error = await response.json();
@@ -61,7 +63,7 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
 
    const { mutate: deletePost } = useMutation({
       mutationFn: async (id: string) => {
-         const response = await fetch(`/api/posts/${id}`, {
+         const response = await fetch(`${process.env.API_URL}/posts/${id}`, {
             method: 'DELETE',
          });
 
@@ -107,7 +109,11 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
       },
       {
          header: 'Título',
-         accessorKey: (post: IPost) => post.title,
+         accessorKey: (post: IPost) => (
+            <Link className="hover:underline" href={`/posts/${post.id}`}>
+               {post.title}
+            </Link>
+         ),
       },
       {
          header: 'Categoria',
@@ -116,7 +122,12 @@ export function PostList({ currentPage, setCurrentPage }: IPostList) {
                <div className="flex flex-wrap w-56 gap-2 text-primary">
                   {post.categories?.length !== 0 ? (
                      post?.categories?.map((category) => {
-                        return <CategoryBadge category={category} />;
+                        return (
+                           <CategoryBadge
+                              key={'PostList' + category.id + post.id}
+                              category={category}
+                           />
+                        );
                      })
                   ) : (
                      <span>Sem Categoria</span>

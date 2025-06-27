@@ -28,7 +28,7 @@ export default function RecentPost({ children, className }: IPropRecentPost) {
    const { data: posts, isLoading } = useQuery<IPost[]>({
       queryKey: ['recent_posts'],
       queryFn: async () => {
-         const response = await fetch('/api/posts/recent');
+         const response = await fetch(`${process.env.API_URL}/posts/recent`);
          if (!response.ok) {
             throw new Error('Erro ao buscar posts recentes');
          }

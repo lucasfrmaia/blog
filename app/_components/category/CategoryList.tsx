@@ -44,7 +44,9 @@ export default function CategoryList() {
             limit: ITENS_PER_PAGE_TABLE.toString(),
          });
 
-         const response = await fetch(`/api/categories/page?${params}`);
+         const response = await fetch(
+            `${process.env.API_URL}/categories/page?${params}`,
+         );
 
          if (!response.ok) {
             const error = await response.json();
@@ -57,9 +59,12 @@ export default function CategoryList() {
 
    const { mutate: deleteCategory } = useMutation({
       mutationFn: async (id: string) => {
-         const response = await fetch(`/api/categories/${id}`, {
-            method: 'DELETE',
-         });
+         const response = await fetch(
+            `${process.env.API_URL}/categories/${id}`,
+            {
+               method: 'DELETE',
+            },
+         );
 
          if (!response.ok) {
             const error = await response.json();

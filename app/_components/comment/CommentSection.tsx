@@ -24,7 +24,9 @@ export default function CommentSection({ postId }: CommentSectionProps) {
    } = useQuery<IComment[]>({
       queryKey: ['comments', postId],
       queryFn: async () => {
-         const response = await fetch(`/api/comments/post/${postId}`);
+         const response = await fetch(
+            `${process.env.API_URL}/comments/post/${postId}`,
+         );
          if (!response.ok) {
             throw new Error('Erro ao buscar comentários');
          }

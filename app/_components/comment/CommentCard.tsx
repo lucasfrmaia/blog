@@ -57,9 +57,12 @@ export function CommentCard({
 
    const handleDelete = async () => {
       try {
-         const response = await fetch(`/api/comments/${comment.id}`, {
-            method: 'DELETE',
-         });
+         const response = await fetch(
+            `${process.env.API_URL}/comments/${comment.id}`,
+            {
+               method: 'DELETE',
+            },
+         );
 
          if (!response.ok) {
             const error = await response.json();
@@ -87,16 +90,19 @@ export function CommentCard({
       setIsProcessing(true);
 
       try {
-         const response = await fetch(`/api/comments/reaction/${comment.id}`, {
-            method: 'POST',
-            headers: {
-               'Content-Type': 'application/json',
+         const response = await fetch(
+            `${process.env.API_URL}/comments/reaction/${comment.id}`,
+            {
+               method: 'POST',
+               headers: {
+                  'Content-Type': 'application/json',
+               },
+               body: JSON.stringify({
+                  userId: session.user.id,
+                  reaction: type,
+               }),
             },
-            body: JSON.stringify({
-               userId: session.user.id,
-               reaction: type,
-            }),
-         });
+         );
 
          if (!response.ok) {
             const error = await response.json();
@@ -162,10 +168,10 @@ export function CommentCard({
                   </AvatarFallback>
                </Avatar>
                <div className="flex-1">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between  md:mb-[0.2rem]">
                      <div className="flex items-end gap-x-1">
                         <p className="font-medium">{comment.user?.name}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground overflow-hidden text-ellipsis">
                            {formatDistanceToNow(new Date(comment.createdAt), {
                               addSuffix: true,
                               locale: ptBR,

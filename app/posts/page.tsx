@@ -50,41 +50,39 @@ export default function PostsPage({
    const totalPages = Math.ceil((postsData?.total || 0) / ITENS_PER_PAGE);
 
    return (
-      <BaseLayout>
-         <div className="container mx-auto px-4 py-16">
-            <motion.div
-               initial={{ opacity: 0, y: 20 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ duration: 0.5 }}
-            >
-               <PostHeader />
+      <BaseLayout className="container mx-auto px-4 py-16">
+         <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+         >
+            <PostHeader />
 
-               <PostFilters
-                  initialSearch={search}
-                  initialCategories={categories}
-                  initialSortBy={sortBy}
-                  onApplyFilters={handleApplyFilters}
-                  onResetFilters={handleResetFilters}
-               />
+            <PostFilters
+               initialSearch={search}
+               initialCategories={categories}
+               initialSortBy={sortBy}
+               onApplyFilters={handleApplyFilters}
+               onResetFilters={handleResetFilters}
+            />
 
-               <div className="mt-10">
-                  {postsData?.posts?.length ? (
-                     <>
-                        <PostGrid posts={postsData.posts} />
-                        <PostPagination
-                           currentPage={page}
-                           totalPages={totalPages}
-                           getPageUrl={getPageUrl}
-                        />
-                     </>
-                  ) : (
-                     <p className="text-center text-muted-foreground">
-                        Nenhum post encontrado
-                     </p>
-                  )}
-               </div>
-            </motion.div>
-         </div>
+            <div className="mt-10">
+               {postsData?.posts?.length ? (
+                  <>
+                     <PostGrid posts={postsData.posts} />
+                     <PostPagination
+                        currentPage={page}
+                        totalPages={totalPages}
+                        getPageUrl={getPageUrl}
+                     />
+                  </>
+               ) : (
+                  <p className="text-center text-muted-foreground">
+                     Nenhum post encontrado
+                  </p>
+               )}
+            </div>
+         </motion.div>
       </BaseLayout>
    );
 }

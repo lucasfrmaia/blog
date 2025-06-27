@@ -17,7 +17,9 @@ export default function PostPage({ params }: { params: { id: string } }) {
    const { data: post, isLoading } = useQuery<IPost>({
       queryKey: ['post', params.id],
       queryFn: async () => {
-         const response = await fetch(`/api/posts/${params.id}`);
+         const response = await fetch(
+            `${process.env.API_URL}/posts/${params.id}`,
+         );
          if (!response.ok) {
             throw new Error('Erro ao buscar categorias');
          }
@@ -75,17 +77,12 @@ export default function PostPage({ params }: { params: { id: string } }) {
 
                      <div className="flex flex-wrap gap-2">
                         {post.categories?.map((category) => (
-                           <CategoryBadge category={category} />
+                           <CategoryBadge
+                              key={`page-${category.id}-${post.id}`}
+                              category={category}
+                           />
                         ))}
                      </div>
-                  </div>
-
-                  <div className="flex items-center gap-x-2">
-                     <Bookmark
-                        onClick={() => alert('ok')}
-                        className="w-10 h-10 hover:scale-125 cursor-pointer"
-                     />
-                     <Share1Icon className="h-10 w-10 hover:scale-125 cursor-pointer   " />
                   </div>
                </div>
 

@@ -1,5 +1,3 @@
-'use client';
-
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ReactNode } from 'react';
 import { Button } from '../ui/button';
@@ -11,8 +9,10 @@ import {
    TableHeader,
    TableRow,
 } from '../ui/table';
-import { FaAngleDoubleLeft } from 'react-icons/fa';
-import { DoubleArrowRightIcon } from '@radix-ui/react-icons';
+import {
+   DoubleArrowLeftIcon,
+   DoubleArrowRightIcon,
+} from '@radix-ui/react-icons';
 
 export interface Column<T> {
    header: string;
@@ -43,31 +43,25 @@ export function DataTable<T>({
    const end = Math.min(start + pageSize - 1, total);
 
    const getPageNumbers = () => {
-      const totalPages = Math.ceil(total / pageSize);
       const pageNumbers: (number | string)[] = [];
 
-      // Sempre mostra a primeira página
-      pageNumbers.push(1);
-
-      // Adiciona "..." se a página atual estiver além da página 3
-      if (page > 3) {
-         pageNumbers.push('...');
-      }
-
-      // Adiciona até 3 páginas ao redor da atual (ex: 2, 3, 4 se page = 3)
-      for (let i = page - 1; i <= page + 1; i++) {
-         if (i > 1 && i < totalPages) {
+      if (totalPages <= 3) {
+         for (let i = 1; i <= totalPages; i++) {
             pageNumbers.push(i);
          }
-      }
+      } else {
+         pageNumbers.push(1);
 
-      // Adiciona "..." se estiver distante do fim
-      if (page < totalPages - 2) {
-         pageNumbers.push('...');
-      }
+         if (page === 2) {
+            pageNumbers.push(2, '...');
+         } else if (page === totalPages - 1) {
+            pageNumbers.push('...', totalPages - 1);
+         } else if (page > 2 && page < totalPages - 1) {
+            pageNumbers.push('...', page, '...');
+         } else {
+            pageNumbers.push(2, '...');
+         }
 
-      // Sempre mostra a última página (se não for a primeira)
-      if (totalPages > 1) {
          pageNumbers.push(totalPages);
       }
 
@@ -88,11 +82,11 @@ export function DataTable<T>({
             </TableHeader>
             <TableBody>
                {data.map((item, rowIndex) => (
-                  <TableRow key={rowIndex}>
+                  <TableRow key={String(item) + rowIndex}>
                      {columns.map((column, colIndex) => (
                         <TableCell
-                           key={colIndex + column.header}
-                           className={`${column.className}`}
+                           key={colIndex + column.header + column.className}
+                           className={column.className}
                         >
                            {column.accessorKey(item)}
                         </TableCell>
@@ -102,18 +96,20 @@ export function DataTable<T>({
             </TableBody>
          </Table>
 
-         <div className="flex items-center justify-between">
+         <div className="flex items-center justify-between flex-wrap gap-y-2">
             <div className="text-sm text-muted-foreground">
                Mostrando {start} até {end} de {total} registros
             </div>
+
             <div className="flex items-center gap-2">
                <Button
                   variant="outline"
                   size="icon"
+                  className="flex md:hideen"
                   onClick={() => onPageChange(1)}
-                  disabled={page === 1}
+                  disabled={page == 1}
                >
-                  <FaAngleDoubleLeft className="h-4 w-4" />
+                  <DoubleArrowLeftIcon className="h-4 w-4" />
                </Button>
                <Button
                   variant="outline"
@@ -124,27 +120,33 @@ export function DataTable<T>({
                   <ChevronLeft className="h-4 w-4" />
                </Button>
 
-               {getPageNumbers().map((pageNumber, index) => (
-                  <div key={index}>
-                     {pageNumber === '...' ? (
-                        <span className="px-3 py-2 text-muted-foreground">
-                           ...
-                        </span>
-                     ) : (
-                        <Button
-                           variant={pageNumber === page ? 'default' : 'outline'}
-                           size="icon"
-                           onClick={() =>
-                              typeof pageNumber === 'number' &&
-                              onPageChange(pageNumber)
-                           }
-                        >
-                           {pageNumber}
-                        </Button>
-                     )}
-                  </div>
-               ))}
+               {/* Páginações numéricas - escondidas em telas menores */}
+               <div className="hidden md:flex items-center gap-2">
+                  {getPageNumbers().map((pageNumber, index) => (
+                     <div key={index}>
+                        {pageNumber === '...' ? (
+                           <span className="px-3 py-2 text-muted-foreground">
+                              ...
+                           </span>
+                        ) : (
+                           <Button
+                              variant={
+                                 pageNumber === page ? 'default' : 'outline'
+                              }
+                              size="icon"
+                              onClick={() =>
+                                 typeof pageNumber === 'number' &&
+                                 onPageChange(pageNumber)
+                              }
+                           >
+                              {pageNumber}
+                           </Button>
+                        )}
+                     </div>
+                  ))}
+               </div>
 
+               {/* Botão Próximo - visível sempre */}
                <Button
                   variant="outline"
                   size="icon"
@@ -156,6 +158,7 @@ export function DataTable<T>({
                <Button
                   variant="outline"
                   size="icon"
+                  className="flex md:hideen"
                   onClick={() => onPageChange(totalPages)}
                   disabled={page >= totalPages}
                >

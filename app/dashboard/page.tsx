@@ -35,7 +35,7 @@ export default function DashboardPage() {
    const { data: posts, isLoading: isLoadingPosts } = useQuery({
       queryKey: ['posts'],
       queryFn: async () => {
-         const response = await fetch('/api/posts');
+         const response = await fetch(`${process.env.API_URL}/posts`);
          if (!response.ok) {
             throw new Error('Erro ao buscar posts');
          }

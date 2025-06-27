@@ -57,7 +57,7 @@ export default function FormRegister({
 
    const onSubmit: SubmitHandler<FormProps> = async (data) => {
       try {
-         const response = await fetch('/api/users/register', {
+         const response = await fetch(`${process.env.API_URL}/users/register`, {
             method: 'POST',
             headers: {
                'Content-Type': 'application/json',

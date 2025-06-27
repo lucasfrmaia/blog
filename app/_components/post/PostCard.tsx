@@ -40,7 +40,7 @@ export default function PostCard({
 
    return (
       <Link href={`/posts/${id}`}>
-         <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow group">
+         <Card className="overflow-hidden h-full hover:shadow-lg transition-shadow group w-full">
             <div className="relative h-48 overflow-hidden">
                <img
                   src={coverImage}
