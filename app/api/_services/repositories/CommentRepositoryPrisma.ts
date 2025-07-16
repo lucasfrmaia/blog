@@ -1,8 +1,12 @@
 import { prisma } from '@/prisma/lib/prisma';
 import { IComment, ICommentCreate, ICommentUpdate } from '../entities/comment';
 import { ICommentRepository } from '../interfaces/CommentRepository';
+import { BaseRepository } from './BaseRepository';
 
-export class CommentRepositoryPrisma implements ICommentRepository {
+export class CommentRepositoryPrisma
+   extends BaseRepository
+   implements ICommentRepository
+{
    async create(data: ICommentCreate): Promise<IComment> {
       return await prisma.comment.create({
          data: {
@@ -12,7 +16,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             parentId: data.parentId,
          },
          include: {
-            user: true,
+            user: this.userSelectProps,
             likes: true,
          },
       });
@@ -32,10 +36,10 @@ export class CommentRepositoryPrisma implements ICommentRepository {
       const comment = await prisma.comment.findUnique({
          where: { id },
          include: {
-            user: true,
+            user: this.userSelectProps,
             replies: {
                include: {
-                  user: true,
+                  user: this.userSelectProps,
                   likes: true,
                },
             },
@@ -52,14 +56,14 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             postId,
          },
          include: {
-            user: true,
+            user: this.userSelectProps,
             post: true,
             replies: {
                orderBy: {
                   createdAt: 'asc',
                },
                include: {
-                  user: true,
+                  user: this.userSelectProps,
                   likes: true,
                },
             },
@@ -79,7 +83,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
             userId,
          },
          include: {
-            user: true,
+            user: this.userSelectProps,
             post: true,
             likes: true,
          },
@@ -94,7 +98,7 @@ export class CommentRepositoryPrisma implements ICommentRepository {
    async findAll(): Promise<IComment[]> {
       const comments = await prisma.comment.findMany({
          include: {
-            user: true,
+            user: this.userSelectProps,
             post: true,
             likes: true,
          },

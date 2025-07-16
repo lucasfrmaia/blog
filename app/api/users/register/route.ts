@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { apiManager } from '../../_services/ApiManager';
+import { USER_ROLE_ID } from '@/utils/constantes/constants';
 
 export async function POST(request: Request) {
    try {
@@ -8,7 +9,7 @@ export async function POST(request: Request) {
 
       if (!name || !email || !password) {
          return NextResponse.json(
-            { error: 'Dados inválidos' },
+            { message: 'Dados inválidos' },
             { status: 400 },
          );
       }
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
 
       if (existingUser != null) {
          return NextResponse.json(
-            { error: 'Email já cadastrado' },
+            { message: 'Email já cadastrado' },
             { status: 400 },
          );
       }
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
          name,
          email,
          password,
-         roleId: 2,
+         roleId: USER_ROLE_ID,
       });
 
       return NextResponse.json(
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
    } catch (error) {
       console.error('Erro ao criar usuário:', error);
       return NextResponse.json(
-         { error: 'Erro ao criar usuário' },
+         { message: 'Erro ao criar usuário' },
          { status: 500 },
       );
    }

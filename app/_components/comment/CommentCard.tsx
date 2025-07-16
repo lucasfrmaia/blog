@@ -231,7 +231,11 @@ export function CommentCard({
                      >
                         <ThumbsDown className="h-4 w-4" /> {reaction.deslikes}
                      </button>
-                     {onReply && <button onClick={onReply}>Responder</button>}
+                     {onReply && (
+                        <button className="hover:underline" onClick={onReply}>
+                           Responder
+                        </button>
+                     )}
                   </div>
                </div>
             </div>

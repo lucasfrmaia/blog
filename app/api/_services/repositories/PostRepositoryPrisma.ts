@@ -7,8 +7,12 @@ import {
 } from '../entities/Post';
 import { Prisma } from '@prisma/client';
 import { IPostRepository } from '../interfaces/PostRepository';
+import { BaseRepository } from './BaseRepository';
 
-export class PostRepositoryPrisma implements IPostRepository {
+export class PostRepositoryPrisma
+   extends BaseRepository
+   implements IPostRepository
+{
    async create(data: IPostCreate): Promise<IPost> {
       const { categories, ...postData } = data;
       return await prisma.post.create({
@@ -38,7 +42,7 @@ export class PostRepositoryPrisma implements IPostRepository {
       const post = await prisma.post.findUnique({
          where: { id },
          include: {
-            author: true,
+            author: this.userSelectProps,
             comments: true,
             categories: true,
          },
@@ -50,7 +54,7 @@ export class PostRepositoryPrisma implements IPostRepository {
    async findAll(): Promise<IPost[]> {
       const posts = await prisma.post.findMany({
          include: {
-            author: true,
+            author: this.userSelectProps,
             comments: true,
             categories: true,
          },
@@ -146,8 +150,8 @@ export class PostRepositoryPrisma implements IPostRepository {
          filters?.sortBy === 'oldest'
             ? { createdAt: 'asc' }
             : filters?.sortBy === 'popular'
-              ? { views: 'desc' }
-              : { createdAt: 'desc' };
+            ? { views: 'desc' }
+            : { createdAt: 'desc' };
 
       const [posts, total] = await Promise.all([
          prisma.post.findMany({
@@ -156,7 +160,7 @@ export class PostRepositoryPrisma implements IPostRepository {
             where,
             orderBy,
             include: {
-               author: true,
+               author: this.userSelectProps,
                comments: true,
                categories: true,
             },
@@ -173,7 +177,7 @@ export class PostRepositoryPrisma implements IPostRepository {
    async getLastPost(): Promise<IPost | null> {
       const post = await prisma.post.findFirst({
          include: {
-            author: true,
+            author: this.userSelectProps,
             comments: true,
             categories: true,
          },

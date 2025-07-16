@@ -3,8 +3,12 @@ import { IUser, IUserCreate, IUserUpdate } from '../entities/user';
 import { hash, compare, genSalt } from 'bcryptjs';
 import { prisma } from '../../../../prisma/lib/prisma';
 import { IUserRepository } from '../interfaces/UserRepository';
+import { BaseRepository } from './BaseRepository';
 
-export class UserRepositoryPrisma implements IUserRepository {
+export class UserRepositoryPrisma
+   extends BaseRepository
+   implements IUserRepository
+{
    async findById(id: string): Promise<IUser | null> {
       const user = await prisma.user.findUnique({
          where: { id },

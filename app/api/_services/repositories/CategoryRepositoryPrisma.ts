@@ -5,8 +5,12 @@ import {
    ICategoryUpdate,
 } from '../entities/category';
 import { ICategoryRepository } from '../interfaces/CategoryRepository';
+import { BaseRepository } from './BaseRepository';
 
-export class CategoryRepositoryPrisma implements ICategoryRepository {
+export class CategoryRepositoryPrisma
+   extends BaseRepository
+   implements ICategoryRepository
+{
    async findPerPage(
       page: number,
       limit: number,

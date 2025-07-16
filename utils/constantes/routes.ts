@@ -36,7 +36,7 @@ export const ROUTES_PAGE = {
       label: 'Perfil',
    },
    termsOfUse: {
-      link: '/terms-of-use',
+      link: '/terms',
       label: 'Termos de Uso',
    },
    privacyPolicy: {

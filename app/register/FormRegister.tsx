@@ -67,6 +67,7 @@ export default function FormRegister({
 
          if (!response.ok) {
             const error = await response.json();
+            console.log(error.message);
             throw new Error(error?.message || 'Erro Desconhecido');
          }
 
@@ -81,7 +82,7 @@ export default function FormRegister({
          const message = (error as Error).message;
 
          toast({
-            title: 'Erro ao fazer login',
+            title: 'Erro ao realizar o registro',
             description: `Erro: ${message}`,
             variant: 'destructive',
          });

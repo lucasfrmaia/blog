@@ -1,8 +1,12 @@
 import { IRoleRepository } from '../interfaces/RoleRepository';
 import { IRole, IRoleCreate, IRoleUpdate } from '../entities/role';
 import { prisma } from '../../../../prisma/lib/prisma';
+import { BaseRepository } from './BaseRepository';
 
-export class RoleRepositoryPrisma implements IRoleRepository {
+export class RoleRepositoryPrisma
+   extends BaseRepository
+   implements IRoleRepository
+{
    async create(data: IRoleCreate): Promise<IRole> {
       const role = await prisma.role.create({
          data: {
