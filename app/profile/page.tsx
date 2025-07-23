@@ -1,5 +1,3 @@
-'use client';
-
 import { useQuery } from '@tanstack/react-query';
 import { useSession } from 'next-auth/react';
 import { format } from 'date-fns';
@@ -30,29 +28,14 @@ import {
 import { Button } from '../_components/ui/button';
 import { ResetPasswordForm } from './ResetPasswordForm';
 
-export default function ProfilePage({
-   searchParams,
-}: {
-   searchParams: { tab?: string };
-}) {
-   const { data: session } = useSession();
+export default async function ProfilePage() {
+   const session = await getServerSession(NextAuthOptions);
+   const response = await fetch(
+      `${process.env.API_URL}/users/${session?.user?.id}`,
+   );
 
-   const { data: userData, isLoading } = useQuery({
-      queryKey: ['profile', session?.user.id],
-      queryFn: async () => {
-         const response = await fetch(
-            `${process.env.API_URL}/users/${session?.user?.id}`,
-         );
-
-         return (await response.json()) as IUser;
-      },
-   });
-
-   if (isLoading) {
-      return <LoadingProfile />;
-   }
-
-   const defaultTab = searchParams.tab || 'comments';
+   const userData = (await response.json()) as IUser;
+   const defaultTab = 'comments';
 
    return (
       <BaseLayout>

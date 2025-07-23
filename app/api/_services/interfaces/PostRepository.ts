@@ -2,6 +2,7 @@ import {
    IPost,
    IPostCreate,
    IPostFilters,
+   IPostStatistics,
    IPostUpdate,
 } from '../entities/Post';
 import { IBaseRepository } from './BaseRepository';
@@ -16,4 +17,5 @@ export interface IPostRepository
       filters?: IPostFilters,
    ): Promise<{ posts: IPost[]; total: number }>;
    getLastPost(): Promise<IPost | null>;
+   getStatistics(): Promise<IPostStatistics>;
 }

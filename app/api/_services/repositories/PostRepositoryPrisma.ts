@@ -3,6 +3,7 @@ import {
    IPost,
    IPostCreate,
    IPostFilters,
+   IPostStatistics,
    IPostUpdate,
 } from '../entities/Post';
 import { Prisma } from '@prisma/client';
@@ -13,6 +14,25 @@ export class PostRepositoryPrisma
    extends BaseRepository
    implements IPostRepository
 {
+   async getStatistics(): Promise<IPostStatistics> {
+      const totalPosts = await prisma.post.count();
+      const totalViewsPosts =
+         (await prisma.post.aggregate({ _sum: { views: true } }))._sum.views ||
+         0;
+      const totalComments = await prisma.post.count();
+      const engagement =
+         totalPosts > 0
+            ? ((totalViewsPosts + totalComments) / (totalPosts * 100)) * 100
+            : 0;
+
+      return {
+         totalPosts: totalPosts,
+         totalViews: totalViewsPosts,
+         totalComments: totalComments,
+         engagement: `${engagement}%`,
+      };
+   }
+
    async create(data: IPostCreate): Promise<IPost> {
       const { categories, ...postData } = data;
       return await prisma.post.create({

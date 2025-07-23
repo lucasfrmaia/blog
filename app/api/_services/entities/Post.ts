@@ -28,3 +28,10 @@ export type IPostFilters = {
    categories?: string[];
    sortBy?: string;
 };
+
+export type IPostStatistics = {
+   totalPosts: number;
+   totalViews: number;
+   totalComments: number;
+   engagement: string;
+};

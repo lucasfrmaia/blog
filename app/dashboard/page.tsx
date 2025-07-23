@@ -28,35 +28,24 @@ import CategoryList from '../_components/category/CategoryList';
 import { CategoryDialog } from '../_components/category/dialogs/CategoryDialog';
 import { PostDialog } from '../_components/post/dialogs/PostDialog';
 import { useState } from 'react';
+import { IPostStatistics } from '../api/_services/entities/Post';
 
 export default function DashboardPage() {
    const [currentPagePost, setCurrentPagePost] = useState(1);
 
-   const { data: posts, isLoading: isLoadingPosts } = useQuery({
-      queryKey: ['posts'],
-      queryFn: async () => {
-         const response = await fetch(`${process.env.API_URL}/posts`);
-         if (!response.ok) {
-            throw new Error('Erro ao buscar posts');
-         }
-         return response.json();
-      },
-   });
-
-   const totalViews =
-      posts?.reduce((acc: number, post: any) => acc + post.views, 0) || 0;
-   const totalComments =
-      posts?.reduce(
-         (acc: number, post: any) => acc + (post.comments?.length || 0),
-         0,
-      ) || 0;
-   const engagement =
-      posts && posts.length > 0
-         ? `${(
-              ((totalViews + totalComments) / (posts.length * 100)) *
-              100
-           ).toFixed(1)}%`
-         : '0%';
+   const { data: statistics, isLoading: isLoadingPosts } =
+      useQuery<IPostStatistics>({
+         queryKey: ['posts', 'statistics'],
+         queryFn: async () => {
+            const response = await fetch(
+               `${process.env.API_URL}/posts/statistics`,
+            );
+            if (!response.ok) {
+               throw new Error('Erro ao buscar posts');
+            }
+            return response.json();
+         },
+      });
 
    return (
       <BaseLayout>
@@ -77,7 +66,7 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                      <div className="text-2xl font-bold">
-                        {posts?.length || 0}
+                        {statistics?.totalPosts}
                      </div>
                      <p className="text-xs text-muted-foreground">
                         Posts publicados
@@ -92,7 +81,9 @@ export default function DashboardPage() {
                      <Eye className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                     <div className="text-2xl font-bold">{totalViews}</div>
+                     <div className="text-2xl font-bold">
+                        {statistics?.totalViews}
+                     </div>
                      <p className="text-xs text-muted-foreground">
                         Total de visualizações
                      </p>
@@ -106,7 +97,9 @@ export default function DashboardPage() {
                      <MessageSquare className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                     <div className="text-2xl font-bold">{totalComments}</div>
+                     <div className="text-2xl font-bold">
+                        {statistics?.totalComments}
+                     </div>
                      <p className="text-xs text-muted-foreground">
                         Total de comentários
                      </p>
@@ -120,7 +113,9 @@ export default function DashboardPage() {
                      <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   </CardHeader>
                   <CardContent>
-                     <div className="text-2xl font-bold">{engagement}</div>
+                     <div className="text-2xl font-bold">
+                        {statistics?.engagement}
+                     </div>
                      <p className="text-xs text-muted-foreground">
                         Média por post
                      </p>
