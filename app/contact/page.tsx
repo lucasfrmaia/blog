@@ -1,6 +1,3 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import {
    Send,
    Mail,
@@ -23,34 +20,25 @@ import {
 } from '../_components/ui/card';
 import { Textarea } from '../_components/ui/textarea';
 import { Input } from '../_components/ui/input';
+import { MotionWrapper } from '../_components/shared/MotionWrapper';
 
 export default function ContactPage() {
    return (
       <BaseLayout>
          <div className="container mx-auto px-4 py-16">
             <div className="max-w-5xl mx-auto">
-               {/* Header */}
-               <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-center mb-12"
-               >
+               <MotionWrapper className="text-center mb-12">
                   <h1 className="text-4xl font-bold mb-4">Entre em Contato</h1>
                   <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                      Tem alguma dúvida ou sugestão? Estamos aqui para ajudar!
                      Preencha o formulário abaixo ou use um de nossos canais de
                      contato.
                   </p>
-               </motion.div>
+               </MotionWrapper>
 
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Contact Form */}
-                  <motion.div
-                     initial={{ opacity: 0, x: -20 }}
-                     animate={{ opacity: 1, x: 0 }}
-                     transition={{ duration: 0.5, delay: 0.2 }}
-                  >
+                  <MotionWrapper>
                      <Card>
                         <CardHeader>
                            <CardTitle>Envie uma Mensagem</CardTitle>
@@ -122,15 +110,11 @@ export default function ContactPage() {
                            </form>
                         </CardContent>
                      </Card>
-                  </motion.div>
+                  </MotionWrapper>
 
                   {/* Contact Information */}
-                  <motion.div
-                     initial={{ opacity: 0, x: 20 }}
-                     animate={{ opacity: 1, x: 0 }}
-                     transition={{ duration: 0.5, delay: 0.2 }}
-                     className="space-y-6"
-                  >
+
+                  <MotionWrapper>
                      {/* Direct Contact */}
                      <Card>
                         <CardHeader>
@@ -187,31 +171,28 @@ export default function ContactPage() {
                         </CardHeader>
                         <CardContent>
                            <div className="flex gap-4">
-                              <Button variant="outline" size="icon" asChild>
+                              <Button variant="outline" size="icon">
                                  <Link
                                     href="https://github.com"
                                     target="_blank"
                                  >
                                     <Github className="h-4 w-4" />
-                                    <span className="sr-only">GitHub</span>
                                  </Link>
                               </Button>
-                              <Button variant="outline" size="icon" asChild>
+                              <Button variant="outline" size="icon">
                                  <Link
                                     href="https://linkedin.com"
                                     target="_blank"
                                  >
                                     <Linkedin className="h-4 w-4" />
-                                    <span className="sr-only">LinkedIn</span>
                                  </Link>
                               </Button>
-                              <Button variant="outline" size="icon" asChild>
+                              <Button variant="outline" size="icon">
                                  <Link
                                     href="https://twitter.com"
                                     target="_blank"
                                  >
                                     <Twitter className="h-4 w-4" />
-                                    <span className="sr-only">Twitter</span>
                                  </Link>
                               </Button>
                            </div>
@@ -236,7 +217,7 @@ export default function ContactPage() {
                            </Link>
                         </CardContent>
                      </Card>
-                  </motion.div>
+                  </MotionWrapper>
                </div>
             </div>
          </div>
